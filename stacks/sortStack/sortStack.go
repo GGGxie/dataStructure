@@ -1,6 +1,6 @@
-package arrayStack
+package sortStack
 
-import "dataStructure/stacks/arrayStack.go"
+import "github.com/GGGxie/dataStructure/stacks/arrayStack.go"
 
 //排序栈
 //辅助数据结构：普通栈
