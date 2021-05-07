@@ -11,14 +11,15 @@ func (q *Queue) Push(x interface{}) {
 }
 
 /** Removes the element from in front of queue and returns that element. */
-func (q *Queue) Pop() interface{} {
+func (q *Queue) Pop() (interface{}, bool) {
 	if q.Empty() {
-		return nil
+		return nil, false
 	}
 	var ret interface{}
 	ret = q.cache[0]
 	q.cache = q.cache[1:]
-	return ret
+	q.size--
+	return ret, true
 }
 
 /** Get the front element. */

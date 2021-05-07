@@ -1,7 +1,5 @@
 package binarySearchTree
 
-import "fmt"
-
 type Tree struct {
 	root *Node
 	size int
@@ -55,107 +53,46 @@ func dfs(nums []int, start, end int) *TreeNode {
 	}
 }
 
-type Stack struct {
-	cache []interface{}
-	size  int
-}
-
-func (s *Stack) Push(value interface{}) {
-	if value == nil {
-		return
-	}
-	s.cache = append(s.cache, value)
-	s.size++
-}
-
-func (s *Stack) Pop() (value interface{}, ok bool) {
-	if s.size == 0 {
-		return nil, false
-	}
-	ret := s.cache[0]
-	if s.size == 1 {
-		s.cache = nil
-	} else {
-		s.cache = s.cache[1:s.size]
-	}
-	s.size--
-	return ret, true
-}
-
-func (s *Stack) Peek() (value interface{}, ok bool) {
-	if s.size == 0 {
-		return nil, false
-	}
-	return s.cache[0], true
-}
-
-func (s *Stack) Empty() bool {
-	return s.size == 0
-}
-
 type ListNode struct {
 	Val  int
 	Next *ListNode
 }
 
+//bfs 层序遍历，广度搜索
 func listOfDepth(tree *TreeNode) []*ListNode {
-	var stack Stack
-	var tempList []*TreeNode
 	if tree == nil {
 		return nil
 	}
+	var tempList []*TreeNode //存储数据的队列
+	var retList []*ListNode  //返回的数据
 	tempList = append(tempList, tree)
-	if tree.Left != nil {
-		stack.Push(tree.Left)
-	}
-	if tree.Right != nil {
-		stack.Push(tree.Right)
-	}
-	for !stack.Empty() { //获取数组
-		if tree, ok := stack.Pop(); ok {
-			tempTree := tree.(*TreeNode)
-			tempList = append(tempList, tempTree)
-			if tempTree.Left != nil {
-				stack.Push(tempTree.Left)
+	for len(tempList) > 0 {
+		var index, tempNode *ListNode
+		size := len(tempList)
+		for i := 0; i < size; i++ {
+			if tempList[i].Left != nil {
+				tempList = append(tempList, tempList[i].Left)
 			}
-			if tempTree.Right != nil {
-				stack.Push(tempTree.Right)
+			if tempList[i].Right != nil {
+				tempList = append(tempList, tempList[i].Right)
 			}
-		}
-	}
-	return getListOfDepth(tempList)
-}
-
-func getListOfDepth(temp []*TreeNode) (ret []*ListNode) {
-	var tempListNode *ListNode
-	var endListNode *ListNode
-	var col int
-	for i := range temp {
-		fmt.Println(col, i, temp[i])
-		if temp[i] == nil {
-			continue
-		}
-		if i == 0 || i > ((2<<(col-1))-1) { //起始点||到达下一层
-			if temp[i] == nil {
-				tempListNode = &ListNode{
-					Val:  temp[i].Val,
+			if i == 0 {
+				tempNode = &ListNode{
+					Val:  tempList[i].Val,
 					Next: nil,
 				}
+				index = tempNode
+			} else {
+				index.Next = &ListNode{
+					Val:  tempList[i].Val,
+					Next: nil,
+				}
+				index = index.Next
 			}
-			tempListNode = &ListNode{
-				Val:  temp[i].Val,
-				Next: nil,
-			}
-			ret = append(ret, tempListNode) //加入数组
-			endListNode = tempListNode
-			col++
-		} else {
-			endListNode.Next = &ListNode{
-				Val:  temp[i].Val,
-				Next: nil,
-			}
-			endListNode = endListNode.Next
 		}
+		retList = append(retList, tempNode)
+		tempList = tempList[size:]
+		size = len(tempList)
 	}
-	return ret
+	return retList
 }
