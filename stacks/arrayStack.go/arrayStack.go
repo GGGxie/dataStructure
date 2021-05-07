@@ -6,6 +6,9 @@ type Stack struct {
 }
 
 func (s *Stack) Push(value interface{}) {
+	if value == nil {
+		return
+	}
 	s.cache = append(s.cache, value)
 	s.size++
 }

@@ -4,9 +4,8 @@ import "github.com/GGGxie/dataStructure/stacks/arrayStack.go"
 
 //双栈实现队列
 type Queue struct {
-	s1   *arrayStack.Stack
-	s2   *arrayStack.Stack
-	size int
+	s1 *arrayStack.Stack
+	s2 *arrayStack.Stack
 }
 
 /** Push element x to the back of queue. */
