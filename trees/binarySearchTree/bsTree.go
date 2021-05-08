@@ -1,5 +1,7 @@
 package binarySearchTree
 
+import "math"
+
 type Tree struct {
 	root *Node
 	size int
@@ -95,4 +97,47 @@ func listOfDepth(tree *TreeNode) []*ListNode {
 		size = len(tempList)
 	}
 	return retList
+}
+
+//层序遍历，判断是否为平衡二叉树，记录深度和节点个数，判断节点个数是否>2^(depth-1)-1
+func isBalanced(tree *TreeNode) bool {
+	if tree == nil {
+		return true
+	}
+	var tempList []*TreeNode //存储数据的队列
+	var num int              //节点个数
+	var depth int            //树的深度
+	tempList = append(tempList, tree)
+	num++
+	for len(tempList) > 0 {
+		depth++
+		var index, tempNode *ListNode
+		size := len(tempList)
+		for i := 0; i < size; i++ {
+			if tempList[i].Left != nil {
+				tempList = append(tempList, tempList[i].Left)
+				num++
+			}
+			if tempList[i].Right != nil {
+				tempList = append(tempList, tempList[i].Right)
+				num++
+			}
+			if i == 0 {
+				tempNode = &ListNode{
+					Val:  tempList[i].Val,
+					Next: nil,
+				}
+				index = tempNode
+			} else {
+				index.Next = &ListNode{
+					Val:  tempList[i].Val,
+					Next: nil,
+				}
+				index = index.Next
+			}
+		}
+		tempList = tempList[size:]
+		size = len(tempList)
+	}
+	return int(math.Exp2(float64((depth-1)))-1) < num
 }

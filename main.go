@@ -1,11 +1,12 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"math"
+)
 
 func main() {
-	a := []int{1, 3}
-	fmt.Println(a[0:])
-	fmt.Println(a[1:])
+	fmt.Println(math.Exp2(2.2))
 }
 func te(t interface{}) {
 	fmt.Println(t == nil)
