@@ -1,7 +1,5 @@
 package binarySearchTree
 
-import "math"
-
 type Tree struct {
 	root *Node
 	size int
@@ -101,43 +99,48 @@ func listOfDepth(tree *TreeNode) []*ListNode {
 
 //层序遍历，判断是否为平衡二叉树，记录深度和节点个数，判断节点个数是否>2^(depth-1)-1
 func isBalanced(tree *TreeNode) bool {
+	return Height(tree) >= 0
+}
+
+//返回节点的高度,如果以该节点为根节点的二叉树,不为平衡二叉树,返回-1
+func Height(tree *TreeNode) int {
 	if tree == nil {
+		return 0
+	}
+	leftHight := Height(tree.Left)
+	if leftHight == -1 { //优化点:左节点不平衡就不需要继续优化
+		return -1
+	}
+	rightHeight := Height(tree.Right)
+	if rightHeight == -1 || abs(leftHight-rightHeight) > 1 {
+		return -1
+	}
+	return max(leftHight, rightHeight) + 1
+}
+
+func isValidBST(root *TreeNode) bool {
+	if root == nil {
 		return true
 	}
-	var tempList []*TreeNode //存储数据的队列
-	var num int              //节点个数
-	var depth int            //树的深度
-	tempList = append(tempList, tree)
-	num++
-	for len(tempList) > 0 {
-		depth++
-		var index, tempNode *ListNode
-		size := len(tempList)
-		for i := 0; i < size; i++ {
-			if tempList[i].Left != nil {
-				tempList = append(tempList, tempList[i].Left)
-				num++
-			}
-			if tempList[i].Right != nil {
-				tempList = append(tempList, tempList[i].Right)
-				num++
-			}
-			if i == 0 {
-				tempNode = &ListNode{
-					Val:  tempList[i].Val,
-					Next: nil,
-				}
-				index = tempNode
-			} else {
-				index.Next = &ListNode{
-					Val:  tempList[i].Val,
-					Next: nil,
-				}
-				index = index.Next
+	var tempList []*TreeNode
+	order(root, &tempList)
+	length := len(tempList)
+	for i := range tempList {
+		if i != length-1 {
+			if tempList[i].Val >= tempList[i+1].Val {
+				return false
 			}
 		}
-		tempList = tempList[size:]
-		size = len(tempList)
 	}
-	return int(math.Exp2(float64((depth-1)))-1) < num
+	return true
+}
+
+func order(root *TreeNode, tempList *[]*TreeNode) {
+	if root == nil {
+		return
+	}
+	order(root.Left, tempList)
+	*tempList = append(*tempList, root)
+	order(root.Right, tempList)
+	return
 }
