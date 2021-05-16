@@ -1,5 +1,7 @@
 package binarySearchTree
 
+import "math"
+
 type Tree struct {
 	root *Node
 	size int
@@ -118,29 +120,34 @@ func Height(tree *TreeNode) int {
 	return max(leftHight, rightHeight) + 1
 }
 
+//判断是否二叉搜索树
 func isValidBST(root *TreeNode) bool {
+	return helper(root, math.MinInt64, math.MaxInt64)
+}
+
+func helper(root *TreeNode, lower, upper int) bool {
 	if root == nil {
 		return true
 	}
-	var tempList []*TreeNode
-	order(root, &tempList)
-	length := len(tempList)
-	for i := range tempList {
-		if i != length-1 {
-			if tempList[i].Val >= tempList[i+1].Val {
-				return false
-			}
-		}
+	if root.Val <= lower || root.Val >= upper {
+		return false
 	}
-	return true
+	return helper(root.Left, lower, root.Val) && helper(root.Right, root.Val, upper)
 }
 
-func order(root *TreeNode, tempList *[]*TreeNode) {
+//中序找出后继节点,要点:这是有序的,比p大的就是它的后续节点
+func inorderSuccessor(root *TreeNode, p *TreeNode) *TreeNode {
 	if root == nil {
-		return
+		return nil
 	}
-	order(root.Left, tempList)
-	*tempList = append(*tempList, root)
-	order(root.Right, tempList)
-	return
+	if node := inorderSuccessor(root.Left, p); node != nil {
+		return node
+	}
+	if root.Val > p.Val {
+		return root
+	}
+	if node := inorderSuccessor(root.Right, p); node != nil {
+		return node
+	}
+	return nil
 }
