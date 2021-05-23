@@ -19,7 +19,7 @@ type TreeNode struct {
 	Right *TreeNode
 }
 
-//给一个数组，生成一个二分搜索树
+//给一个有序数组，生成一个二分搜索树
 func sortedArrayToBST(nums []int) *TreeNode {
 	len := len(nums)
 	if len == 0 {
