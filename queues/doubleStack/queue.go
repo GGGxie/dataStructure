@@ -73,5 +73,5 @@ func (q *Queue) Empty() bool {
 
 /** Returns the size of queue. */
 func (q *Queue) Size() int {
-	return q.size
+	return q.s1.Size() + q.s2.Size()
 }

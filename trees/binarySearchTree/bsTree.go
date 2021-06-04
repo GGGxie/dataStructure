@@ -1,5 +1,7 @@
 package binarySearchTree
 
+import "math"
+
 type Tree struct {
 	root *Node
 	size int
@@ -17,7 +19,7 @@ type TreeNode struct {
 	Right *TreeNode
 }
 
-//给一个数组，生成一个二分搜索树
+//给一个有序数组，生成一个二分搜索树
 func sortedArrayToBST(nums []int) *TreeNode {
 	len := len(nums)
 	if len == 0 {
@@ -97,47 +99,34 @@ func listOfDepth(tree *TreeNode) []*ListNode {
 	return retList
 }
 
-/**
- * Definition for a binary tree node.
- * type TreeNode struct {
- *     Val int
- *     Left *TreeNode
- *     Right *TreeNode
- * }
- */
-//层序遍历，判断是否为平衡二叉树，记录深度和节点个数，判断节点个数是否>2^(depth-1)-1
-func isBalanced(tree *TreeNode) bool {
-	return Height(tree) >= 0
+//判断是否二叉搜索树
+func isValidBST(root *TreeNode) bool {
+	return helper(root, math.MinInt64, math.MaxInt64)
 }
 
-//返回节点的高度,如果以该节点为根节点的二叉树,不为平衡二叉树,返回-1
-func Height(tree *TreeNode) int {
-	if tree == nil {
-		return 0
+func helper(root *TreeNode, lower, upper int) bool {
+	if root == nil {
+		return true
 	}
-	leftHight := Height(tree.Left)
-	if leftHight == -1 { //优化点:左节点不平衡就不需要继续优化
-		return -1
+	if root.Val <= lower || root.Val >= upper {
+		return false
 	}
-	rightHeight := Height(tree.Right)
-	if rightHeight == -1 || abs(leftHight-rightHeight) > 1 {
-		return -1
-	}
-	return max(leftHight, rightHeight) + 1
+	return helper(root.Left, lower, root.Val) && helper(root.Right, root.Val, upper)
 }
 
-func max(a, b int) int {
-	if a > b {
-		return a
-	} else {
-		return b
+//中序找出后继节点,要点:这是有序的,比p大的就是它的后续节点
+func inorderSuccessor(root *TreeNode, p *TreeNode) *TreeNode {
+	if root == nil {
+		return nil
 	}
-}
-
-func abs(a int) int {
-	if a < 0 {
-		return a * (-1)
-	} else {
-		return a
+	if node := inorderSuccessor(root.Left, p); node != nil {
+		return node
 	}
+	if root.Val > p.Val {
+		return root
+	}
+	if node := inorderSuccessor(root.Right, p); node != nil {
+		return node
+	}
+	return nil
 }
