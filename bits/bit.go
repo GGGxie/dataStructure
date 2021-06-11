@@ -42,3 +42,35 @@ func PrintBin(num float64) string {
 		return "ERROR"
 	}
 }
+
+//翻转数位,你可以将一个数位从0变为1,找出你能够获得的最长的一串1的长度。
+func reverseBits(num int) int {
+	//pre记录从上一个0开始，1的总数
+	//max记录最大的1的总数
+	//current记录用0连接的两段的1的总数
+	var pre, max, current int
+	var flag bool
+	for i := 0; i < 32; i++ { //遍历num
+		a := num & 1 //取出个位
+		num = num >> 1
+		if a == 1 {
+			current++
+			pre++
+		} else if a == 0 {
+			if !flag { //替换1还不被使用
+				current++
+				flag = true
+			} else { //替换1已被使用
+				current = pre + 1
+				if current > max {
+					max = current
+				}
+			}
+			pre = 0
+		}
+		if current > max {
+			max = current
+		}
+	}
+	return max
+}
