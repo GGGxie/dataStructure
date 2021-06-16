@@ -117,3 +117,18 @@ func findClosedNumbers(num int) []int {
 	}
 	return []int{larger, smaller}
 }
+
+//整数转换。编写一个函数，确定需要改变几个位才能将整数A转成整数B。
+//todo:为什么获取数字的二进制表示中1的个数要这样写
+//todo:为什么要int32?
+func convertInteger(A int, B int) int {
+	count := func(num int32) (sum int) { //获取数字的二进制表示中1的个数
+		fmt.Println(num)
+		for num != 0 {
+			sum++
+			num = num & (num - 1)
+		}
+		return
+	}
+	return count(int32(A ^ B))
+}

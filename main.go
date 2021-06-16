@@ -6,10 +6,21 @@ func main() {
 	fmt.Printf("%0b\n", 34)
 	fmt.Printf("%0b\n", 36)
 	fmt.Printf("%0b\n", 33)
-	a := 0b1101100
-	num := a & (-a)
-	fmt.Printf("%0b\n", -a)
-	fmt.Printf("%0b\n", num)
+	fmt.Printf("%0b\n", -729934991)
+	fmt.Printf(" %0b\n", 826966453)
+	fmt.Println(convertInteger(826966453, -729934991))
+}
+
+func convertInteger(A int, B int) int {
+	count := func(num int32) (sum int) {
+		fmt.Println(num)
+		for num != 0 {
+			sum++
+			num = num & (num - 1)
+		}
+		return
+	}
+	return count(int32(A ^ B))
 }
 
 // func findClosedNumbers(num int) []int {
