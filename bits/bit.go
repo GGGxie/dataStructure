@@ -4,6 +4,10 @@ import (
 	"fmt"
 )
 
+//常用操作
+//取出最地位：num & 1
+//取出后n位：num & ((1<<n)-1)
+
 //用M去填充N的第i-j位
 // 输入：N = 1024(10000000000), M = 19(10011), i = 2, j = 6
 // 输出：N = 1100(10001001100)
@@ -43,7 +47,7 @@ func PrintBin(num float64) string {
 	}
 }
 
-//翻转数位,你可以将一个数位从0变为1,找出你能够获得的最长的一串1的长度。
+//翻转数位,你可以将一个数位从0变为1,找出你能够获得的最长的一串1的长度。TODO:改成动态规划
 func reverseBits(num int) int {
 	//pre记录从上一个0开始，1的总数
 	//max记录最大的1的总数
@@ -73,4 +77,43 @@ func reverseBits(num int) int {
 		}
 	}
 	return max
+}
+
+// 给定一个正整数，找出与其二进制表达式中1的个数相同且大小最接近的那两个数（一个略大，一个略小）。
+// 解题思路
+// 比 num 大的数：从右往左，找到第一个 01 位置，然后把 01 转为 10，右侧剩下的 1 移到右侧的低位，右侧剩下的位清0。
+// 比 num 小的数：从右往左，找到第一个 10 位置，然后把 10 转为 01，右侧剩下的 1 移到右侧的高位，右侧剩下的位置0。
+func findClosedNumbers(num int) []int {
+	larger, smaller := -1, -1
+	count := func(num int) int {
+		var sum int
+		for num != 0 {
+			if num&1 == 1 {
+				sum++
+			}
+			num >>= 1
+		}
+		return sum
+	}
+	sumOfNum := count(num)
+	//获取偏大值
+	temp := num + 1
+	for temp <= 2147483647 {
+		if count(temp) == sumOfNum {
+			larger = temp
+			break
+		}
+		temp++
+	}
+
+	//获取偏小值
+	temp = num - 1
+	for temp >= 1 {
+		if count(temp) == sumOfNum {
+			smaller = temp
+			break
+		}
+		temp--
+	}
+	return []int{larger, smaller}
 }
