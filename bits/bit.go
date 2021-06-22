@@ -135,9 +135,42 @@ func convertInteger(A int, B int) int {
 // 编写程序，交换某个整数的奇数位和偶数位
 func exchangeBits(num int) int {
 	//取出奇数位
-	single :=((num&0x55555555)<<1)
+	single := ((num & 0x55555555) << 1)
 	//取出偶数位
-	double :=((num&0xaaaaaaaa)>>1)
+	double := ((num & 0xaaaaaaaa) >> 1)
 	//基数位和偶数位进行或操作
-	return single |double
+	return single | double
+}
+
+// 05.08. 绘制直线
+func drawLine(length int, w int, x1 int, x2 int, y int) []int {
+	ret := make([]int, length)
+	for i := range ret { //遍历元素
+		var temp int32                        //TODO:为什么要int32不能用int
+		for z := 0 + 32*i; z < 32+32*i; z++ { //遍历元素的bit位
+			if z >= x1+y*w && z <= x2+y*w { //判断是否在x1和x2之间
+				temp |= 1 << (31 - (z - 32*i)) //在x1和x2之间的0全部置为1
+			}
+		}
+		ret[i] = int(temp)
+	}
+	return ret
+}
+
+// 三步问题。有个小孩正在上楼梯，楼梯有n阶台阶，小孩一次可以上1阶、2阶或3阶。实现一种方法，计算小孩有多少种上楼梯的方式。结果可能很大，你需要对结果模1000000007。
+func waysToStep(n int) int {
+	var size int
+	if n < 3 {
+		size = 3
+	} else {
+		size = n
+	}
+	temp := make([]int, size+1)
+	temp[1] = 1
+	temp[2] = 2
+	temp[3] = 4
+	for i := 4; i <= n; i++ {
+		temp[i] = (temp[i-1] + temp[i-2] + temp[i-3]) % 1000000007 //每次都要取余？？？？？
+	}
+	return temp[n]
 }
