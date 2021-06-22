@@ -123,7 +123,6 @@ func findClosedNumbers(num int) []int {
 //todo:为什么要int32?
 func convertInteger(A int, B int) int {
 	count := func(num int32) (sum int) { //获取数字的二进制表示中1的个数
-		fmt.Println(num)
 		for num != 0 {
 			sum++
 			num = num & (num - 1)
@@ -131,4 +130,14 @@ func convertInteger(A int, B int) int {
 		return
 	}
 	return count(int32(A ^ B))
+}
+
+// 编写程序，交换某个整数的奇数位和偶数位
+func exchangeBits(num int) int {
+	//取出奇数位
+	single :=((num&0x55555555)<<1)
+	//取出偶数位
+	double :=((num&0xaaaaaaaa)>>1)
+	//基数位和偶数位进行或操作
+	return single |double
 }

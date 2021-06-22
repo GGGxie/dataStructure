@@ -3,12 +3,15 @@ package main
 import "fmt"
 
 func main() {
-	fmt.Printf("%0b\n", 34)
-	fmt.Printf("%0b\n", 36)
-	fmt.Printf("%0b\n", 33)
-	fmt.Printf("%0b\n", -729934991)
-	fmt.Printf(" %0b\n", 826966453)
-	fmt.Println(convertInteger(826966453, -729934991))
+	count := func(num int32) (sum int) { //获取数字的二进制表示中1的个数
+		for num != 0 {
+			sum++
+			num &= (num - 1)
+		}
+		return
+	}
+	fmt.Println(count(-0b1101))
+	fmt.Printf("%0b\n",0xaaaaaaaa)
 }
 
 func convertInteger(A int, B int) int {
