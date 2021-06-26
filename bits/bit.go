@@ -159,18 +159,20 @@ func drawLine(length int, w int, x1 int, x2 int, y int) []int {
 
 // 三步问题。有个小孩正在上楼梯，楼梯有n阶台阶，小孩一次可以上1阶、2阶或3阶。实现一种方法，计算小孩有多少种上楼梯的方式。结果可能很大，你需要对结果模1000000007。
 func waysToStep(n int) int {
-	var size int
-	if n < 3 {
-		size = 3
-	} else {
-		size = n
+	switch n {
+	case 1:
+		return 1
+	case 2:
+		return 2
+	case 3:
+		return 4
+	default:
+		dp1 := 1
+		dp2 := 2
+		dp3 := 4
+		for i := 4; i <= n; i++ {
+			dp1, dp2, dp3 = dp2, dp3, (dp1+dp2+dp3)%1000000007 //每次都要取余？？？？？
+		}
+		return dp3
 	}
-	temp := make([]int, size+1)
-	temp[1] = 1
-	temp[2] = 2
-	temp[3] = 4
-	for i := 4; i <= n; i++ {
-		temp[i] = (temp[i-1] + temp[i-2] + temp[i-3]) % 1000000007 //每次都要取余？？？？？
-	}
-	return temp[n]
 }

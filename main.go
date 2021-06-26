@@ -3,27 +3,43 @@ package main
 import "fmt"
 
 func main() {
-	count := func(num int32) (sum int) { //获取数字的二进制表示中1的个数
-		for num != 0 {
-			sum++
-			num &= (num - 1)
-		}
-		return
+	m := [][]int{
+		{0, 0, 0},
+		{1, 1, 0},
+		{0, 0, 0},
 	}
-	fmt.Println(count(-0b1101))
-	fmt.Printf("%0b\n",0xaaaaaaaa)
+	fmt.Println(pathWithObstacles(m))
 }
-
-func convertInteger(A int, B int) int {
-	count := func(num int32) (sum int) {
-		fmt.Println(num)
-		for num != 0 {
-			sum++
-			num = num & (num - 1)
+func pathWithObstacles(obstacleGrid [][]int) [][]int {
+	var (
+		result [][]int
+		rowEnd = len(obstacleGrid) - 1
+		colEnd = len(obstacleGrid[0]) - 1
+		dfs    func([][]int) //内部函数递归需要用到该变量
+	)
+	dfs = func(path [][]int) {
+		if len(result) != 0 { //已找到路径
+			return
 		}
-		return
+		row, col := path[len(path)-1][0], path[len(path)-1][1]
+		if obstacleGrid[row][col] == 1 { //判断路径是否可通
+			return
+		}
+		if row == rowEnd && col == colEnd {
+			result = make([][]int, rowEnd+colEnd+1) //结果的长度必定是长加高-1
+			fmt.Println(len(result))
+			copy(result, path)
+		}
+		obstacleGrid[row][col] = 1
+		if row < rowEnd { //向下走
+			dfs(append(path, []int{row + 1, col})) //采用append的方式可以不改变path的值，让path仍然记录当前位置
+		}
+		if col < colEnd { //向右走
+			dfs(append(path, []int{row, col + 1}))
+		}
 	}
-	return count(int32(A ^ B))
+	dfs([][]int{{0, 0}})
+	return result
 }
 
 // func findClosedNumbers(num int) []int {
