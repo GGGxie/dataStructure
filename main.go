@@ -9,6 +9,7 @@ func main() {
 		{0, 0, 0},
 	}
 	fmt.Println(pathWithObstacles(m))
+	fmt.Println(7 % 1000000007)
 }
 func pathWithObstacles(obstacleGrid [][]int) [][]int {
 	var (

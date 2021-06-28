@@ -176,3 +176,21 @@ func waysToStep(n int) int {
 		return dp3
 	}
 }
+
+// 幂集。编写一种方法，返回某集合的所有子集。集合中不包含重复的元素。
+func subsets(nums []int) [][]int {
+	count := 1 << len(nums)
+	res := make([][]int, count)
+	m := map[int]int{} //记录每个bit对应的数字
+	for i, a := range nums {
+		m[1<<i] = a
+	}
+	for i := 0; i < count; i++ { //
+		n := i
+		for n > 0 { //把i中bit值为1对应的数字加入数组
+			res[i] = append(res[i], m[n&-n])
+			n -= (n & -n)
+		}
+	}
+	return res
+}
