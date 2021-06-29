@@ -3,43 +3,20 @@ package main
 import "fmt"
 
 func main() {
-	m := [][]int{
-		{0, 0, 0},
-		{1, 1, 0},
-		{0, 0, 0},
-	}
-	fmt.Println(pathWithObstacles(m))
+	fmt.Println(maxSubArray([]int{10, -2, -1, 20}))
 }
-func pathWithObstacles(obstacleGrid [][]int) [][]int {
-	var (
-		result [][]int
-		rowEnd = len(obstacleGrid) - 1
-		colEnd = len(obstacleGrid[0]) - 1
-		dfs    func([][]int) //内部函数递归需要用到该变量
-	)
-	dfs = func(path [][]int) {
-		if len(result) != 0 { //已找到路径
-			return
+
+func maxSubArray(nums []int) int {
+	max := nums[0]
+	for i := 1; i < len(nums); i++ {
+		if nums[i]+nums[i-1] > nums[i] {
+			nums[i] += nums[i-1]
 		}
-		row, col := path[len(path)-1][0], path[len(path)-1][1]
-		if obstacleGrid[row][col] == 1 { //判断路径是否可通
-			return
-		}
-		if row == rowEnd && col == colEnd {
-			result = make([][]int, rowEnd+colEnd+1) //结果的长度必定是长加高-1
-			fmt.Println(len(result))
-			copy(result, path)
-		}
-		obstacleGrid[row][col] = 1
-		if row < rowEnd { //向下走
-			dfs(append(path, []int{row + 1, col})) //采用append的方式可以不改变path的值，让path仍然记录当前位置
-		}
-		if col < colEnd { //向右走
-			dfs(append(path, []int{row, col + 1}))
+		if nums[i] > max {
+			max = nums[i]
 		}
 	}
-	dfs([][]int{{0, 0}})
-	return result
+	return max
 }
 
 // func findClosedNumbers(num int) []int {
