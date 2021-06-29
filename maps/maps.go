@@ -68,3 +68,35 @@ func pathWithObstacles(obstacleGrid [][]int) [][]int {
 	dfs([]int{0})
 	return result
 }
+
+// 颜色填充
+func floodFill(image [][]int, sr int, sc int, newColor int) [][]int {
+	var (
+		flag     map[int]bool = make(map[int]bool) //标记节点时候已经被染色
+		dfs      func(tempSr, tempSc int)
+		rLen     = len(image)
+		cLen     = len(image[0])
+		oldColor = image[sr][sc] //记录原始节点颜色
+	)
+	dfs = func(tempSr, tempSc int) { //深度搜索
+		if image[tempSr][tempSc] != oldColor {
+			return
+		}
+		image[tempSr][tempSc] = newColor
+		flag[tempSr*cLen+tempSc] = true
+		if 0 <= tempSr-1 && !flag[(tempSr-1)*cLen+tempSc] { //上
+			dfs(tempSr-1, tempSc)
+		}
+		if tempSr+1 < rLen && !flag[(tempSr+1)*cLen+tempSc] { //下
+			dfs(tempSr+1, tempSc)
+		}
+		if 0 <= tempSc-1 && !flag[tempSr*cLen+(tempSc-1)] { //左
+			dfs(tempSr, tempSc-1)
+		}
+		if tempSc+1 < cLen && !flag[tempSr*cLen+(tempSc+1)] { //右
+			dfs(tempSr, tempSc+1)
+		}
+	}
+	dfs(sr, sc)
+	return image
+}
