@@ -3,45 +3,41 @@ package main
 import "fmt"
 
 func main() {
-	m := [][]int{
-		{0, 0, 0},
-		{1, 1, 0},
-		{0, 0, 0},
-	}
-	fmt.Println(pathWithObstacles(m))
-	fmt.Println(7 % 1000000007)
+	fmt.Println(multiply(918795921, 1))
 }
-func pathWithObstacles(obstacleGrid [][]int) [][]int {
-	var (
-		result [][]int
-		rowEnd = len(obstacleGrid) - 1
-		colEnd = len(obstacleGrid[0]) - 1
-		dfs    func([][]int) //内部函数递归需要用到该变量
-	)
-	dfs = func(path [][]int) {
-		if len(result) != 0 { //已找到路径
-			return
-		}
-		row, col := path[len(path)-1][0], path[len(path)-1][1]
-		if obstacleGrid[row][col] == 1 { //判断路径是否可通
-			return
-		}
-		if row == rowEnd && col == colEnd {
-			result = make([][]int, rowEnd+colEnd+1) //结果的长度必定是长加高-1
-			fmt.Println(len(result))
-			copy(result, path)
-		}
-		obstacleGrid[row][col] = 1
-		if row < rowEnd { //向下走
-			dfs(append(path, []int{row + 1, col})) //采用append的方式可以不改变path的值，让path仍然记录当前位置
-		}
-		if col < colEnd { //向右走
-			dfs(append(path, []int{row, col + 1}))
-		}
+func multiply(A int, B int) int {
+	var tempA, tempB, tempC int
+	if A > B {
+		tempA, tempB, tempC = A, B, A
+	} else {
+		tempA, tempB, tempC = B, A, B
 	}
-	dfs([][]int{{0, 0}})
-	return result
+	for i := 1; i < tempB; i++ {
+		tempA += tempC
+	}
+	return tempA
 }
+
+// func multiply(A int, B int) int {
+// 	var re func(A, B *int, C int)
+// 	re = func(A, B *int, C int) {
+// 		if *B == 0 {
+// 			return
+// 		}
+// 		*A += C
+// 		*B -= 1
+// 		re(A, B, C)
+// 	}
+// 	if A > B {
+// 		B -= 1
+// 		re(&A, &B, A)
+// 		return A
+// 	} else {
+// 		A -= 1
+// 		re(&B, &A, B)
+// 		return B
+// 	}
+// }
 
 // func findClosedNumbers(num int) []int {
 // 	count := func(num int) int { //找出1的总数

@@ -194,3 +194,17 @@ func subsets(nums []int) [][]int {
 	}
 	return res
 }
+
+// 递归乘法。 写一个递归函数，不使用 * 运算符， 实现两个正整数的相乘。可以使用加号、减号、位移，但要吝啬一些。
+func multiply(A int, B int) int {
+	if B == 1 {
+		return A
+	} else {
+		if B&1 == 1 { //最低位为1，A*3
+			return A + multiply(A<<1, B>>1)
+		} else { //最低位为0，A*2
+			return multiply(A<<1, B>>1)
+		}
+
+	}
+}
