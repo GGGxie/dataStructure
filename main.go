@@ -1,37 +1,52 @@
 package main
 
+import "fmt"
+
 func main() {
+	fmt.Println(waysToChange(10))
 }
-func floodFill(image [][]int, sr int, sc int, newColor int) [][]int {
-	var (
-		flag     map[int]bool = make(map[int]bool) //标记节点时候已经被染色
-		dfs      func(tempSr, tempSc int)
-		rLen     = len(image)
-		cLen     = len(image[0])
-		oldColor = image[sr][sc] //记录原始节点颜色
-	)
-	dfs = func(tempSr, tempSc int) { //深度搜索
-		if image[tempSr][tempSc] != oldColor {
-			return
-		}
-		image[tempSr][tempSc] = newColor
-		flag[tempSr*cLen+tempSc] = true
-		if 0 <= tempSr-1 && !flag[(tempSr-1)*cLen+tempSc] { //上
-			dfs(tempSr-1, tempSc)
-		}
-		if tempSr+1 < rLen && !flag[(tempSr+1)*cLen+tempSc] { //下
-			dfs(tempSr+1, tempSc)
-		}
-		if 0 <= tempSc-1 && !flag[tempSr*cLen+(tempSc-1)] { //左
-			dfs(tempSr, tempSc-1)
-		}
-		if tempSc+1 < cLen && !flag[tempSr*cLen+(tempSc+1)] { //右
-			dfs(tempSr, tempSc+1)
+
+func waysToChange(n int) int {
+	if n == 0 {
+		return 0
+	}
+	dp := make([]int, n+1)
+	dp[0] = 1
+	coins := []int{1, 5, 10, 25}
+	for i := 0; i < 4; i++ {
+		for j := 1; j <= n; j++ {
+			if j-coins[i] >= 0 {
+				dp[j] += dp[j-coins[i]]
+				fmt.Println(i, j, dp[j-coins[i]], dp[j])
+			}
 		}
 	}
-	dfs(sr, sc)
-	return image
+	return dp[n] % 1000000007
 }
+
+// func waysToChange(n int) int {
+// 	if n == 0 {
+// 		return 0
+// 	}
+// 	dp := make([]int, n+1)
+// 	dp[0] = 1
+// 	for i := 1; i <= n; i++ {
+// 		if i >= 1 {
+// 			dp[i] += dp[i-1]
+// 		}
+// 		if i >= 5 {
+// 			dp[i] += dp[i-5]
+// 		}
+// 		if i >= 10 {
+// 			dp[i] += dp[i-10]
+// 		}
+// 		if i >= 25 {
+// 			dp[i] += dp[i-25]
+// 		}
+// 		fmt.Println(i, dp[i])
+// 	}
+// 	return dp[n]
+// }
 
 // func multiply(A int, B int) int {
 // 	var re func(A, B *int, C int)
