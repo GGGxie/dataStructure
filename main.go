@@ -3,25 +3,40 @@ package main
 import "fmt"
 
 func main() {
-	fmt.Println(waysToChange(10))
+	a := []int{55, 123, 56, 4, 14, 56, 77}
+	quickSort(a)
+	fmt.Println(a)
 }
 
-func waysToChange(n int) int {
-	if n == 0 {
-		return 0
-	}
-	dp := make([]int, n+1)
-	dp[0] = 1
-	coins := []int{1, 5, 10, 25}
-	for i := 0; i < 4; i++ {
-		for j := 1; j <= n; j++ {
-			if j-coins[i] >= 0 {
-				dp[j] += dp[j-coins[i]]
-				fmt.Println(i, j, dp[j-coins[i]], dp[j])
+//快速排序
+//时间复杂度O(nlogn), 空间复杂度O(logn),不稳定排序
+func quickSort(slice []int) {
+	var (
+		_quickSort func(left, right int, slice []int)     //利用递归不断对分区进行排序
+		partition  func(left, right int, slice []int) int //排序
+	)
+	partition = func(left, right int, slice []int) int {
+		flag := left      //基准
+		index := left + 1 //标记比slice[flag]大的位置
+		for i := index; i <= right; i++ {
+			if slice[i] < slice[flag] {
+				slice[i], slice[index] = slice[index], slice[i]
+				index++
 			}
 		}
+		slice[flag], slice[index-1] = slice[index-1], slice[flag]
+		return (index - 1)
 	}
-	return dp[n] % 1000000007
+	_quickSort = func(left, right int, slice []int) {
+		if left < right {
+			partitionIndex := partition(left, right, slice) //排序并获取基准位置
+			//以基准位置进行分区，进行再排序
+			_quickSort(left, partitionIndex-1, slice)
+			_quickSort(partitionIndex+1, right, slice)
+		}
+	}
+	left, right := 0, len(slice)-1 //left起始值下标，right末尾值下标
+	_quickSort(left, right, slice)
 }
 
 // func waysToChange(n int) int {
