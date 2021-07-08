@@ -3,40 +3,36 @@ package main
 import "fmt"
 
 func main() {
-	a := []int{55, 123, 56, 4, 14, 56, 77}
-	quickSort(a)
+	a := []int{55, 60, 56, 4, 14, 56, 77, 14}
+	// a := []int{3, 2}
+	countingSort(a, 78)
 	fmt.Println(a)
 }
 
-//快速排序
-//时间复杂度O(nlogn), 空间复杂度O(logn),不稳定排序
-func quickSort(slice []int) {
-	var (
-		_quickSort func(left, right int, slice []int)     //利用递归不断对分区进行排序
-		partition  func(left, right int, slice []int) int //排序
-	)
-	partition = func(left, right int, slice []int) int {
-		flag := left      //基准
-		index := left + 1 //标记比slice[flag]大的位置
-		for i := index; i <= right; i++ {
-			if slice[i] < slice[flag] {
-				slice[i], slice[index] = slice[index], slice[i]
-				index++
-			}
-		}
-		slice[flag], slice[index-1] = slice[index-1], slice[flag]
-		return (index - 1)
+//计数排序
+func countingSort(array []int, k int) {
+	//b中间数据，记录array排序后的顺序
+	b, t := make([]int, len(array)), make([]int, k)
+	for i := 0; i < len(array); i++ {
+		t[array[i]]++
 	}
-	_quickSort = func(left, right int, slice []int) {
-		if left < right {
-			partitionIndex := partition(left, right, slice) //排序并获取基准位置
-			//以基准位置进行分区，进行再排序
-			_quickSort(left, partitionIndex-1, slice)
-			_quickSort(partitionIndex+1, right, slice)
-		}
+	fmt.Println(t)
+	//实现稳定性
+	for i := 1; i < k; i++ {
+		t[i] += t[i-1]
 	}
-	left, right := 0, len(slice)-1 //left起始值下标，right末尾值下标
-	_quickSort(left, right, slice)
+	fmt.Println(t)
+	//倒序实现稳定性，使得排序后的数组也是倒着来
+	for j := len(array) - 1; j >= 0; j-- {
+		b[t[array[j]]-1] = array[j]
+		fmt.Println(array[j], t[array[j]], t[array[j]]-1)
+		t[array[j]]--
+	}
+	fmt.Println(b)
+	//赋值
+	for i := 0; i < len(array); i++ {
+		array[i] = b[i]
+	}
 }
 
 // func waysToChange(n int) int {
