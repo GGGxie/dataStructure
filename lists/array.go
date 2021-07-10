@@ -1,4 +1,6 @@
-package array
+package lists
 
-type Array interface {
+type Array struct {
+	cache []int
+	size  int
 }

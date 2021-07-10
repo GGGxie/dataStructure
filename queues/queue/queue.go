@@ -5,11 +5,13 @@ type Queue struct {
 	size  int
 }
 
+//Push 把数据压入队列
 func (q *Queue) Push(x interface{}) {
 	q.cache = append(q.cache, x)
 	q.size++
 }
 
+//Pop 从队列中获取元素
 /** Removes the element from in front of queue and returns that element. */
 func (q *Queue) Pop() (interface{}, bool) {
 	if q.Empty() {
@@ -41,4 +43,10 @@ func (q *Queue) Empty() bool {
 /** Returns the size of queue. */
 func (q *Queue) Size() int {
 	return q.size
+}
+
+//清空队列
+func (q *Queue) Clear() {
+	q.cache = nil
+	q.size = 0
 }

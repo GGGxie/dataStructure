@@ -1,5 +1,6 @@
 package arrayStack
 
+//常用方法:
 type Stack struct {
 	cache []interface{}
 	size  int
