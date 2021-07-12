@@ -1,38 +1,17 @@
 package main
 
-import "fmt"
+import (
+	"github.com/GGGxie/dataStructure/lists"
+)
 
 func main() {
-	a := []int{55, 60, 56, 4, 14, 56, 77, 14}
-	// a := []int{3, 2}
-	countingSort(a, 78)
-	fmt.Println(a)
-}
-
-//计数排序
-func countingSort(array []int, k int) {
-	//b中间数据，记录array排序后的顺序
-	b, t := make([]int, len(array)), make([]int, k)
-	for i := 0; i < len(array); i++ {
-		t[array[i]]++
-	}
-	fmt.Println(t)
-	//实现稳定性
-	for i := 1; i < k; i++ {
-		t[i] += t[i-1]
-	}
-	fmt.Println(t)
-	//倒序实现稳定性，使得排序后的数组也是倒着来
-	for j := len(array) - 1; j >= 0; j-- {
-		b[t[array[j]]-1] = array[j]
-		fmt.Println(array[j], t[array[j]], t[array[j]]-1)
-		t[array[j]]--
-	}
-	fmt.Println(b)
-	//赋值
-	for i := 0; i < len(array); i++ {
-		array[i] = b[i]
-	}
+	list := lists.InitList()
+	list.Add(1)
+	list.Add(3)
+	list.Add(2)
+	list.Append(4)
+	list.Append(5)
+	list.Iterate()
 }
 
 // func waysToChange(n int) int {
