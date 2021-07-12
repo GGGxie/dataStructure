@@ -17,13 +17,17 @@ type Node struct {
 	Next  *Node
 }
 
+func NewNode(data int, front, next *Node) *Node {
+	return &Node{
+		Data:  data,
+		Front: front,
+		Next:  next,
+	}
+}
+
 //init 初始化一个新链表
 func InitList() *LinkList {
-	header := &Node{
-		Data:  0,
-		Front: nil,
-		Next:  nil,
-	}
+	header := NewNode(0, nil, nil)
 	return &LinkList{
 		Header: header,
 		End:    header,
@@ -33,19 +37,11 @@ func InitList() *LinkList {
 //insert 在链头插入新元素
 func (l *LinkList) Add(data int) {
 	if l.Size == 0 { //空链表
-		temp := &Node{
-			Data:  data,
-			Front: nil,
-			Next:  nil,
-		}
+		temp := NewNode(data, nil, nil)
 		l.Header = temp
 		l.End = temp
 	} else {
-		temp := &Node{
-			Data:  data,
-			Front: nil,
-			Next:  l.Header,
-		}
+		temp := NewNode(data, nil, l.Header)
 		l.Header.Front = temp
 		l.Header = temp
 	}
@@ -55,19 +51,11 @@ func (l *LinkList) Add(data int) {
 //insert 在链尾插入新元素
 func (l *LinkList) Append(data int) {
 	if l.Size == 0 { //空链表
-		temp := &Node{
-			Data:  data,
-			Front: nil,
-			Next:  nil,
-		}
+		temp := NewNode(data, nil, nil)
 		l.Header = temp
 		l.End = temp
 	} else {
-		temp := &Node{
-			Data:  data,
-			Front: l.End,
-			Next:  nil,
-		}
+		temp := NewNode(data, l.End, nil)
 		l.End.Next = temp
 		l.End = temp
 	}
@@ -81,11 +69,7 @@ func (l *LinkList) Insert(data int, i int) {
 		return
 	}
 	tempNode := l.Get(i) //获取第i个元素
-	newNode := &Node{
-		Data:  data,
-		Front: tempNode,
-		Next:  tempNode.Next,
-	}
+	newNode := NewNode(data, tempNode, tempNode.Next)
 	tempNode.Next.Front = newNode
 	tempNode.Next = newNode
 	l.Size++
@@ -128,6 +112,9 @@ func (l *LinkList) Delete(index int) *Node {
 
 // 正序打印链表
 func (l *LinkList) Iterate() {
+	if l.Size == 0 {
+		return
+	}
 	temp := l.Header
 	for temp != nil {
 		fmt.Println(temp)
@@ -137,6 +124,9 @@ func (l *LinkList) Iterate() {
 
 // 倒序打印链表
 func (l *LinkList) Reverse() {
+	if l.Size == 0 {
+		return
+	}
 	temp := l.End
 	for temp != nil {
 		fmt.Println(temp)
