@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+
 	"github.com/GGGxie/dataStructure/lists"
 )
 
@@ -9,9 +11,13 @@ func main() {
 	list.Add(1)
 	list.Add(3)
 	list.Add(2)
+	list.Insert(7, 2)
 	list.Append(4)
 	list.Append(5)
+	list.Delete(2)
 	list.Iterate()
+	fmt.Println("`````````````")
+	list.Reverse()
 }
 
 // func waysToChange(n int) int {
