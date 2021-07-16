@@ -34,6 +34,35 @@ func sortedArrayToBST(nums []int) *TreeNode {
 	return tree
 }
 
+//search 查询元素
+func (tn *TreeNode) Search(data int) *TreeNode {
+	if tn == nil {
+		return nil
+	}
+	if data == tn.Val { //数据相等，返回
+		return tn
+	} else if data > tn.Val { //比当前节点的数据要大，遍历右子树
+		return tn.Right.Search(data)
+	} else if data < tn.Val { //比当前节点的数据要小，遍历左子树
+		return tn.Left.Search(data)
+	}
+	return nil
+}
+
+//insert 插入新元素
+func (tn *TreeNode) Insert(newNode *TreeNode) {
+	if tn == nil {
+		tn = newNode
+	}
+	if tn.Val == newNode.Val {
+		return
+	} else if newNode.Val < tn.Val {
+		tn.Left.Insert(newNode)
+	} else if newNode.Val > tn.Val {
+		tn.Right.Insert(newNode)
+	}
+}
+
 //二分递归
 func dfs(nums []int, start, end int) *TreeNode {
 	if end < start {

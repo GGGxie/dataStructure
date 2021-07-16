@@ -1,4 +1,62 @@
-package maps
+package graph
+
+import "sync"
+
+type Node struct {
+	Value int
+}
+
+type Graph struct {
+	Nodes []*Node           //记录节点
+	Edges map[*Node][]*Node //记录边
+	Lock  sync.RWMutex      //读写锁
+}
+
+func NewGraph() *Graph {
+	return &Graph{
+		Edges: make(map[*Node][]*Node),
+	}
+}
+
+func (g *Graph) AddNode(node *Node) {
+	g.Nodes = append(g.Nodes, node)
+}
+
+func (g *Graph) AddEdge(node1, node2 *Node) {
+	g.Edges[node1] = append(g.Edges[node1], node2)
+}
+
+//广度遍历，参数是对节点的操作
+func (g *Graph) BFS(start *Node, f func(node *Node)) {
+	g.Lock.RLock()
+	defer g.Lock.RUnlock()
+	//标记节点是否已经被访问过
+	visited := make(map[*Node]bool)
+	//新建队列，并把起点压入队列
+	var nodeList []*Node
+	nodeList = append(nodeList, start)
+	for {
+		if len(nodeList) == 0 { //遍历完毕，退出
+			break
+		}
+		//取出头部node
+		visitNode := nodeList[0]
+		nodeList = nodeList[1:]
+		//标记
+		visited[visitNode] = true
+		for _, node := range g.Edges[visitNode] { //把连接的节点压入队列
+			if visited[node] { //如果已经被遍历就继续
+				continue
+			}
+			//压入队列
+			nodeList = append(nodeList, node)
+			//标记
+			visited[node] = true
+		}
+		//对节点调用回调函数
+		f(visitNode)
+	}
+}
 
 // //迷路的机器人，深搜找终点
 // //优化点：状态压缩，二维切片优化成普通切片(行列最大不超过100，可以以101为区间大小，给切片分段)
