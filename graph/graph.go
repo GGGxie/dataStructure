@@ -6,6 +6,27 @@ type Node struct {
 	Value int
 }
 
+// Test
+// g := graph.NewGraph()
+// n1, n2, n3, n4, n5 := graph.Node{1}, graph.Node{2}, graph.Node{3}, graph.Node{4}, graph.Node{5}
+
+// g.AddNode(&n1)
+// g.AddNode(&n2)
+// g.AddNode(&n3)
+// g.AddNode(&n4)
+// g.AddNode(&n5)
+
+// g.AddEdge(&n1, &n2)
+// g.AddEdge(&n1, &n5)
+// g.AddEdge(&n2, &n3)
+// g.AddEdge(&n2, &n4)
+// g.AddEdge(&n2, &n5)
+// g.AddEdge(&n3, &n4)
+// g.AddEdge(&n4, &n5)
+// fmt.Println(g.Edges)
+// g.BFS(&n4, func(node *graph.Node) {
+// 	fmt.Println(node)
+// })
 type Graph struct {
 	Nodes []*Node           //记录节点
 	Edges map[*Node][]*Node //记录边
