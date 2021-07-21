@@ -1,38 +1,7 @@
 package main
 
-import (
-	"fmt"
-	"io/ioutil"
-	"os/exec"
-
-	"gopkg.in/yaml.v2"
-)
-
 func main() {
-	// c := fmt.Sprintf("create %s", "hello")
-	cmd := exec.Command("/bin/bash", "-c", "helm create hello")
-	if err := cmd.Run(); err != nil {
-		fmt.Println(err)
-	}
 
-	//读取yaml
-	var value Value
-	valueByte, err := ioutil.ReadFile("./hello/values.yaml")
-	if err != nil {
-		fmt.Print(err)
-	}
-	//解析yaml
-	yaml.Unmarshal(valueByte, &value)
-	value.Image.Repository = "nginx3"
-	//写入yaml
-	data, err := yaml.Marshal(value) // 第二个表示每行的前缀，这里不用，第三个是缩进符号，这里用tab
-	err = ioutil.WriteFile("./hello/values.yaml", data, 0777)
-
-	//打包成压缩文件
-	cmd = exec.Command("/bin/bash", "-c", "helm package hello --version=0.1.1")
-	if err := cmd.Run(); err != nil {
-		fmt.Println(err)
-	}
 }
 
 //value.yaml配置文件对应的结构体
