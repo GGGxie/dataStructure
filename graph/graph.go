@@ -1,10 +1,9 @@
 package graph
 
-import "sync"
-
-type Node struct {
-	Value int
-}
+import (
+	"fmt"
+	"sync"
+)
 
 // Test
 // g := graph.NewGraph()
@@ -27,6 +26,10 @@ type Node struct {
 // g.BFS(&n4, func(node *graph.Node) {
 // 	fmt.Println(node)
 // })
+
+type Node struct {
+	Value int
+}
 type Graph struct {
 	Nodes []*Node           //记录节点
 	Edges map[*Node][]*Node //记录边
@@ -37,14 +40,6 @@ func NewGraph() *Graph {
 	return &Graph{
 		Edges: make(map[*Node][]*Node),
 	}
-}
-
-func (g *Graph) AddNode(node *Node) {
-	g.Nodes = append(g.Nodes, node)
-}
-
-func (g *Graph) AddEdge(node1, node2 *Node) {
-	g.Edges[node1] = append(g.Edges[node1], node2)
 }
 
 //广度遍历，参数是对节点的操作
@@ -79,48 +74,33 @@ func (g *Graph) BFS(start *Node, f func(node *Node)) {
 	}
 }
 
-import (
-	"fmt"
-	"sync"
-)
-
-type Node struct {
-	value int
-}
-
-type Graph struct {
-	nodes []*Node          // 节点集
-	edges map[Node][]*Node // 邻接表表示的无向图
-	lock  sync.RWMutex     // 保证线程安全
-}
-
 // 增加节点
 func (g *Graph) AddNode(n *Node) {
-	g.lock.Lock()
-	defer g.lock.Unlock()
-	g.nodes = append(g.nodes, n)
+	g.Lock.Lock()
+	defer g.Lock.Unlock()
+	g.Nodes = append(g.Nodes, n)
 }
 
 // 增加边
 func (g *Graph) AddEdge(u, v *Node) {
-	g.lock.Lock()
-	defer g.lock.Unlock()
+	g.Lock.Lock()
+	defer g.Lock.Unlock()
 	// 首次建立图
-	if g.edges == nil {
-		g.edges = make(map[Node][]*Node)
+	if g.Edges == nil {
+		g.Edges = make(map[*Node][]*Node)
 	}
-	g.edges[*u] = append(g.edges[*u], v) // 建立 u->v 的边
-	g.edges[*v] = append(g.edges[*v], u) // 由于是无向图，同时存在 v->u 的边
+	g.Edges[u] = append(g.Edges[u], v) // 建立 u->v 的边
+	g.Edges[v] = append(g.Edges[v], u) // 由于是无向图，同时存在 v->u 的边
 }
 
 // 输出图
 func (g *Graph) String() {
-	g.lock.RLock()
-	defer g.lock.RUnlock()
+	g.Lock.RLock()
+	defer g.Lock.RUnlock()
 	str := ""
-	for _, iNode := range g.nodes {
+	for _, iNode := range g.Nodes {
 		str += iNode.String() + " -> "
-		nexts := g.edges[*iNode]
+		nexts := g.Edges[iNode]
 		for _, next := range nexts {
 			str += next.String() + " "
 		}
@@ -131,80 +111,7 @@ func (g *Graph) String() {
 
 // 输出节点
 func (n *Node) String() string {
-	return fmt.Sprintf("%v", n.value)
-}
-
-type NodeQueue struct {
-	nodes []Node
-	lock  sync.RWMutex
-}
-
-// 生成节点队列
-func NewNodeQueue() *NodeQueue {
-	q := NodeQueue{}
-	q.lock.Lock()
-	defer q.lock.Unlock()
-	q.nodes = []Node{}
-	return &q
-}
-
-// 入队列
-func (q *NodeQueue) Enqueue(n Node) {
-	q.lock.Lock()
-	defer q.lock.Unlock()
-	q.nodes = append(q.nodes, n)
-}
-
-// 出队列
-func (q *NodeQueue) Dequeue() *Node {
-	q.lock.Lock()
-	defer q.lock.Unlock()
-	node := q.nodes[0]
-	q.nodes = q.nodes[1:]
-	return &node
-}
-
-// 判空
-func (q *NodeQueue) IsEmpty() bool {
-	q.lock.RLock()
-	defer q.lock.RUnlock()
-	return len(q.nodes) == 0
-}
-
-// 实现 BFS 遍历
-func (g *Graph) BFS(f func(node *Node)) {
-	g.lock.RLock()
-	defer g.lock.RUnlock()
-	// 初始化队列
-	q := NewNodeQueue()
-	// 取图的第一个节点入队列
-	head := g.nodes[0]
-	q.Enqueue(*head)
-	// 标识节点是否已经被访问过
-	visited := make(map[*Node]bool)
-	visited[head] = true
-	// 遍历所有节点直到队列为空
-	for {
-		if q.IsEmpty() {
-			break
-		}
-		node := q.Dequeue()
-		visited[node] = true
-		nexts := g.edges[*node]
-		// 将所有未访问过的邻接节点入队列
-		for _, next := range nexts {
-			// 如果节点已被访问过
-			if visited[next] {
-				continue
-			}
-			q.Enqueue(*next)
-			visited[next] = true
-		}
-		// 对每个正在遍历的节点执行回调
-		if f != nil {
-			f(node)
-		}
-	}
+	return fmt.Sprintf("%v", n.Value)
 }
 
 // //迷路的机器人，深搜找终点
