@@ -1,4 +1,83 @@
-package maps
+package graph
+
+import "sync"
+
+type Node struct {
+	Value int
+}
+
+// Test
+// g := graph.NewGraph()
+// n1, n2, n3, n4, n5 := graph.Node{1}, graph.Node{2}, graph.Node{3}, graph.Node{4}, graph.Node{5}
+
+// g.AddNode(&n1)
+// g.AddNode(&n2)
+// g.AddNode(&n3)
+// g.AddNode(&n4)
+// g.AddNode(&n5)
+
+// g.AddEdge(&n1, &n2)
+// g.AddEdge(&n1, &n5)
+// g.AddEdge(&n2, &n3)
+// g.AddEdge(&n2, &n4)
+// g.AddEdge(&n2, &n5)
+// g.AddEdge(&n3, &n4)
+// g.AddEdge(&n4, &n5)
+// fmt.Println(g.Edges)
+// g.BFS(&n4, func(node *graph.Node) {
+// 	fmt.Println(node)
+// })
+type Graph struct {
+	Nodes []*Node           //记录节点
+	Edges map[*Node][]*Node //记录边
+	Lock  sync.RWMutex      //读写锁
+}
+
+func NewGraph() *Graph {
+	return &Graph{
+		Edges: make(map[*Node][]*Node),
+	}
+}
+
+func (g *Graph) AddNode(node *Node) {
+	g.Nodes = append(g.Nodes, node)
+}
+
+func (g *Graph) AddEdge(node1, node2 *Node) {
+	g.Edges[node1] = append(g.Edges[node1], node2)
+}
+
+//广度遍历，参数是对节点的操作
+func (g *Graph) BFS(start *Node, f func(node *Node)) {
+	g.Lock.RLock()
+	defer g.Lock.RUnlock()
+	//标记节点是否已经被访问过
+	visited := make(map[*Node]bool)
+	//新建队列，并把起点压入队列
+	var nodeList []*Node
+	nodeList = append(nodeList, start)
+	for {
+		if len(nodeList) == 0 { //遍历完毕，退出
+			break
+		}
+		//取出头部node
+		visitNode := nodeList[0]
+		nodeList = nodeList[1:]
+		//标记
+		visited[visitNode] = true
+		for _, node := range g.Edges[visitNode] { //把连接的节点压入队列
+			if visited[node] { //如果已经被遍历就继续
+				continue
+			}
+			//压入队列
+			nodeList = append(nodeList, node)
+			//标记
+			visited[node] = true
+		}
+		//对节点调用回调函数
+		f(visitNode)
+	}
+}
 
 import (
 	"fmt"
