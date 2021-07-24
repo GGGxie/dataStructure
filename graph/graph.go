@@ -27,13 +27,14 @@ import (
 // 	fmt.Println(node)
 // })
 
-type Node struct {
-	Value int
-}
+//无向图
 type Graph struct {
 	Nodes []*Node           //记录节点
 	Edges map[*Node][]*Node //记录边
 	Lock  sync.RWMutex      //读写锁
+}
+type Node struct {
+	Value int
 }
 
 func NewGraph() *Graph {

@@ -1,7 +1,22 @@
 package main
 
-func main() {
+import (
+	"fmt"
 
+	"github.com/GGGxie/dataStructure/trie"
+)
+
+func main() {
+	tree := trie.NewTrie([]string{"her", "xa"})
+	//fmt.Println(tree)
+	flag := tree.Search("her")
+	fmt.Println(flag)
+	flag = tree.Search("xa1")
+	fmt.Println(flag)
+	flag = tree.StartsWith("h")
+	fmt.Println(flag)
+	flag = tree.StartsWith("ha")
+	fmt.Println(flag)
 }
 
 //value.yaml配置文件对应的结构体
