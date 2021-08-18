@@ -5,6 +5,7 @@ import (
 	"fmt"
 )
 
+//实现heap包
 type MaxHeap []int
 
 func (h MaxHeap) Len() int {

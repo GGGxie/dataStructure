@@ -1,22 +1,155 @@
 package main
 
 import (
+	"archive/tar"
+	"bytes"
+	"compress/gzip"
 	"fmt"
-
-	"github.com/GGGxie/dataStructure/trie"
+	"io"
+	"io/ioutil"
+	"os"
+	"os/exec"
+	"path/filepath"
+	"strconv"
+	"strings"
 )
 
+func VersionOrdinal(version string) string {
+	// ISO/IEC 14651:2011
+	const maxByte = 1<<8 - 1
+	vo := make([]byte, 0, len(version)+8)
+	j := -1
+	for i := 0; i < len(version); i++ {
+		b := version[i]
+		if '0' > b || b > '9' {
+			vo = append(vo, b)
+			j = -1
+			continue
+		}
+		if j == -1 {
+			vo = append(vo, 0x00)
+			j = len(vo) - 1
+		}
+		if vo[j] == 1 && vo[j+1] == '0' {
+			vo[j+1] = b
+			continue
+		}
+		if vo[j]+1 > maxByte {
+			panic("VersionOrdinal: invalid version")
+		}
+		vo = append(vo, b)
+		vo[j]++
+	}
+	return string(vo)
+}
+
+func compareVersion(version1 string, version2 string) int {
+	versionA := strings.Split(version1, ".")
+	versionB := strings.Split(version2, ".")
+
+	for i := len(versionA); i < 4; i++ {
+		versionA = append(versionA, "0")
+	}
+	fmt.Println(versionA)
+	for i := len(versionB); i < 4; i++ {
+		versionB = append(versionB, "0")
+	}
+	fmt.Println(versionB)
+	for i := 0; i < 4; i++ {
+		version1, _ := strconv.Atoi(versionA[i])
+		version2, _ := strconv.Atoi(versionB[i])
+		if version1 == version2 {
+			continue
+		} else if version1 > version2 {
+			return 1
+		} else {
+			return -1
+		}
+	}
+	return 0
+}
+
 func main() {
-	tree := trie.NewTrie([]string{"her", "xa"})
-	//fmt.Println(tree)
-	flag := tree.Search("her")
-	fmt.Println(flag)
-	flag = tree.Search("xa1")
-	fmt.Println(flag)
-	flag = tree.StartsWith("h")
-	fmt.Println(flag)
-	flag = tree.StartsWith("ha")
-	fmt.Println(flag)
+	fmt.Println(strings.TrimPrefix("/home/gavin/Documents/go/src/dataStructure/temp/chartdemo", "/home/gavin/Documents/go/src/dataStructure/temp/"))
+	fmt.Println(getPrePath("/home/gavin/Documents/go/src/dataStructure/temp/chartdemo"))
+}
+
+//输入：./data/catalog/mychart/chartdemo/chartdemo-0.1.0.tgz
+//返回：./data/catalog/mychart/chartdemo/
+func getPrePath(fullPath string) (string, string) {
+	comma := strings.LastIndex(fullPath, "/")
+	return fullPath[:comma], fullPath[comma+1:]
+}
+
+// 读取文件夹内所有文件内容，忽略文件夹
+func ReadFiles(src string) map[string]string {
+	mapp := make(map[string]string)
+	var paths []string
+	err := filepath.Walk(src, func(path string, info os.FileInfo, err error) error {
+		if !info.IsDir() {
+			paths = append(paths, path)
+		}
+		return nil
+	})
+	if err != nil {
+		panic(err)
+	}
+	for _, path := range paths {
+		a, _ := ioutil.ReadFile(path)
+		mapp[path] = string(a)
+	}
+	return mapp
+}
+
+//解压tgz压缩包
+func DeCompress(src, dest string) error {
+	srcFile, err := os.Open(src)
+	if err != nil {
+		return err
+	}
+	defer srcFile.Close()
+	gr, err := gzip.NewReader(srcFile)
+	if err != nil {
+		return err
+	}
+	defer gr.Close()
+	tr := tar.NewReader(gr)
+	for {
+		hdr, err := tr.Next()
+		if err != nil {
+			if err == io.EOF {
+				break
+			} else {
+				return err
+			}
+		}
+		filename := dest + hdr.Name
+		file, err := createFile(filename)
+		if err != nil {
+			return err
+		}
+		io.Copy(file, tr)
+	}
+	return nil
+}
+
+func createFile(name string) (*os.File, error) {
+	err := os.MkdirAll(string([]rune(name)[0:strings.LastIndex(name, "/")]), 0755)
+	if err != nil {
+		return nil, err
+	}
+	return os.Create(name)
+}
+
+//执行命令行，返回结果
+func execCommand(cmd string) (*bytes.Buffer, error) {
+	c := exec.Command("/bin/bash", "-c", cmd)
+	var out bytes.Buffer
+	c.Stdout = &out
+	if err := c.Run(); err != nil {
+		return nil, err
+	}
+	return &out, nil
 }
 
 //value.yaml配置文件对应的结构体
