@@ -5,7 +5,7 @@ package search
 func isBadVersion(version int) bool
 func firstBadVersion(n int) int {
 	var start, end int
-	for start, end = 1, n; start < end; {
+	for start, end = 1, n; start < end; { //二分搜索
 		mid := (start + end) / 2
 		if isBadVersion(mid) {
 			end = mid

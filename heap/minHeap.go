@@ -16,7 +16,7 @@ func NewMinHeap() *MinHeap {
 	return h
 }
 
-// 插入数字,插入数字需要保证堆的性质
+// 插入元素,插入元素需要保证堆的性质
 func (H *MinHeap) Insert(v int) {
 	H.Element = append(H.Element, v)
 	i := len(H.Element) - 1

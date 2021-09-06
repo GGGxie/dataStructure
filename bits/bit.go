@@ -5,7 +5,7 @@ import (
 )
 
 //常用操作
-//取出最地位：num & 1
+//取出最低位：num & 1
 //取出后n位：num & ((1<<n)-1)
 
 //用M去填充N的第i-j位
@@ -13,7 +13,8 @@ import (
 // 输出：N = 1100(10001001100)
 func InsertBits(N int, M int, i int, j int) int {
 	for k := i; k <= j; k++ { //把N的第i-j位置为0
-		N &= (^(1 << k))
+		//^k对k进行位反操作
+		N &= (^(1 << k)) //N&=(^k)对N进行清位操作
 		fmt.Printf("%016b\n", N)
 	}
 	fmt.Printf("%016b\n", N)
