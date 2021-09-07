@@ -12,14 +12,15 @@ package trie
 // fmt.Println(flag)
 
 //字典树
-type TrieNode struct {
-	IsWord bool               //记录到该节点是否为一个单词
-	Next   map[rune]*TrieNode //记录下一个节点的信息
-}
-
 //树的root为空,不储存数据
 type TrieTree struct {
 	Root *TrieNode
+}
+
+//树节点
+type TrieNode struct {
+	IsWord bool               //记录到该节点是否为一个单词
+	Next   map[rune]*TrieNode //记录下一个节点的信息
 }
 
 //新建字典树
