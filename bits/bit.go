@@ -22,7 +22,7 @@ func InsertBits(N int, M int, i int, j int) int {
 	return N
 }
 
-//输出十进制小数的二进制表示
+//输出十进制>1的小数的二进制表示
 func PrintBin(num float64) string {
 	var ret []byte
 	var count int
@@ -54,7 +54,6 @@ func reverseBits(num int) int {
 	//max记录最大的1的总数
 	//current记录用0连接的两段的1的总数
 	var pre, max, current int
-	var flag bool
 	for i := 0; i < 32; i++ { //遍历num
 		a := num & 1 //取出个位
 		num = num >> 1
@@ -62,15 +61,7 @@ func reverseBits(num int) int {
 			current++
 			pre++
 		} else if a == 0 {
-			if !flag { //替换1还不被使用
-				current++
-				flag = true
-			} else { //替换1已被使用
-				current = pre + 1
-				if current > max {
-					max = current
-				}
-			}
+			current = pre + 1
 			pre = 0
 		}
 		if current > max {
