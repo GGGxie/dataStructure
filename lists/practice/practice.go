@@ -1,24 +1,20 @@
-package main
-
-import (
-	"fmt"
-)
-
-func main() {
-	fmt.Println(1 & 1)
-	fmt.Println(2 & 1)
-}
+package practice
 
 type ListNode struct {
 	Val  int
 	Next *ListNode
 }
 
+// https://leetcode-cn.com/problems/delete-node-in-a-linked-list/
+// 删除某个链表中给定的（非末尾）节点
+// 思路:直接用下一个节点的值来覆盖当前节点,使得达到"删除"效果
 func deleteNode(node *ListNode) {
 	node.Val = node.Next.Val
 	node.Next = node.Next.Next
 }
 
+// https://leetcode-cn.com/leetbook/read/top-interview-questions/xa0a97/
+// 给定一个单链表，把所有的奇数节点和偶数节点分别排在一起。
 func oddEvenList(head *ListNode) *ListNode {
 	if head == nil || head.Next == nil {
 		return head
