@@ -1,14 +1,9 @@
-package main
+package string
 
-import (
-	"fmt"
-	"strings"
-)
+import "strings"
 
-func main() {
-	fmt.Println(isPalindrome(".,"))
-}
-
+// https://leetcode-cn.com/leetbook/read/top-interview-questions/xah8k6/
+// 判断字符串是否为回文串
 func isPalindrome(s string) bool {
 	stemp := strings.ToUpper(s) //全部转大写
 	length := len(s)
