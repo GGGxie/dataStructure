@@ -20,24 +20,26 @@ func deleteNode(node *ListNode) {
 }
 
 func oddEvenList(head *ListNode) *ListNode {
-	if head == nil || head.Next == nil {
+	if head == nil {
 		return head
 	}
-	p1, p2, p3 := head, head.Next, head.Next //p1奇数队列的结尾,p2偶数队列的结尾,p3偶数队列的开头
-	var idx int
-	temp := head.Next.Next
-	for temp != nil {
-		idx++
-		if idx&1 == 1 { //奇数
-			p1.Next = temp
-			p1 = temp
-		} else { //偶数
-			p2.Next = temp
-			p2 = temp
-		}
-		temp = temp.Next
+	odd := head           //奇数列表尾部
+	evenHead := head.Next //偶数列表头部
+	even := evenHead      //偶数列表尾部
+	for even != nil && even.Next != nil {
+		odd.Next = even.Next
+		odd = even.Next
+		even.Next = odd.Next
+		even = odd.Next
 	}
-	p2.Next = nil //偶数队列的最后一个要设置为nil
-	p1.Next = p3
+	odd.Next = evenHead
 	return head
+}
+
+func isPalindrome(head *ListNode) bool {
+	fast, slow := head, head
+	for fast.Next != nil {
+		slow = slow.Next
+		fast = fast.Next.Next
+	}
 }
