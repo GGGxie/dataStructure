@@ -2,11 +2,11 @@ package main
 
 import (
 	"fmt"
+	"math"
 )
 
 func main() {
-	fmt.Println(1 & 1)
-	fmt.Println(2 & 1)
+	fmt.Println(longestConsecutive([]int{1, 2, 0, 1}))
 }
 
 type ListNode struct {
@@ -14,32 +14,27 @@ type ListNode struct {
 	Next *ListNode
 }
 
-func deleteNode(node *ListNode) {
-	node.Val = node.Next.Val
-	node.Next = node.Next.Next
-}
-
-func oddEvenList(head *ListNode) *ListNode {
-	if head == nil {
-		return head
+func longestConsecutive(nums []int) int {
+	if len(nums) == 0 {
+		return 0
 	}
-	odd := head           //奇数列表尾部
-	evenHead := head.Next //偶数列表头部
-	even := evenHead      //偶数列表尾部
-	for even != nil && even.Next != nil {
-		odd.Next = even.Next
-		odd = even.Next
-		even.Next = odd.Next
-		even = odd.Next
+	mapp := make(map[int]bool)
+	max := math.MinInt32
+	for i := range nums {
+		mapp[nums[i]] = true
 	}
-	odd.Next = evenHead
-	return head
-}
-
-func isPalindrome(head *ListNode) bool {
-	fast, slow := head, head
-	for fast.Next != nil {
-		slow = slow.Next
-		fast = fast.Next.Next
+	for i := range nums {
+		if !mapp[nums[i]-1] { //起点
+			count := 1
+			start := nums[i]
+			for mapp[start+1] {
+				count++
+				start += 1
+			}
+			if count > max {
+				max = count
+			}
+		}
 	}
+	return max
 }
