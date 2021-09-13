@@ -2,11 +2,16 @@ package main
 
 import (
 	"fmt"
+	"strconv"
 	"strings"
 )
 
 func main() {
-	fmt.Println(isPalindrome(".,"))
+	a := 1.0000000002301
+	b := 1.0000000002301
+	tempa := strconv.FormatFloat(a, 'g', -1, 64)
+	tempb := strconv.FormatFloat(b, 'g', -1, 64)
+	fmt.Println(tempa, tempb)
 }
 
 func isPalindrome(s string) bool {
