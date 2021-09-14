@@ -6,33 +6,53 @@ import (
 )
 
 func main() {
-	fmt.Println(coinChange([]int{1, 2, 5}, 11))
+	fmt.Println(longestIncreasingPath([][]int{{9, 9, 4}, {6, 6, 8}, {2, 1, 1}}))
 }
 
-// https://leetcode-cn.com/leetbook/read/top-interview-questions/x2echt/
-// 零钱兑换，最少的硬币个数 。如果没有任何一种硬币组合能组成总金额
-// 动态转移方程 dp[i]=min(dp[i-coins[j]]+1),其中coins[j] <= i
-func coinChange(coins []int, amount int) int {
-	dp := make([]int, amount+1) //dp[i]：i代表amount为i时，需要的最少硬币数
-	dp[0] = 0
-	for i := 1; i <= amount; i++ {
-		minNum := math.MaxInt32
-		for j := range coins {
-			if coins[j] <= i {
-				minNum = min(minNum, dp[i-coins[j]]+1)
-			}
+var mapp [][]int //记录点的最长递增路径值
+var (
+	dis    = [][]int{{0, -1}, {0, 1}, {-1, 0}, {1, 0}}
+	lenRow int
+	lenCol int
+)
+
+func longestIncreasingPath(matrix [][]int) int {
+	if len(matrix) == 0 || len(matrix[0]) == 0 {
+		return 0
+	}
+	lenRow = len(matrix)
+	lenCol = len(matrix[0])
+	//初始化mapp
+	mapp = make([][]int, lenRow)
+	for r := 0; r < lenRow; r++ {
+		mapp[r] = make([]int, lenCol)
+	}
+
+	maxNum := math.MinInt32
+	for i := range matrix {
+		for j := range matrix[i] {
+			maxNum = max(dfs(i, j, matrix), maxNum)
 		}
-		dp[i] = minNum
 	}
-	if dp[amount] == math.MaxInt32 { //没有匹配返回-1
-		return -1
-	} else {
-		return dp[amount]
-	}
+	return maxNum
 }
 
-func min(a, b int) int {
-	if a < b {
+func dfs(row, col int, matrix [][]int) int {
+	if mapp[row][col] != 0 {
+		return mapp[row][col]
+	}
+	mapp[row][col]++
+	for _, s := range dis {
+		newRow, newCol := row+s[0], col+s[1]
+		if lenRow > newRow && newRow >= 0 && lenCol > newCol && newCol >= 0 && matrix[newRow][newCol] > matrix[row][col] {
+			mapp[row][col] = max(dfs(newRow, newCol, matrix)+1, mapp[row][col])
+		}
+	}
+	return mapp[row][col]
+}
+
+func max(a, b int) int {
+	if a > b {
 		return a
 	}
 	return b
