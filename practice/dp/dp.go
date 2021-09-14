@@ -4,6 +4,20 @@ import (
 	"math"
 )
 
+func max(x, y int) int {
+	if x > y {
+		return x
+	}
+	return y
+}
+
+func min(a, b int) int {
+	if a < b {
+		return a
+	}
+	return b
+}
+
 // 三步问题。有个小孩正在上楼梯，楼梯有n阶台阶，小孩一次可以上1阶、2阶或3阶。实现一种方法，计算小孩有多少种上楼梯的方式。结果可能很大，你需要对结果模1000000007。
 func waysToStep(n int) int {
 	switch n {
@@ -70,13 +84,6 @@ func maxPathSum(root *TreeNode) int {
 	return maxSum
 }
 
-func max(x, y int) int {
-	if x > y {
-		return x
-	}
-	return y
-}
-
 // https://leetcode-cn.com/leetbook/read/top-interview-questions/x2xmre/
 // 最长连续序列
 // hash表实现,时间复杂度O(n),空间复杂度O(n)
@@ -103,4 +110,62 @@ func longestConsecutive(nums []int) int {
 		}
 	}
 	return max
+}
+
+// https://leetcode-cn.com/leetbook/read/top-interview-questions/x2959v/
+// 完全平方数:需要让组成和的完全平方数的个数最少,给你一个整数 n ，返回和为 n 的完全平方数的最少数量
+func numSquares(n int) int {
+	dp := make([]int, n+1) //dp[i]：达到i所需要的最少个数
+	dp[0] = 0
+	for i := 1; i <= n; i++ {
+		minNum := math.MaxInt32
+		for j := 1; j*j <= i; j++ {
+			minNum = min(minNum, dp[i-j*j])
+		}
+		dp[i] = minNum + 1
+	}
+	return dp[n]
+}
+
+// https://leetcode-cn.com/leetbook/read/top-interview-questions/x29fxj/
+// 最长上升子序列
+// 状态转移方程：dp[i]=max(dp[j])+1,其中0≤j<i且num[j]<num[i]
+func lengthOfLIS(nums []int) int {
+	dp := make([]int, len(nums)) //dp[i]:到达i的最长上升子序列的个数
+	maxNum := math.MinInt32
+	for i := 0; i < len(nums); i++ {
+		count := 1
+		for j := i; j >= 0; j-- {
+			if nums[j] < nums[i] {
+				count = max(dp[j]+1, count)
+			}
+		}
+		dp[i] = count
+		if maxNum < dp[i] {
+			maxNum = dp[i]
+		}
+	}
+	return maxNum
+}
+
+// https://leetcode-cn.com/leetbook/read/top-interview-questions/x2echt/
+// 零钱兑换，最少的硬币个数 。如果没有任何一种硬币组合能组成总金额
+// 动态转移方程 dp[i]=min(dp[i-coins[j]]+1),其中coins[j] <= i
+func coinChange(coins []int, amount int) int {
+	dp := make([]int, amount+1) //dp[i]：i代表amount为i时，需要的最少硬币数
+	dp[0] = 0
+	for i := 1; i <= amount; i++ {
+		minNum := math.MaxInt32
+		for j := range coins {
+			if coins[j] <= i {
+				minNum = min(minNum, dp[i-coins[j]]+1)
+			}
+		}
+		dp[i] = minNum
+	}
+	if dp[amount] == math.MaxInt32 { //没有匹配返回-1
+		return -1
+	} else {
+		return dp[amount]
+	}
 }
