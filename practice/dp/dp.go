@@ -2,6 +2,7 @@ package dp
 
 import (
 	"math"
+	"strings"
 )
 
 func max(x, y int) int {
@@ -168,4 +169,32 @@ func coinChange(coins []int, amount int) int {
 	} else {
 		return dp[amount]
 	}
+}
+
+// https://leetcode-cn.com/leetbook/read/top-interview-questions/xafdmc/
+// 至少有K个重复字符的最长子串，给你一个字符串 s 和一个整数 k ，请你找出 s 中的最长子串， 要求该子串中的每一字符出现次数都不少于 k 。返回这一子串的长度。
+// 分治实现，找出s中数量小于k的字母，然后根据字母来分割字符串，再从各个字符串中找出最长子字符串。
+func longestSubstring(s string, k int) int {
+	mapp := make(map[int]int) //记录s中每种字符的数量
+	for _, r := range s {
+		index := int(r - 'a')
+		mapp[index]++
+	}
+	var temp string //记录数量小于k的字母
+	for i, _ := range mapp {
+		if mapp[i] < k {
+			temp = string(i + 'a')
+			break
+		}
+	}
+	if temp == "" {
+		return len(s)
+	}
+	maxNum := math.MinInt32
+	for _, child := range strings.Split(s, string(temp)) {
+		maxNum = max(longestSubstring(child, k), maxNum)
+	}
+
+	//记录s中
+	return maxNum
 }
