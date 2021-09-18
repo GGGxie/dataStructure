@@ -12,6 +12,11 @@ package trie
 // fmt.Println(flag)
 
 //字典树
+//作用是高效检索单词
+// 常见应用场景
+// 1.字符串检索
+// 2.字符串最长公共前缀
+// 3.排序
 //树的root为空,不储存数据
 type TrieTree struct {
 	Root *TrieNode

@@ -1,33 +1,77 @@
 package main
 
-import (
-	"fmt"
-)
+import "fmt"
 
 func main() {
-	fmt.Println(wordBreak("leetcode", []string{"leet", "code"}))
+
+	mapp := [][]byte{
+		{'a', 'b', 'c'}, {'a', 'e', 'd'}, {'a', 'f', 'g'},
+	}
+
+	words := []string{
+		"eaabcdgfa",
+	}
+	fmt.Println(findWords(mapp, words))
 }
 
-// https://leetcode-cn.com/leetbook/read/top-interview-questions/xa503c/
-// 单词拆分。给定一个非空字符串 s 和一个包含非空单词的列表 wordDict，判定 s 是否可以被空格拆分为一个或多个在字典中出现的单词。
-// 状态转移方程：dp[i]=dp[j] && check(s[j..i−1])
-func wordBreak(s string, wordDict []string) bool {
-	length := len(s)
-	mapp := make(map[string]bool)
-	for _, v := range wordDict {
-		mapp[v] = true
+type Trie struct {
+	children [26]*Trie
+	word     string
+}
+
+func (t *Trie) Insert(word string) {
+	node := t
+	for _, ch := range word {
+		ch -= 'a'
+		if node.children[ch] == nil {
+			node.children[ch] = &Trie{}
+		}
+		node = node.children[ch]
 	}
-	fmt.Println(mapp)
-	dp := make([]bool, length+1) //dp[i]记录子串s[0:i]是否能在字段中被拆分成一个或多个单词
-	dp[0] = true
-	for i := 1; i <= length; i++ {
-		for j := 0; j < i; j++ {
-			if dp[j] && mapp[s[j:i]] {
-				dp[i] = true
-				break
+	node.word = word
+}
+
+var dirs = []struct{ x, y int }{{-1, 0}, {1, 0}, {0, -1}, {0, 1}}
+
+func findWords(board [][]byte, words []string) []string {
+	t := &Trie{}
+	for _, word := range words {
+		t.Insert(word)
+	}
+
+	m, n := len(board), len(board[0])
+	seen := map[string]bool{}
+
+	var dfs func(node *Trie, x, y int)
+	dfs = func(node *Trie, x, y int) {
+		ch := board[x][y]
+		node = node.children[ch-'a']
+		if node == nil {
+			return
+		}
+
+		if node.word != "" {
+			seen[node.word] = true
+		}
+
+		board[x][y] = '#'
+		for _, d := range dirs {
+			nx, ny := x+d.x, y+d.y
+			if 0 <= nx && nx < m && 0 <= ny && ny < n && board[nx][ny] != '#' {
+				dfs(node, nx, ny)
 			}
+		}
+		board[x][y] = ch
+	}
+	for i, row := range board {
+		for j := range row {
+			dfs(t, i, j)
 		}
 	}
 
-	return dp[length]
+	ans := make([]string, 0, len(seen))
+	for s := range seen {
+		ans = append(ans, s)
+	}
+	return ans
 }
