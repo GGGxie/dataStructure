@@ -1,17 +1,20 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+)
 
 func main() {
 
-	mapp := [][]byte{
-		{'a', 'b', 'c'}, {'a', 'e', 'd'}, {'a', 'f', 'g'},
-	}
+	// mapp := [][]byte{
+	// 	{'a', 'b', 'c'}, {'a', 'e', 'd'}, {'a', 'f', 'g'},
+	// }
 
-	words := []string{
-		"eaabcdgfa",
-	}
-	fmt.Println(findWords(mapp, words))
+	// words := []string{
+	// 	"eaabcdgfa",
+	// }
+	// fmt.Println(findWords(mapp, words))
+	fmt.Println(majorityElement([]int{2, 2, 1, 1, 1, 2, 2}))
 }
 
 type Trie struct {
