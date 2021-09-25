@@ -16,6 +16,16 @@ func main() {
 	// fmt.Println(findWords(mapp, words))
 	fmt.Println(majorityElement([]int{2, 2, 1, 1, 1, 2, 2}))
 }
+func moveZeroes(nums []int) {
+	left, right, n := 0, 0, len(nums)
+	for right < n {
+		if nums[right] != 0 {
+			nums[left], nums[right] = nums[right], nums[left]
+			left++
+		}
+		right++
+	}
+}
 
 type Trie struct {
 	children [26]*Trie

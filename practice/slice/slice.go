@@ -44,6 +44,43 @@ func majorityElement(nums []int) int {
 	}
 	return index
 }
+
+// https://leetcode-cn.com/leetbook/read/top-interview-questions/xm42hs/
+// 旋转数组,给定一个数组，将数组中的元素向右移动 k 个位置，其中 k 是非负数。
+func rotate(nums []int, k int) {
+	length := len(nums)
+	k %= length //当k>length
+	index := length - k
+	copy(nums, append(nums[index:], nums[0:index]...))
+}
+
+// https://leetcode-cn.com/leetbook/read/top-interview-questions/xm1rfd/
+// 存在重复元素.给定一个整数数组，判断是否存在重复元素.
+func containsDuplicate(nums []int) bool {
+	mapp := make(map[int]int)
+	for i := range nums {
+		mapp[nums[i]]++
+		if mapp[nums[i]] > 1 {
+			return true
+		}
+	}
+	return false
+}
+
+// https://leetcode-cn.com/leetbook/read/top-interview-questions/xmy9jh/
+// 移动零.给定一个数组 nums，编写一个函数将所有 0 移动到数组的末尾，同时保持非零元素的相对顺序。
+// 双指针实现,
+func moveZeroes(nums []int) {
+	left, right, n := 0, 0, len(nums) //left:第一个为0的下标,rigth:遍历切片的下标
+	for right < n {
+		if nums[right] != 0 {
+			nums[left], nums[right] = nums[right], nums[left]
+			left++
+		}
+		right++
+	}
+}
+
 func min(a, b int) int {
 	if a < b {
 		return a
