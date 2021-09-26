@@ -1,20 +1,18 @@
 package main
 
-import (
-	"fmt"
-)
+import "fmt"
 
 func main() {
-
-	// mapp := [][]byte{
-	// 	{'a', 'b', 'c'}, {'a', 'e', 'd'}, {'a', 'f', 'g'},
-	// }
-
-	// words := []string{
-	// 	"eaabcdgfa",
-	// }
-	// fmt.Println(findWords(mapp, words))
-	fmt.Println(majorityElement([]int{2, 2, 1, 1, 1, 2, 2}))
+	a := []int{1, 2, 3, 4, 5, 6, 7}
+	fmt.Printf("%p\n", &a)
+	rotate(a, 6)
+	fmt.Println(a)
+}
+func rotate(nums []int, k int) {
+	length := len(nums)
+	k %= length //当k>length
+	index := length - k
+	copy(nums, append(nums[index:], nums[0:index]...))
 }
 func moveZeroes(nums []int) {
 	left, right, n := 0, 0, len(nums)
