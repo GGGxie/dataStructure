@@ -81,6 +81,36 @@ func moveZeroes(nums []int) {
 	}
 }
 
+// https://leetcode-cn.com/problems/search-a-2d-matrix-ii/
+// 搜索二维矩阵 II,
+// 每行的元素从左到右升序排列。
+// 每列的元素从上到下升序排列。
+// 暴力对每一行进行二分
+func searchMatrix(matrix [][]int, target int) bool {
+	for _, row := range matrix {
+		if binarySearch(row, target) {
+			return true
+		}
+	}
+	return false
+}
+
+//二分搜索
+func binarySearch(list []int, target int) bool {
+	if len(list) == 0 {
+		return false
+	}
+	mid := len(list) / 2
+	if list[mid] == target {
+		return true
+	}
+	if list[mid] > target {
+		return binarySearch(list[0:mid], target) //当len(list)=1,list[0:0]为空，len(list[0:0])=0
+	} else if list[mid] < target {
+		return binarySearch(list[mid+1:], target) //当len(list)=1,list[1:]为空,len(list[1:])=0
+	}
+	return false
+}
 func min(a, b int) int {
 	if a < b {
 		return a

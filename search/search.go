@@ -15,3 +15,20 @@ func firstBadVersion(n int) int {
 	}
 	return start
 }
+
+//二分搜索
+func binarySearch(list []int, target int) bool {
+	if len(list) == 0 {
+		return false
+	}
+	mid := len(list) / 2
+	if list[mid] == target {
+		return true
+	}
+	if list[mid] > target {
+		return binarySearch(list[0:mid], target) //当len(list)=1,list[0:0]为空，len(list[0:0])=0
+	} else if list[mid] < target {
+		return binarySearch(list[mid+1:], target) //当len(list)=1,list[1:]为空,len(list[1:])=0
+	}
+	return false
+}
