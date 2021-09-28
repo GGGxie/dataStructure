@@ -125,6 +125,7 @@ func productExceptSelf(nums []int) []int {
 	return nums
 }
 
+// 官方实现
 // func productExceptSelf(nums []int) []int {
 // 	length := len(nums)
 // 	answer := make([]int, length)
