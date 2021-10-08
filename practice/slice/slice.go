@@ -81,6 +81,57 @@ func moveZeroes(nums []int) {
 	}
 }
 
+// https://leetcode-cn.com/leetbook/read/top-interview-questions/xmcbym/
+// 两个数组的交集 II.给定两个数组，编写一个函数来计算它们的交集。(数组中可能存在重复数据)
+func intersect(nums1 []int, nums2 []int) []int {
+	//队列从小到大排序
+	quickSort(nums1)
+	quickSort(nums2)
+	var ret []int
+	//i:nums1下标,j:nums2下标
+	for i, j := 0, 0; i < len(nums1) && j < len(nums2); {
+		if nums1[i] == nums2[j] {
+			ret = append(ret, nums1[i])
+			i++
+			j++
+		} else if nums1[i] > nums2[j] {
+			j++
+		} else if nums1[i] < nums2[j] {
+			i++
+		}
+	}
+	return ret
+}
+
+func quickSort(slice []int) {
+	var (
+		_quickSort func(left, right int, slice []int)     //利用递归不断对分区进行排序
+		partition  func(left, right int, slice []int) int //排序
+	)
+	partition = func(left, right int, slice []int) int {
+		flag := left      //基准
+		index := left + 1 //标记比slice[flag]大的位置
+		for i := index; i <= right; i++ {
+			if slice[i] < slice[flag] {
+				slice[i], slice[index] = slice[index], slice[i]
+				index++
+			}
+		}
+		slice[flag], slice[index-1] = slice[index-1], slice[flag]
+		return (index - 1)
+	}
+	_quickSort = func(left, right int, slice []int) {
+		if left < right {
+			partitionIndex := partition(left, right, slice) //排序并获取基准位置
+			//以基准位置进行分区，进行再排序
+			_quickSort(left, partitionIndex-1, slice)
+			_quickSort(partitionIndex+1, right, slice)
+		}
+	}
+	left, right := 0, len(slice)-1 //left起始值下标，right末尾值下标
+	_quickSort(left, right, slice)
+}
+
 // https://leetcode-cn.com/problems/search-a-2d-matrix-ii/
 // 搜索二维矩阵 II,
 // 每行的元素从左到右升序排列。

@@ -1,12 +1,4 @@
-package main
-
-import (
-	"fmt"
-)
-
-func main() {
-	fmt.Println(singleNumber(nil))
-}
+package bit
 
 // https://leetcode-cn.com/problems/single-number/
 // 只出现一次的数字

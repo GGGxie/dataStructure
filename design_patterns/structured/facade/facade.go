@@ -1,7 +1,8 @@
 package facade
 
 // 门面模式
-// 将子系统的多个细粒度的接口封装成一个接口，提供给上层使用
+//将几个细颗粒度的接口封装成一个接口,让上层调用更方便.
+
 // 假设现在我有一个网站，以前有登录和注册的流程，
 // 登录的时候调用用户的查询接口，注册时调用用户的创建接口。
 // 为了简化用户的使用流程，我们现在提供直接验证码登录/注册的功能，
@@ -40,6 +41,7 @@ func (u UserService) Register(phone int, code int) (*User, error) {
 }
 
 // LoginOrRegister 登录或注册
+// 登录失败则跳转到注册
 func (u UserService) LoginOrRegister(phone int, code int) (*User, error) {
 	user, err := u.Login(phone, code)
 	if err != nil {
