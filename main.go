@@ -2,10 +2,12 @@ package main
 
 import (
 	"fmt"
+
+	uuid "github.com/satori/go.uuid"
 )
 
 func main() {
-	fmt.Println(singleNumber(nil))
+	fmt.Println(uuid.NewV1())
 }
 
 // https://leetcode-cn.com/problems/single-number/
