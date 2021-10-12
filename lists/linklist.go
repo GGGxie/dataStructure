@@ -27,10 +27,12 @@ func NewNode(data int, front, next *Node) *Node {
 
 //init 初始化一个新链表
 func InitList() *LinkList {
-	header := NewNode(0, nil, nil)
+	// header := NewNode(0, nil, nil)
 	return &LinkList{
-		Header: header,
-		End:    header,
+		Header: nil,
+		End:    nil,
+		Length: 0,
+		Size:   0,
 	}
 }
 

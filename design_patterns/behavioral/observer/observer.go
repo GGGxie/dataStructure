@@ -4,7 +4,7 @@ import "fmt"
 
 //观察者模式
 //在对象之间定义一个一对多的依赖，当一个对象的状态改变的时候，所有依赖的对象都会自动收到通知
-//应用场景：订阅、发布
+//应用场景：订阅、发布  
 // ISubject subject
 type ISubject interface {
 	Register(observer IObserver)
