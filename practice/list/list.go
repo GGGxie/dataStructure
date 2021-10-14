@@ -1,6 +1,9 @@
 package list
 
-import "sort"
+import (
+	"container/list"
+	"sort"
+)
 
 // 链表相关练习
 
@@ -150,4 +153,51 @@ func reverseList(head *ListNode) *ListNode {
 		}
 	}
 	return ll[len(ll)-1] //返回翻转后的头部
+}
+
+//链表实现LRU页面置换算法
+type LRUCache struct {
+	capacity int                   //容量
+	cache    map[int]*list.Element //存储
+	list     *list.List            //利用链表来给元素排序
+}
+
+type Pair struct { //元素结构体定义
+	key   int
+	value int
+}
+
+//新建一个缓存
+func Constructor(c int) LRUCache {
+	return LRUCache{
+		capacity: c,
+		cache:    make(map[int]*list.Element),
+		list:     list.New(),
+	}
+}
+
+//根据key获取数据，并把数据放到链表表头
+func (this *LRUCache) Get(key int) int {
+	if elem, ok := this.cache[key]; ok {
+		this.list.MoveToFront(elem)
+		return elem.Value.(Pair).value
+	}
+	return -1
+}
+
+//插入新数据，并把数据放到链表表头
+func (this *LRUCache) Put(key int, value int) {
+	if elem, ok := this.cache[key]; ok {
+		delete(this.cache, key)
+		this.list.Remove(elem)
+		this.list.PushFront(Pair{key, value})
+		this.cache[key] = this.list.Front()
+	} else {
+		if len(this.cache) >= this.capacity {
+			delete(this.cache, this.list.Back().Value.(Pair).key)
+			this.list.Remove(this.list.Back())
+		}
+		this.list.PushFront(Pair{key, value})
+		this.cache[key] = this.list.Front()
+	}
 }

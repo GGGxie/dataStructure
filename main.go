@@ -11,7 +11,10 @@ import (
 
 //自定义一个字符串
 var jwtkey = []byte("www.topgoer.com")
+<<<<<<< HEAD
 var str string
+=======
+>>>>>>> 275c7b708252a11cbd8887035b3202a6a4a135e5
 
 type Claims struct {
 	UserId uint
@@ -44,7 +47,10 @@ func setting(ctx *gin.Context) {
 	if err != nil {
 		fmt.Println(err)
 	}
+<<<<<<< HEAD
 	str = tokenString
+=======
+>>>>>>> 275c7b708252a11cbd8887035b3202a6a4a135e5
 	ctx.JSON(200, gin.H{"token": tokenString})
 }
 
@@ -64,7 +70,11 @@ func getting(ctx *gin.Context) {
 		ctx.Abort()
 		return
 	}
+<<<<<<< HEAD
 	ctx.JSON(200, "111")
+=======
+	fmt.Println(111)
+>>>>>>> 275c7b708252a11cbd8887035b3202a6a4a135e5
 	fmt.Println(claims.UserId)
 }
 
