@@ -1,75 +1,77 @@
 package main
 
-import (
-	"fmt"
-	"net/http"
-	"time"
-
-	"github.com/dgrijalva/jwt-go"
-	"github.com/gin-gonic/gin"
-)
-
-//自定义一个字符串
-var jwtkey = []byte("www.topgoer.com")
-
-type Claims struct {
-	UserId uint
-	jwt.StandardClaims
-}
+import "fmt"
 
 func main() {
-	r := gin.Default()
-	r.GET("/set", setting)
-	r.GET("/get", getting)
-	//监听端口默认为8080
-	r.Run(":8080")
+	a := "123"
+	A(&a)
+	fmt.Println(a)
 }
 
-//颁发token
-func setting(ctx *gin.Context) {
-	expireTime := time.Now().Add(7 * 24 * time.Hour)
-	claims := &Claims{
-		UserId: 2,
-		StandardClaims: jwt.StandardClaims{
-			ExpiresAt: expireTime.Unix(), //过期时间
-			IssuedAt:  time.Now().Unix(),
-			Issuer:    "127.0.0.1",  // 签名颁发者
-			Subject:   "user token", //签名主题
-		},
-	}
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	// fmt.Println(token)
-	tokenString, err := token.SignedString(jwtkey)
-	if err != nil {
-		fmt.Println(err)
-	}
-	ctx.JSON(200, gin.H{"token": tokenString})
+func A(A *string) {
+	*A = "24"
 }
 
-//解析token
-func getting(ctx *gin.Context) {
-	tokenString := ctx.GetHeader("Authorization")
-	//vcalidate token formate
-	if tokenString == "" {
-		ctx.JSON(http.StatusUnauthorized, gin.H{"code": 401, "msg": "权限不足"})
-		ctx.Abort()
+//数据结构定义
+type Stack struct {
+	cache  []interface{} //存储数据，借助切片来排序
+	length int           //数组大小
+}
+
+func NewStack(size int) *Stack {
+	return &Stack{
+		cache:  make([]interface{}, 0, size),
+		length: 0,
+	}
+}
+
+// Push:往栈压入数据
+func (s *Stack) Push(value interface{}) {
+	if value == nil {
 		return
 	}
-
-	token, claims, err := ParseToken(tokenString)
-	if err != nil || !token.Valid {
-		ctx.JSON(http.StatusUnauthorized, gin.H{"code": 401, "msg": "权限不足"})
-		ctx.Abort()
-		return
-	}
-	fmt.Println(111)
-	fmt.Println(claims.UserId)
+	s.cache = append(s.cache, value)
+	s.length++
 }
 
-func ParseToken(tokenString string) (*jwt.Token, *Claims, error) {
-	Claims := &Claims{}
-	token, err := jwt.ParseWithClaims(tokenString, Claims, func(token *jwt.Token) (i interface{}, err error) {
-		return jwtkey, nil
-	})
-	return token, Claims, err
+// Pop:从栈取出数据
+func (s *Stack) Pop() (value interface{}, ok bool) {
+	if s.length == 0 { //判断栈内是否有元素
+		return nil, false
+	}
+	ret := s.cache[s.length-1]        //获取栈顶元素
+	s.cache = s.cache[0 : s.length-1] //取出栈顶元素
+	s.length--
+	return ret, true
+}
+
+// Peek:获取栈顶元素的值
+func (s *Stack) Peek() (value interface{}, ok bool) {
+	if s.length == 0 { //判断栈是否为空
+		return nil, false
+	}
+	return s.cache[0], true
+}
+
+// Size:获取栈的大小
+func (s *Stack) Size() int {
+	return s.length
+}
+
+// Clear:清空栈
+func (s *Stack) Clear() {
+	s.cache = nil
+	s.length = 0
+}
+
+// Empty:判断栈是否为空
+func (s *Stack) Empty() bool {
+	return s.length == 0
+}
+
+//返回栈的值，通过copy的方式，不会对原值造成影响
+func (s *Stack) Values() []interface{} {
+	ret := make([]interface{}, s.length)
+	copy(ret, s.cache)
+	return ret
 }
