@@ -39,3 +39,24 @@ func firstUniqChar(s string) int {
 	}
 	return -1
 }
+
+// https://leetcode-cn.com/leetbook/read/top-interview-questions/xar9lv/
+// 字母异位词
+func isAnagram(s string, t string) bool {
+	if len(s) != len(t) {
+		return false
+	}
+	mapp := make(map[rune]int)
+	for _, r := range s {
+		mapp[r]++
+	}
+	for _, r := range t {
+		mapp[r]--
+	}
+	for i := range mapp {
+		if mapp[i] != 0 {
+			return false
+		}
+	}
+	return true
+}

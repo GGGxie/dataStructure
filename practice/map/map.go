@@ -54,3 +54,56 @@ func max(a, b int) int {
 	}
 	return b
 }
+
+// https://leetcode-cn.com/leetbook/read/top-interview-questions/xaorig/
+// 单词搜索 II
+// 暴力会超时
+// func findWords(board [][]byte, words []string) []string {
+// 	if board == nil {
+// 		return nil
+// 	}
+// 	lenRow = len(board)
+// 	lenCol = len(board[0])
+// 	var ret []string
+// 	for _, w := range words {
+// 		if ok := _findWord(board, w); ok {
+// 			ret = append(ret, w)
+// 		}
+// 	}
+// 	return ret
+// }
+// func _findWord(board [][]byte, words string) bool {
+// 	flag = make([][]int, lenRow)
+// 	for row := range flag {
+// 		flag[row] = make([]int, lenCol)
+// 	}
+// 	for row := range board {
+// 		for col := range board[row] {
+// 			if board[row][col] == words[0] {
+// 				if ok := dfs(board, row, col, words, 0); ok {
+// 					return true
+// 				}
+// 			}
+// 		}
+// 	}
+// 	return false
+// }
+// func dfs(board [][]byte, row, col int, word string, index int) bool { //对bard[row][col]开始深度搜索，判断与word[index]是否匹配
+// 	if board[row][col] == word[index] && index == len(word)-1 {
+// 		return true
+// 	}
+// 	if board[row][col] == word[index] {
+// 		flag[row][col] = 1 //标记board[row][col]已经被搜索
+// 		for _, d := range dis {
+// 			newRow := row + d[0]
+// 			newCol := col + d[1]
+// 			if lenRow > newRow && newRow >= 0 && lenCol > newCol && newCol >= 0 && flag[newRow][newCol] != 1 {
+// 				if ok := dfs(board, newRow, newCol, word, index+1); ok {
+// 					return true
+// 				}
+// 			}
+// 		}
+// 		flag[row][col] = 0 //取消标记
+// 	}
+// 	return false
+// }

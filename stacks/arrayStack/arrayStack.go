@@ -37,7 +37,7 @@ func (s *Stack) Peek() (value interface{}, ok bool) {
 	if s.length == 0 { //判断栈是否为空
 		return nil, false
 	}
-	return s.cache[0], true
+	return s.cache[s.length-1], true
 }
 
 // Size:获取栈的大小
