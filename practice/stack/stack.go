@@ -1,25 +1,9 @@
-package main
+package stack
 
-import (
-	"fmt"
-	"math"
-)
+import "math"
 
-// ["MinStack","push","push","push","getMin","pop","top","getMin"]
-// [[],[-2],[0],[-3],[],[],[],[]]
-func main() {
-	// a := []int{2, 451, 3}
-	// fmt.Println(append(a[0:0], a[1:]...))
-	ms := Constructor()
-	ms.Push(-2)
-	ms.Push(0)
-	ms.Push(-3)
-	fmt.Println(ms.GetMin())
-	ms.Pop()
-	fmt.Println(ms.Top())
-	fmt.Println(ms.GetMin())
-}
-
+// https://leetcode-cn.com/problems/min-stack/
+// 最小栈
 func min(a, b int) int {
 	if a < b {
 		return a
@@ -66,12 +50,3 @@ func (this *MinStack) Top() int {
 func (this *MinStack) GetMin() int {
 	return this.minCache[len(this.minCache)-1]
 }
-
-/**
- * Your MinStack object will be instantiated and called as such:
- * obj := Constructor();
- * obj.Push(val);
- * obj.Pop();
- * param_3 := obj.Top();
- * param_4 := obj.GetMin();
- */
