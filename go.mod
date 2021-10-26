@@ -5,6 +5,7 @@ go 1.15
 require (
 	github.com/HdrHistogram/hdrhistogram-go v1.1.2 // indirect
 	github.com/bmizerany/assert v0.0.0-20160611221934-b7ed37b82869
+	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/opentracing/opentracing-go v1.2.0
 	github.com/stretchr/testify v1.7.0
 	github.com/uber/jaeger-client-go v2.29.1+incompatible
