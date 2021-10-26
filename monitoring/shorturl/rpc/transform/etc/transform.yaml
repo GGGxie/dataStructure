@@ -1,0 +1,10 @@
+Name: transform.rpc
+ListenOn: 127.0.0.1:8080
+Etcd:
+  Hosts:
+  - 127.0.0.1:2379
+  Key: transform.rpc
+DataSource: root:123@tcp(39.108.148.65:13306)/gozero?charset=utf8mb4&parseTime=true&loc=Asia%2FShanghai 
+Table: shorturl
+Cache:
+  - Host: 39.108.148.65:6379

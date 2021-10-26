@@ -1,25 +1,12 @@
-package main
+package heap
 
 import (
 	"container/heap"
-	"fmt"
 	"sort"
 )
 
-// ["MinStack","push","push","push","getMin","pop","top","getMin"]
-// [[],[-2],[0],[-3],[],[],[],[]]
-func main() {
-	a := Constructor()
-	a.AddNum(-1)
-	a.AddNum(-2)
-
-	a.AddNum(-3)
-	a.AddNum(-4)
-	a.AddNum(-5)
-	fmt.Println(a.MaxHp, a.MinHp)
-	fmt.Println(a.FindMedian())
-}
-
+// https://leetcode-cn.com/problems/find-median-from-data-stream/
+// 大小堆维护中位数
 //首先想到用二叉搜索树来维护中位数,左右子树的节点个数相差<=1,根节点(或根节点+下一节点/2)便是中位数.(根节点放在右子树中)
 
 type MedianFinder struct {
