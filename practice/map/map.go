@@ -2,6 +2,7 @@ package mapp
 
 import (
 	"math"
+	"sort"
 )
 
 // https://leetcode-cn.com/leetbook/read/top-interview-questions/x2osfr/
@@ -107,3 +108,19 @@ func max(a, b int) int {
 // 	}
 // 	return false
 // }
+
+// https://leetcode-cn.com/problems/kth-smallest-element-in-a-sorted-matrix/
+// 方法一,二分,还没看懂
+// 方法二:暴力法,找到给出矩阵中第k个最小的值,把map转化成slice,然后排序
+// 时间复杂度: O(n^2\logn),对 n^2n个数排序
+// 空间复杂度: O(n^2),一维数组需要存储这 n^2个元素
+func kthSmallest(matrix [][]int, k int) int {
+	var s sort.IntSlice
+	for i := range matrix {
+		for j := range matrix[i] {
+			s = append(s, matrix[i][j])
+		}
+	}
+	sort.Sort(s)
+	return s[k-1]
+}
