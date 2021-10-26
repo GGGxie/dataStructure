@@ -1,6 +1,6 @@
 package doubleStack
 
-import "github.com/GGGxie/dataStructure/stacks/arrayStack.go"
+import "github.com/GGGxie/dataStructure/stacks/arrayStack"
 
 //双栈实现队列
 type Queue struct {
