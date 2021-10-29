@@ -63,3 +63,45 @@ func (h *minHp) Top() interface{} {
 	}
 	return nil
 }
+
+// https://leetcode-cn.com/problems/sliding-window-maximum/
+// 滑动窗口最大值
+var tempNums []int
+
+type maxHp struct{ sort.IntSlice } //最大堆，存的是数组的下表
+func (h *maxHp) Less(i, j int) bool { //根据数组的值由大到小排序
+	return tempNums[h.IntSlice[i]] > tempNums[h.IntSlice[j]]
+}
+
+func (h *maxHp) Push(v interface{}) { h.IntSlice = append(h.IntSlice, v.(int)) }
+func (h *maxHp) Pop() interface{} {
+	a := h.IntSlice
+	v := a[len(a)-1]
+	h.IntSlice = a[:len(a)-1]
+	return v
+}
+func (h *maxHp) Top() interface{} {
+	if h.Len() > 0 {
+		return h.IntSlice[0]
+	}
+	return nil
+}
+
+func maxSlidingWindow(nums []int, k int) []int {
+	tempNums = nums
+	maxHp := &maxHp{}
+	for i := 0; i < k; i++ {
+		heap.Push(maxHp, i)
+	}
+	n := len(nums)
+	ans := make([]int, 1, n-k+1)
+	ans[0] = nums[maxHp.Top().(int)]
+	for i := k; i < n; i++ {
+		heap.Push(maxHp, i)
+		for maxHp.Top().(int) <= i-k { //把在栈顶，且不在窗口内的元素全部移除
+			heap.Pop(maxHp)
+		}
+		ans = append(ans, nums[maxHp.Top().(int)])
+	}
+	return ans
+}
