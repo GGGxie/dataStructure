@@ -1,6 +1,9 @@
 package slice
 
-import "math"
+import (
+	"math"
+	"math/rand"
+)
 
 // https://leetcode-cn.com/leetbook/read/top-interview-questions/xmk3rv/
 // 乘积最大子数组
@@ -285,4 +288,34 @@ func exponent(a, n int) int {
 		a *= a
 	}
 	return result
+}
+
+// https://leetcode-cn.com/problems/shuffle-an-array/
+// 打乱数组,洗牌算法
+type Solution struct {
+	nums []int
+}
+
+func Constructor(nums []int) Solution {
+	return Solution{
+		nums: nums,
+	}
+}
+
+/** Resets the array to its original configuration and return it. */
+func (this *Solution) Reset() []int {
+	ret := make([]int, len(this.nums))
+	copy(ret, this.nums)
+	return ret
+}
+
+/** Returns a random shuffling of the array. */
+func (this *Solution) Shuffle() []int { //模拟洗牌算法
+	ret := make([]int, len(this.nums))
+	copy(ret, this.nums)
+	for i := range ret {
+		random := rand.Intn(i + 1) //返回一个[0,i+1)的随机值
+		ret[i], ret[random] = ret[random], ret[i]
+	}
+	return ret
 }
