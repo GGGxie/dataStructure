@@ -1,6 +1,9 @@
 package slice
 
-import "math"
+import (
+	"math"
+	"math/rand"
+)
 
 // https://leetcode-cn.com/leetbook/read/top-interview-questions/xmk3rv/
 // 乘积最大子数组
@@ -285,4 +288,48 @@ func exponent(a, n int) int {
 		a *= a
 	}
 	return result
+}
+
+// https://leetcode-cn.com/problems/insert-delete-getrandom-o1/
+// O(1) 时间插入、删除和获取随机元素
+// 通过把要删除元素和数组尾部元素调换，然后去掉尾部元素，实现O(1)删除
+type RandomizedSet struct {
+	mapp map[int]int //记录数据的下标
+	data []int       //记录数据的数组
+}
+
+func Constructor() RandomizedSet {
+	return RandomizedSet{
+		mapp: make(map[int]int),
+		data: make([]int, 0),
+	}
+}
+
+func (this *RandomizedSet) Insert(val int) bool {
+	if _, ok := this.mapp[val]; !ok {
+		this.mapp[val] = len(this.data)
+		this.data = append(this.data, val)
+		return true
+	}
+	return false
+}
+
+func (this *RandomizedSet) Remove(val int) bool {
+	if index, ok := this.mapp[val]; ok {
+		length := len(this.data)
+		this.data[index], this.data[length-1] = this.data[length-1], this.data[index] //数组尾部和下标互换
+		this.data = this.data[0 : length-1]                                           //去掉尾部
+		if index != length-1 {                                                        //如果刚好移除的是尾部元素，就不用替换下标
+			this.mapp[this.data[index]] = index //被替换的尾部元素改下标
+		}
+		delete(this.mapp, val) //去掉下标存储
+		return true
+	}
+	return false
+}
+
+func (this *RandomizedSet) GetRandom() int {
+	length := len(this.data)
+	random := rand.Int() % length
+	return this.data[random]
 }
