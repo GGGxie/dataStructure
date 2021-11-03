@@ -1,5 +1,10 @@
 package tree
 
+import (
+	"strconv"
+	"strings"
+)
+
 // https://leetcode-cn.com/problems/flatten-nested-list-iterator/
 // 扁平化嵌套列表迭代器
 /**
@@ -119,4 +124,51 @@ func preOrder(root, p, q *TreeNode) *TreeNode {
 		}
 	}
 	return nil
+}
+
+// https://leetcode-cn.com/problems/serialize-and-deserialize-binary-tree/
+// 二叉树的序列化与反序列化
+type Codec struct {
+}
+
+func CodecConstructor() Codec {
+	return Codec{}
+}
+
+// Serializes a tree to a single string.
+func (this *Codec) serialize(root *TreeNode) string {
+	var ret []string
+	var preOrder func(root *TreeNode, str *[]string)
+	preOrder = func(root *TreeNode, str *[]string) {
+		if root != nil {
+			*str = append(*str, strconv.FormatInt(int64(root.Val), 10))
+			preOrder(root.Left, str)
+			preOrder(root.Right, str)
+			return
+		}
+		*str = append(*str, "null")
+	}
+	preOrder(root, &ret)
+	return strings.Join(ret, ",")
+}
+
+// Deserializes your encoded data to tree.
+func (this *Codec) deserialize(data string) *TreeNode {
+	tl := strings.Split(data, ",")
+	var build func(tl *[]string) *TreeNode
+	build = func(tl *[]string) *TreeNode { //前序构建，先构建根节点，再递归构建左节点，递归构建右节点
+		tn := (*tl)[0]
+		*tl = (*tl)[1:]
+		if tn == "null" {
+			return nil
+		} else {
+			val, _ := strconv.ParseInt(tn, 10, 64)
+			return &TreeNode{ //序列化的顺序是前序遍历，反序列化也需要相同顺序，中、左、右
+				Val:   int(val),
+				Left:  build(tl),
+				Right: build(tl),
+			}
+		}
+	}
+	return build(&tl)
 }
