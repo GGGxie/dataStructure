@@ -298,7 +298,7 @@ type RandomizedSet struct {
 	data []int       //记录数据的数组
 }
 
-func Constructor() RandomizedSet {
+func RandomizedSetConstructor() RandomizedSet {
 	return RandomizedSet{
 		mapp: make(map[int]int),
 		data: make([]int, 0),
@@ -332,4 +332,34 @@ func (this *RandomizedSet) GetRandom() int {
 	length := len(this.data)
 	random := rand.Int() % length
 	return this.data[random]
+}
+
+// https://leetcode-cn.com/problems/shuffle-an-array/
+// 打乱数组,洗牌算法
+type Solution struct {
+	nums []int
+}
+
+func SolutionConstructor(nums []int) Solution {
+	return Solution{
+		nums: nums,
+	}
+}
+
+/** Resets the array to its original configuration and return it. */
+func (this *Solution) Reset() []int {
+	ret := make([]int, len(this.nums))
+	copy(ret, this.nums)
+	return ret
+}
+
+/** Returns a random shuffling of the array. */
+func (this *Solution) Shuffle() []int { //模拟洗牌算法
+	ret := make([]int, len(this.nums))
+	copy(ret, this.nums)
+	for i := range ret {
+		random := rand.Intn(i + 1) //返回一个[0,i+1)的随机值
+		ret[i], ret[random] = ret[random], ret[i]
+	}
+	return ret
 }
