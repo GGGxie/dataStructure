@@ -11,28 +11,31 @@ type TreeNode struct {
 	Right *TreeNode
 }
 
-// https://leetcode-cn.com/problems/kth-smallest-element-in-a-bst/
-// 二叉搜索树中第K小的元素
-//二叉搜索树中，左节点<根节点<右节点，所以中序遍历就能找出第k个最小值
-func kthSmallest(root *TreeNode, k int) int {
-	return inOrder(root, &k)
+// 给定一个二叉树, 找到该树中两个指定节点的最近公共祖先。
+
+// https://leetcode-cn.com/problems/lowest-common-ancestor-of-a-binary-tree/submissions/
+// 二叉树的最近公共祖先
+func lowestCommonAncestor(root, p, q *TreeNode) *TreeNode {
+	return preOrder(root, p, q)
 }
 
-//中序遍历
-func inOrder(root *TreeNode, k *int) int {
+//先序遍历
+func preOrder(root, p, q *TreeNode) *TreeNode {
 	if root != nil {
-		val := inOrder(root.Left, k)
-		if val != -1 {
-			return val
+		if root.Val == p.Val || root.Val == q.Val { //如果节点是左节点或者右节点则该返回
+			return root
 		}
-		*k--
-		if *k == 0 {
-			return root.Val
+		left := preOrder(root.Left, p, q)
+		right := preOrder(root.Right, p, q)
+		if left != nil && right != nil { //如果左和右都不为空，说明该节点就是适合返回的值
+			return root
 		}
-		val = inOrder(root.Right, k)
-		if val != -1 {
-			return val
+		if left != nil { //如果左不为空，说明适合的值为左
+			return left
+		}
+		if right != nil { //如果左不为空，说明适合的值为右
+			return right
 		}
 	}
-	return -1
+	return nil
 }
