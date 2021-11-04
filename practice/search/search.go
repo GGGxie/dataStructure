@@ -1,16 +1,6 @@
-package main
+package search
 
-import (
-	"fmt"
-	"math"
-)
-
-// ["MinStack","push","push","push","getMin","pop","top","getMin"]
-// [[],[-2],[0],[-3],[],[],[],[]]
-func main() {
-	a := []int{10, 3, 4, 5, 6}
-	fmt.Println(findPeakElement(a))
-}
+import "math"
 
 // https://leetcode-cn.com/problems/find-peak-element/
 // 寻找峰值
