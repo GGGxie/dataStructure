@@ -1,6 +1,9 @@
 package search
 
-import "math"
+import (
+	"math"
+	"sort"
+)
 
 // https://leetcode-cn.com/problems/find-peak-element/
 // 寻找峰值
@@ -31,4 +34,17 @@ func findPeakElement(nums []int) int {
 			continue
 		}
 	}
+}
+
+// https://leetcode-cn.com/problems/find-the-duplicate-number/
+// 寻找重复数
+// 应该用快满指针，但是没搞懂
+func findDuplicate(nums []int) int {
+	sort.Ints(nums)
+	for i := 0; i < len(nums)-1; i++ {
+		if nums[i] == nums[i+1] {
+			return nums[i]
+		}
+	}
+	return -1
 }

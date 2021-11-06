@@ -2,43 +2,25 @@ package main
 
 import (
 	"fmt"
-	"math"
+	"sort"
 )
 
 // ["MinStack","push","push","push","getMin","pop","top","getMin"]
 // [[],[-2],[0],[-3],[],[],[],[]]
 func main() {
-	a := []int{10, 3, 4, 5, 6}
-	fmt.Println(findPeakElement(a))
+	nums := []int{1, 3, 4, 2, 2}
+	fmt.Println(findDuplicate(nums))
 }
 
-// https://leetcode-cn.com/problems/find-peak-element/
-// 寻找峰值
-// 如果 {nums}[i-1] < {nums}[i] > {nums}[i+1]nums[i−1]<nums[i]>nums[i+1]，那么位置 i 就是峰值位置，我们可以直接返回 i 作为答案；
-// 如果 {nums}[i-1] < {nums}[i] < {nums}[i+1]nums[i−1]<nums[i]<nums[i+1]，那么位置 i 处于上坡，我们需要往右走，即 i←i+1；
-// 如果 {nums}[i-1] > {nums}[i] > {nums}[i+1]nums[i−1]>nums[i]>nums[i+1]，那么位置 i 处于下坡，我们需要往左走，即 i←i−1；
-// 如果 {nums}[i-1] > {nums}[i] < {nums}[i+1]nums[i−1]>nums[i]<nums[i+1]，那么位置 i 位于山谷，两侧都是上坡，我们可以朝任意方向走。
-// 在这个基础上，再用二分查找
-func findPeakElement(nums []int) int {
-	length := len(nums)
-	var get func(int) int
-	get = func(inx int) int {
-		if inx >= length || inx < 0 {
-			return math.MinInt64 //超出了界限，则返回最小值
-		}
-		return nums[inx]
-	}
-	left, right := 0, length
-	for {
-		mid := (left + right) / 2
-		if get(mid) > get(mid-1) && get(mid) > get(mid+1) {
-			return mid
-		} else if get(mid) > get(mid-1) {
-			left = mid + 1
-			continue
-		} else {
-			right = mid - 1
-			continue
+// https://leetcode-cn.com/problems/find-the-duplicate-number/
+// 寻找重复数
+// 应该用快满指针，但是没搞懂
+func findDuplicate(nums []int) int {
+	sort.Ints(nums)
+	for i := 0; i < len(nums)-1; i++ {
+		if nums[i] == nums[i+1] {
+			return nums[i]
 		}
 	}
+	return -1
 }
