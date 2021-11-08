@@ -124,3 +124,61 @@ func kthSmallest(matrix [][]int, k int) int {
 	sort.Sort(s)
 	return s[k-1]
 }
+
+// https://leetcode-cn.com/problems/word-ladder/
+// 单词接龙
+// bfs解决最短路径问题
+// dfs不能解决最短路径问题
+type node struct {
+	val   string
+	count int
+}
+
+func ladderLength(beginWord string, endWord string, wordList []string) int {
+	var mapp = make(map[string]bool) //标记单词是否已经遍历过
+	nodeList := make([]node, 0, len(wordList))
+	nodeList = append(nodeList, node{
+		val:   beginWord,
+		count: 1,
+	})
+	mapp[beginWord] = true
+	for {
+		if len(nodeList) == 0 {
+			break
+		}
+		top := nodeList[0]
+		nodeList = nodeList[1:]
+		for _, str := range wordList { //把beginWord可以到达的str压入队列
+			if judge(top.val, str) && !mapp[str] {
+				if str == endWord {
+					return top.count + 1
+				}
+				nodeList = append(nodeList, node{
+					val:   str,
+					count: top.count + 1,
+				})
+				mapp[str] = true
+			}
+		}
+	}
+	return 0
+}
+
+func judge(str1, str2 string) bool { //判断两个字符串是否相差一个字符
+	var flag bool
+	len1 := len(str1)
+	len2 := len(str2)
+	if len1 != len2 {
+		return false
+	}
+	for i := 0; i < len1; i++ {
+		if str1[i] != str2[i] {
+			if flag {
+				return false
+			} else {
+				flag = true
+			}
+		}
+	}
+	return true
+}
