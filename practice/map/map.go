@@ -182,3 +182,38 @@ func judge(str1, str2 string) bool { //判断两个字符串是否相差一个�
 	}
 	return true
 }
+
+// // https://leetcode-cn.com/leetbook/read/top-interview-questions/x2p3cd/
+// // 岛屿数量
+// // 遍历图，对岛屿进行深搜，搜到的都标记为1
+// var dir = [4][2]int{{0, 1}, {0, -1}, {-1, 0}, {1, 0}} //前、后、左、右
+
+// //深搜，都记录为1
+// func numIslands(grid [][]byte) int {
+// 	var count int
+// 	var mapp [][]bool //标记
+// 	mapp = make([][]bool, len(grid))
+// 	for i := range mapp {
+// 		mapp[i] = make([]bool, len(grid[0]))
+// 	}
+// 	for x := range grid { //对图进行遍历
+// 		for y := range grid[x] {
+// 			if grid[x][y] == '1' && !mapp[x][y] { //对没有标记过的岛屿进行深搜
+// 				dfs(x, y, grid, mapp)
+// 				count++
+// 			}
+// 		}
+// 	}
+// 	return count
+// }
+
+// func dfs(x, y int, grid [][]byte, mapp [][]bool) {
+// 	for _, d := range dir {
+// 		newX := d[0] + x
+// 		newY := d[1] + y
+// 		if (newX < len(grid) && newX >= 0) && (newY < len(grid[0]) && newY >= 0) && grid[x][y] == '1' && !mapp[newX][newY] {
+// 			mapp[newX][newY] = true //搜到的岛屿都标记为true
+// 			dfs(newX, newY, grid, mapp)
+// 		}
+// 	}
+// }
