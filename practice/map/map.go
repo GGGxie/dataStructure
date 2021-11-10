@@ -217,3 +217,91 @@ func judge(str1, str2 string) bool { //判断两个字符串是否相差一个�
 // 		}
 // 	}
 // }
+
+// https://leetcode-cn.com/problems/course-schedule/
+// 课程表
+// 判断是否有向无环图
+// 1.找出所有入度为0的加入队列list中
+// 2.进行bfs
+// 3.遍历到的节点出线对应的节点入度-1
+// 4.再找出所有入度为0的加入队列list中
+// 5.判断队列list的节点数和numCourse是否相同
+func canFinish(numCourses int, prerequisites [][]int) bool {
+	var clsList []int                  //记录入度为0的节点
+	list := make([]int, 0, numCourses) //bfs队列
+	preNum := make([]int, numCourses)  //存储入度
+	visit := make([]bool, numCourses)  //记录节点是否已被记录
+	for i := range prerequisites {
+		preNum[prerequisites[i][0]]++
+	}
+	//入度为0的就加入队列中
+	for i := range preNum {
+		if preNum[i] == 0 {
+			list = append(list, i)
+			clsList = append(clsList, i)
+			visit[i] = true
+		}
+	}
+	//bfs
+	for len(list) != 0 {
+		clsNum := list[0]
+		list = list[1:]
+		for i := range prerequisites { //找到所有出线，对应的节点入度-1
+			if prerequisites[i][1] == clsNum {
+				preNum[prerequisites[i][0]]--
+			}
+		}
+		//bfs，入度为0的就加入队列中
+		for i := range preNum {
+			if preNum[i] == 0 && !visit[i] {
+				list = append(list, i)
+				clsList = append(clsList, i)
+				visit[i] = true
+			}
+		}
+	}
+	return len(clsList) == numCourses
+}
+
+// https://leetcode-cn.com/leetbook/read/top-interview-questions/x2a743/
+// 课程表 II
+func findOrder(numCourses int, prerequisites [][]int) []int {
+	var clsList []int                  //记录入度为0的节点
+	list := make([]int, 0, numCourses) //bfs队列
+	preNum := make([]int, numCourses)  //存储入度
+	visit := make([]bool, numCourses)  //记录节点是否已被记录
+	for i := range prerequisites {
+		preNum[prerequisites[i][0]]++
+	}
+	//入度为0的就加入队列中
+	for i := range preNum {
+		if preNum[i] == 0 {
+			list = append(list, i)
+			clsList = append(clsList, i)
+			visit[i] = true
+		}
+	}
+	//bfs
+	for len(list) != 0 {
+		clsNum := list[0]
+		list = list[1:]
+		for i := range prerequisites { //找到所有出线，对应的节点入度-1
+			if prerequisites[i][1] == clsNum {
+				preNum[prerequisites[i][0]]--
+			}
+		}
+		//bfs，入度为0的就加入队列中
+		for i := range preNum {
+			if preNum[i] == 0 && !visit[i] {
+				list = append(list, i)
+				clsList = append(clsList, i)
+				visit[i] = true
+			}
+		}
+	}
+	if len(clsList) == numCourses {
+		return clsList
+	} else {
+		return nil
+	}
+}
