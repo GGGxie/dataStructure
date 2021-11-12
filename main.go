@@ -2,8 +2,6 @@ package main
 
 import "fmt"
 
-// ["MinStack","push","push","push","getMin","pop","top","getMin"]
-// [[],[-2],[0],[-3],[],[],[],[]]
 func main() {
 	n := uint32(0b00000010100101000001111010011100)
 	fmt.Printf("%032b\n", reverseBits(n))
