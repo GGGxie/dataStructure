@@ -15,15 +15,6 @@ func singleNumber(nums []int) int {
 	return ret
 }
 
-// https://leetcode-cn.com/leetbook/read/top-interview-questions/xapbdt/
-//字符串翻转
-func reverseString(s []byte) {
-	length := len(s)
-	for i := 0; i < length/2; i++ {
-		s[i], s[length-i-1] = s[length-i-1], s[i]
-	}
-}
-
 // https://leetcode-cn.com/leetbook/read/top-interview-questions/xaph0j/
 //找到第一个不重复的字符
 //用hash来存储频数
@@ -59,4 +50,17 @@ func isAnagram(s string, t string) bool {
 		}
 	}
 	return true
+}
+
+// https://leetcode-cn.com/leetbook/read/top-interview-questions/x2dx36/
+// 颠倒二进制位
+func reverseBits(num uint32) uint32 {
+	var ret uint32
+	for i := 0; i < 32; i++ {
+		temp := num & 1 //取出num最后一个二进制位
+		num >>= 1       //num右移一位
+		ret <<= 1       //ret左移一位
+		ret += temp     //ret+取出的二进制位
+	}
+	return ret
 }

@@ -4,6 +4,15 @@ import (
 	"strings"
 )
 
+// https://leetcode-cn.com/leetbook/read/top-interview-questions/xapbdt/
+//字符串翻转
+func reverseString(s []byte) {
+	length := len(s)
+	for i := 0; i < length/2; i++ {
+		s[i], s[length-i-1] = s[length-i-1], s[i]
+	}
+}
+
 // https://leetcode-cn.com/leetbook/read/top-interview-questions/xah8k6/
 // 判断字符串是否为回文串
 func isPalindrome(s string) bool {
