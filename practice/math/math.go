@@ -57,7 +57,7 @@ func isPowerOfThree(n int) bool {
 	if n <= 0 {
 		return false
 	}
-	for n > 1 {
+	for n > 1 { //从3^n一直到3^0
 		if n%3 != 0 {
 			return false
 		}
