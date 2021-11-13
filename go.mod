@@ -80,6 +80,7 @@ require (
 	golang.org/x/time v0.0.0-20210723032227-1f47c861a9ac // indirect
 	golang.org/x/tools v0.1.2 // indirect
 	google.golang.org/api v0.20.0 // indirect
+	google.golang.org/appengine v1.6.5
 	google.golang.org/grpc v1.41.0
 	gopkg.in/cheggaaa/pb.v1 v1.0.28 // indirect
 	gopkg.in/h2non/gock.v1 v1.0.15 // indirect
