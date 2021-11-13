@@ -50,17 +50,18 @@ func countPrimes(n int) int {
 	return ret
 }
 
-// https://leetcode-cn.com/leetbook/read/top-interview-questions/x27sii/
-// 缺失数字
-// 求[0,n]这个范围内，缺失的一个数
-func missingNumber(nums []int) int {
-	length := len(nums) //得出范围
-	ret := 0
-	for i := range nums { //把nums内的数都异或一遍
-		ret ^= nums[i]
+// https://leetcode-cn.com/leetbook/read/top-interview-questions/x2lkle/
+// 3的幂
+// 除了暴力还有更优的解法。
+func isPowerOfThree(n int) bool {
+	if n <= 0 {
+		return false
 	}
-	for i := 0; i <= length; i++ { //再把[0,n]的数抑或一遍，得出那个只有单个的数
-		ret ^= i
+	for n > 1 {
+		if n%3 != 0 {
+			return false
+		}
+		n /= 3
 	}
-	return ret
+	return true
 }
