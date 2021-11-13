@@ -31,3 +31,21 @@ func maxPoints(points [][]int) int {
 	}
 	return max + 1
 }
+
+// https://leetcode-cn.com/problems/count-primes/
+// 计算小于n的质数个数
+// 常规筛选法
+func countPrimes(n int) int {
+	flag := make([]bool, n+1) //标记所有元素，非素数就为true
+	var ret int
+	for i := 2; i <= n; i++ {
+		if flag[i] {
+			continue
+		}
+		for j := i; j <= n; j += i { //素数的所有倍数标记为true
+			flag[j] = true
+		}
+		ret++
+	}
+	return ret
+}
