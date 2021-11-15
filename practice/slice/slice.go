@@ -385,8 +385,8 @@ func canCompleteCircuit(gas []int, cost []int) int {
 				tempList[i] = tempGas
 				break
 			}
-			if tempGas < tempList[j] { //如果从i点开始，到了j点，汽油还充足，但是少于从j开始到最后缺少的汽油，则没必要继续遍历
-				tempList[i] = tempGas - tempList[j]
+			if tempGas < -tempList[j] { //如果从i点开始，到了j点，汽油还充足，但是少于从j开始到最后缺少的汽油，则没必要继续遍历
+				tempList[i] = tempGas + tempList[j]
 				break
 			}
 			if count == length {
