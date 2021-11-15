@@ -1,6 +1,9 @@
 package math
 
-import "math"
+import (
+	"math"
+	"strconv"
+)
 
 // https://leetcode-cn.com/problems/max-points-on-a-line/
 // 直线上最多的点数
@@ -64,4 +67,47 @@ func isPowerOfThree(n int) bool {
 		n /= 3
 	}
 	return true
+}
+
+// https://leetcode-cn.com/problems/happy-number/
+// 快乐数
+func isHappy(n int) bool {
+	temp := n
+	mapp := make(map[int]bool) //标记环
+	for {
+		var tempB int //计算平均和的值
+		for temp != 0 {
+			z := temp % 10
+			temp /= 10
+			tempB += z * z
+		}
+		if mapp[tempB] { //已被遍历，进入循环
+			break
+		}
+		if tempB == 1 {
+			return true
+		}
+		mapp[tempB] = true
+		temp = tempB
+	}
+	return false
+}
+
+// https://leetcode-cn.com/leetbook/read/top-interview-questions/xm6kpg/
+// Fizz Buzz
+// 模拟题
+func fizzBuzz(n int) []string {
+	ret := make([]string, 0, n)
+	for i := 1; i <= n; i++ {
+		if i%3 == 0 && i%5 == 0 {
+			ret = append(ret, "FizzBuzz")
+		} else if i%3 == 0 {
+			ret = append(ret, "Fizz")
+		} else if i%5 == 0 {
+			ret = append(ret, "Buzz")
+		} else {
+			ret = append(ret, strconv.FormatInt(int64(i), 10))
+		}
+	}
+	return ret
 }
