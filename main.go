@@ -1,43 +1,63 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+)
 
 func main() {
-	gas := []int{1, 2, 3, 4, 5}
-	cost := []int{3, 4, 5, 1, 2}
-	fmt.Println(canCompleteCircuit(gas, cost))
+	fmt.Println(reverseList(nil))
 }
 
-// https://leetcode-cn.com/problems/gas-station/
-// 加油站
-// 模拟题
-func canCompleteCircuit(gas []int, cost []int) int {
-	length := len(cost)
-	tempList := make([]int, length)    //标记从i节点开始，到最后因为缺少多少汽油而停止
-	for i := length - 1; i >= 0; i-- { //从最后一个节点开始遍历，然后往前去遍历每一个节点开始的情况（因为这样子后面节点的tempList都有值了）
-		if gas[i] < cost[i] {
-			continue
-		}
-		tempGas := 0 //初始汽油值
-		count := 0
-		for j := i; ; j = ((j + 1) % length) { //从i节点开始往前遍历
-			count++
-			tempGas += gas[j]
-			tempGas -= cost[j]
-			if tempGas < 0 { //如果从i点开始，到了j点，汽油不够了，就记录到tempList中
-				tempList[i] = tempGas
-				break
-			}
-			if tempGas < tempList[j] { //如果从i点开始，到了j点，汽油还充足，但是少于从j开始到最后缺少的汽油，则没必要继续遍历
-				tempList[i] = tempGas - tempList[j]
-				break
-			}
-			if count == length {
-				fmt.Println(tempList)
-				return i
-			}
-		}
+type ListNode struct {
+	Val  int
+	Next *ListNode
+}
 
+func reverseList2(head *ListNode) *ListNode {
+	var prev *ListNode
+	curr := head
+	for curr != nil {
+		next := curr.Next
+		curr.Next = prev
+		prev = curr
+		curr = next
 	}
-	return -1
+	return prev
+}
+
+type Stack struct {
+	cache  []*ListNode //存储数据，借助切片来排序
+	length int         //数组大小
+}
+
+func NewStack(size int) *Stack {
+	return &Stack{
+		cache:  make([]*ListNode, 0, size),
+		length: 0,
+	}
+}
+
+// Push:往栈压入数据
+func (s *Stack) Push(value *ListNode) {
+	if value == nil {
+		return
+	}
+	s.cache = append(s.cache, value)
+	s.length++
+}
+
+// Pop:从栈取出数据
+func (s *Stack) Pop() *ListNode {
+	if s.length == 0 { //判断栈内是否有元素
+		return nil
+	}
+	ret := s.cache[s.length-1]        //获取栈顶元素
+	s.cache = s.cache[0 : s.length-1] //取出栈顶元素
+	s.length--
+	return ret
+}
+
+// Empty:判断栈是否为空
+func (s *Stack) Empty() bool {
+	return s.length == 0
 }
