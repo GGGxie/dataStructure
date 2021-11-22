@@ -1,6 +1,9 @@
 package math
 
-import "math"
+import (
+	"math"
+	"strconv"
+)
 
 // https://leetcode-cn.com/problems/max-points-on-a-line/
 // 直线上最多的点数
@@ -44,6 +47,83 @@ func reverse(x int) int {
 	}
 	if ret > int(math.MaxInt32) || ret < int(-math.MaxInt32) {
 		return 0
+	}
+	return ret
+}
+
+// https://leetcode-cn.com/problems/count-primes/
+// 计算小于n的质数个数
+// 常规筛选法
+func countPrimes(n int) int {
+	flag := make([]bool, n+1) //标记所有元素，非素数就为true
+	var ret int
+	for i := 2; i <= n; i++ {
+		if flag[i] {
+			continue
+		}
+		for j := i; j <= n; j += i { //素数的所有倍数标记为true
+			flag[j] = true
+		}
+		ret++
+	}
+	return ret
+}
+
+// https://leetcode-cn.com/leetbook/read/top-interview-questions/x2lkle/
+// 3的幂
+// 除了暴力还有更优的解法。
+func isPowerOfThree(n int) bool {
+	if n <= 0 {
+		return false
+	}
+	for n > 1 { //从3^n一直到3^0
+		if n%3 != 0 {
+			return false
+		}
+		n /= 3
+	}
+	return true
+}
+
+// https://leetcode-cn.com/problems/happy-number/
+// 快乐数
+func isHappy(n int) bool {
+	temp := n
+	mapp := make(map[int]bool) //标记环
+	for {
+		var tempB int //计算平均和的值
+		for temp != 0 {
+			z := temp % 10
+			temp /= 10
+			tempB += z * z
+		}
+		if mapp[tempB] { //已被遍历，进入循环
+			break
+		}
+		if tempB == 1 {
+			return true
+		}
+		mapp[tempB] = true
+		temp = tempB
+	}
+	return false
+}
+
+// https://leetcode-cn.com/leetbook/read/top-interview-questions/xm6kpg/
+// Fizz Buzz
+// 模拟题
+func fizzBuzz(n int) []string {
+	ret := make([]string, 0, n)
+	for i := 1; i <= n; i++ {
+		if i%3 == 0 && i%5 == 0 {
+			ret = append(ret, "FizzBuzz")
+		} else if i%3 == 0 {
+			ret = append(ret, "Fizz")
+		} else if i%5 == 0 {
+			ret = append(ret, "Buzz")
+		} else {
+			ret = append(ret, strconv.FormatInt(int64(i), 10))
+		}
 	}
 	return ret
 }

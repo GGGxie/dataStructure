@@ -155,6 +155,21 @@ func reverseList(head *ListNode) *ListNode {
 	return ll[len(ll)-1] //返回翻转后的头部
 }
 
+// // https://leetcode-cn.com/problems/fan-zhuan-lian-biao-lcof/
+// // 翻转链表
+// // 空间复杂度O(1)
+// func reverseList(head *ListNode) *ListNode {
+// 	cur := head        //记录当前节点
+// 	var prev *ListNode //记录前一个节点
+// 	for cur != nil {
+// 		next := cur.Next //记录后一个节点
+// 		cur.Next = prev  //当前指向前缀
+// 		prev = cur       //prev=当前
+// 		cur = next       //当前=后一个节点
+// 	}
+// 	return prev
+// }
+
 //链表实现LRU页面置换算法
 type LRUCache struct {
 	capacity int                   //容量
