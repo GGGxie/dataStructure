@@ -31,3 +31,19 @@ func maxPoints(points [][]int) int {
 	}
 	return max + 1
 }
+
+// https://leetcode-cn.com/problems/reverse-integer/
+// 整数反转
+func reverse(x int) int {
+	ret := 0
+	for x != 0 {
+		temp := x % 10
+		x /= 10
+		ret *= 10
+		ret += temp
+	}
+	if ret > int(math.MaxInt32) || ret < int(-math.MaxInt32) {
+		return 0
+	}
+	return ret
+}
