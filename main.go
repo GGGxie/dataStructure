@@ -5,31 +5,45 @@ import (
 )
 
 func main() {
-	z := [][]int{{1, 4, 7, 11, 15},
-		{2, 5, 8, 12, 19},
-		{3, 6, 9, 16, 22},
-		{10, 13, 14, 17, 24},
-		{18, 21, 23, 26, 30}}
-	fmt.Println(findNumberIn2DArray(z, 5))
+	z := []int{0, 1, 2, 3}
+	fmt.Println(minArray(z))
 }
 
-// https://leetcode-cn.com/problems/er-wei-shu-zu-zhong-de-cha-zhao-lcof/submissions/
-// 二维数组中的查找
-func findNumberIn2DArray(matrix [][]int, target int) bool {
-	for i := range matrix {
-		//二分搜索
-		start, end := 0, len(matrix[i])-1
-		for start <= end {
-			mid := (start + end) / 2
-			fmt.Println(matrix[i][mid])
-			if matrix[i][mid] == target {
-				return true
-			} else if matrix[i][mid] > target {
-				end = mid - 1
-			} else if matrix[i][mid] < target {
-				start = mid + 1
-			}
-		}
+type TreeNode struct {
+	Val   int
+	Left  *TreeNode
+	Right *TreeNode
+}
+
+// https://leetcode-cn.com/problems/cong-shang-dao-xia-da-yin-er-cha-shu-lcof/
+// 从上到下打印二叉树(层序遍历)
+func levelOrder(root *TreeNode) []int {
+	if root == nil {
+		return nil
 	}
-	return false
+	var ret []int
+	var list []*TreeNode
+	list = append(list, root)
+	for len(list) != 0 { //不能用list!=nil判断，empty slice != nil
+		top := list[0]       //取出头部元素
+		list = list[1:]      //弹出头部元素
+		if top.Left != nil { //加入左节点
+			list = append(list, top.Left)
+		}
+		if top.Right != nil { //加入右节点
+			list = append(list, top.Right)
+		}
+		ret = append(ret, top.Val)
+	}
+	return ret
+}
+
+//先序遍历
+func PreOrder(root *TreeNode, ret *[]int) {
+	if root == nil {
+		return
+	}
+	*ret = append(*ret, root.Val)
+	PreOrder(root.Left, ret)
+	PreOrder(root.Right, ret)
 }

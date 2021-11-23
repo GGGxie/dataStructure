@@ -34,3 +34,18 @@ func binarySearch(list []int, target int) bool {
 	}
 	return false
 }
+
+// https://leetcode-cn.com/problems/di-yi-ge-zhi-chu-xian-yi-ci-de-zi-fu-lcof/
+// 第一个只出现一次的字符
+func firstUniqChar(s string) byte {
+	mapp := make(map[rune]int) //记录每个字符出现的次数
+	for _, r := range s {      //遍历记录次数
+		mapp[r]++
+	}
+	for _, r := range s { //遍历找出次数为1的字符
+		if mapp[r] == 1 {
+			return byte(r)
+		}
+	}
+	return ' '
+}

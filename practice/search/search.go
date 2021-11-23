@@ -105,3 +105,14 @@ func findNumberIn2DArray(matrix [][]int, target int) bool {
 	}
 	return false
 }
+
+// https://leetcode-cn.com/problems/xuan-zhuan-shu-zu-de-zui-xiao-shu-zi-lcof/
+// 旋转数组的最小数字
+func minArray(numbers []int) int {
+	for i := range numbers { //处理最小元素在中间或结尾的情况
+		if i != 0 && numbers[i] < numbers[i-1] {
+			return numbers[i]
+		}
+	}
+	return numbers[0] //数组顺序没有改变，那么第一个元素为最小值
+}
