@@ -5,20 +5,13 @@ import (
 )
 
 func main() {
-	fmt.Println(reverseList(nil))
+	fmt.Println(reverseLeftWords("abcdefg", 2))
 }
 
-// https://leetcode-cn.com/problems/ti-huan-kong-ge-lcof/
-// 替换空格
-func replaceSpace(s string) string {
-	// return strings.ReplaceAll(s, " ", "%20")
-	var ret string
-	for _, r := range s {
-		if r == ' ' {
-			ret += "%20"
-		} else {
-			ret += string(r)
-		}
-	}
-	return ret
+// https://leetcode-cn.com/problems/zuo-xuan-zhuan-zi-fu-chuan-lcof/
+// 左旋转字符串
+func reverseLeftWords(s string, n int) string {
+	length := len(s)
+	n %= length //防止n>length
+	return s[n:] + s[0:n]
 }
