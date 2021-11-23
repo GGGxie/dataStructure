@@ -16,7 +16,7 @@ type Node struct {
 
 //链表深拷贝
 func copyRandomList(head *Node) *Node {
-	mapp := make(map[*Node]*Node) //记录新旧节点之间的关系
+	mapp := make(map[*Node]*Node) //记录新旧节点之间的关系。key：旧节点，value：新节点
 	var ret *Node
 	temp := head
 	for temp != nil {
