@@ -38,12 +38,49 @@ func findPeakElement(nums []int) int {
 
 // https://leetcode-cn.com/problems/find-the-duplicate-number/
 // 寻找重复数
-// 应该用快满指针，但是没搞懂
+// 应该用快慢指针，但是没搞懂
 func findDuplicate(nums []int) int {
 	sort.Ints(nums)
 	for i := 0; i < len(nums)-1; i++ {
 		if nums[i] == nums[i+1] {
 			return nums[i]
+		}
+	}
+	return -1
+}
+
+// https://leetcode-cn.com/problems/shu-zu-zhong-zhong-fu-de-shu-zi-lcof/
+// 数组中重复的数字
+func findRepeatNumber(nums []int) int {
+	mapp := make(map[int]int) //存储元素的个数
+	for i := range nums {
+		mapp[nums[i]]++
+		if mapp[nums[i]] > 1 { //大于一个元素就直接返回
+			return nums[i]
+		}
+	}
+	return -1
+}
+
+// https://leetcode-cn.com/problems/zai-pai-xu-shu-zu-zhong-cha-zhao-shu-zi-lcof/
+// 在排序数组中查找数字 I
+func search(nums []int, target int) int {
+	var count int
+	for i := range nums {
+		if nums[i] == target {
+			count++
+		}
+	}
+	return count
+}
+
+// https://leetcode-cn.com/problems/que-shi-de-shu-zi-lcof/
+// 寻找0～n-1中缺失的数字
+func missingNumber(nums []int) int {
+	length := len(nums)
+	for i := 0; i <= length; i++ {
+		if i == length || nums[i] != i {
+			return i
 		}
 	}
 	return -1
