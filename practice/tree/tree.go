@@ -235,3 +235,42 @@ func levelOrder2(root *TreeNode) [][]int {
 	}
 	return ret
 }
+
+// https://leetcode-cn.com/problems/cong-shang-dao-xia-da-yin-er-cha-shu-iii-lcof/
+// 从上到下打印二叉树 III
+func levelOrder3(root *TreeNode) [][]int {
+	if root == nil {
+		return nil
+	}
+	var ret [][]int
+	var list []*TempNode
+	list = append(list, &TempNode{
+		node:  root,
+		Level: 1,
+	})
+	for len(list) != 0 { //不能用list!=nil判断，empty slice != nil
+		top := list[0]  //取出头部元素
+		list = list[1:] //弹出头部元素
+		if top.node == nil {
+			continue
+		}
+		list = append(list, &TempNode{ //加入左节点
+			node:  top.node.Left,
+			Level: top.Level + 1,
+		})
+		list = append(list, &TempNode{ //加入右节点
+			node:  top.node.Right,
+			Level: top.Level + 1,
+		})
+
+		if len(ret) < top.Level { //扩容
+			ret = append(ret, []int{})
+		}
+		if top.Level&1 == 1 { //奇数行，从左往右遍历
+			ret[top.Level-1] = append(ret[top.Level-1], top.node.Val)
+		} else { //偶数行，从右往左遍历
+			ret[top.Level-1] = append([]int{top.node.Val}, ret[top.Level-1]...)
+		}
+	}
+	return ret
+}
