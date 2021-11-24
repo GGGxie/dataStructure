@@ -319,3 +319,39 @@ func Compare(root *TreeNode, B *TreeNode) bool { //递归比较从root节点开�
 	}
 	return true
 }
+
+// https://leetcode-cn.com/problems/er-cha-shu-de-jing-xiang-lcof/
+// 二叉树的镜像
+//先序遍历，左右扭转
+func mirrorTree(root *TreeNode) *TreeNode {
+	var preOrder func(root *TreeNode)
+	preOrder = func(root *TreeNode) {
+		if root == nil {
+			return
+		}
+		root.Left, root.Right = root.Right, root.Left
+		preOrder(root.Left)
+		preOrder(root.Right)
+	}
+	preOrder(root)
+	return root
+}
+
+// https://leetcode-cn.com/problems/dui-cheng-de-er-cha-shu-lcof/submissions/
+// 对称的二叉树
+func isSymmetric(root *TreeNode) bool {
+	if root == nil {
+		return true
+	}
+	return Judge(root.Left, root.Right)
+}
+
+//自底向上递归，根据对称性，left.Left=right.Right，left.Right=right.Left
+func Judge(left, right *TreeNode) bool {
+	if left == nil && right == nil { //两边为空，遍历结束
+		return true
+	} else if (left == nil || right == nil) || left.Val != right.Val { //单边为空，或者值不相等
+		return false
+	}
+	return Judge(left.Left, right.Right) && Judge(left.Right, right.Left)
+}
