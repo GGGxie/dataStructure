@@ -1,40 +1,28 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"math/rand"
+	"sync/atomic"
+	"time"
+)
+
+var counter int32
 
 func main() {
-	A := &TreeNode{
-		Val: 10,
-		Left: &TreeNode{
-			Val: 1,
-		},
-		Right: nil,
+	counter = 0
+	for i := 0; i < 10000; i++ {
+		go func(i int) {
+			if atomic.CompareAndSwapInt32(&counter, counter, counter+1) {
+				time.Sleep(time.Duration(rand.Intn(2)) * time.Microsecond) //加一个睡眠
+				if counter > 3 {
+					return
+				}
+				fmt.Println(counter, "处理服务: ", i)
+				time.Sleep(time.Hour)
+			} else {
+			}
+		}(i)
 	}
-	T := A.Left
-	fmt.Println(A, T)
-}
-
-type TreeNode struct {
-	Val   int
-	Left  *TreeNode
-	Right *TreeNode
-}
-
-// https://leetcode-cn.com/problems/dui-cheng-de-er-cha-shu-lcof/submissions/
-// 对称的二叉树
-func isSymmetric(root *TreeNode) bool {
-	if root == nil {
-		return true
-	}
-	return Judge(root.Left, root.Right)
-}
-
-//自底向上递归，根据对称性，left.Left=right.Right，left.Right=right.Left
-func Judge(left, right *TreeNode) bool {
-	if left == nil && right == nil { //两边为空，遍历结束
-		return true
-	} else if (left == nil || right == nil) || left.Val != right.Val { //单边为空，或者值不相等
-		return false
-	}
-	return Judge(left.Left, right.Right) && Judge(left.Right, right.Left)
+	time.Sleep(time.Hour)
 }
