@@ -252,3 +252,19 @@ func numWays(n int) int {
 // 	}
 // 	return curr
 // }
+
+// https://leetcode-cn.com/problems/lian-xu-zi-shu-zu-de-zui-da-he-lcof
+// 连续子数组的最大和
+// 动态规划: maxSubArray(n)=max(maxSubArray(n-1)+nums[n],nums[n])
+// 用滚动数组优化空间
+func maxSubArray(nums []int) int {
+	temp, ret := 0, nums[0]
+	for i := 0; i < len(nums); i++ {
+		temp2 := max(nums[i], temp+nums[i]) //temp:记录以nums(i-1)结束的最大和,temp2:记录nums(i)结束的最大和
+		if temp2 > ret {
+			ret = temp2
+		}
+		temp = temp2 //滚动,temp记录nums(i)结束的最大和,继续遍历i+1
+	}
+	return ret
+}
