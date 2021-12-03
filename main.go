@@ -1,32 +1,39 @@
 package main
 
 import (
-	"fmt"
-	"math"
+	_ "net/http/pprof"
 )
 
-var counter int32
+func main() {}
 
-func main() {
-	a := []int{7, 6}
-	fmt.Println(maxProfit1(a))
+// https://leetcode-cn.com/problems/li-wu-de-zui-da-jie-zhi-lcof/
+// 礼物的最大价值
+// 动态规划
+// 动态转移方程:maxValue(x, y) = max(maxValue(x-1,y)+grid[x][y],maxValue(x,y-1)+grid[x][y])
+func maxValue(grid [][]int) int {
+	var dp [][]int //记录和grid对应的每个点的最大价值
+	dp = make([][]int, len(grid))
+	for i := range dp {
+		dp[i] = make([]int, len(grid[i]))
+	}
+	for row := range grid {
+		for col := range grid[row] {
+			if row == 0 && col == 0 { //grid[0][0]
+				dp[0][0] = grid[0][0]
+			} else if row == 0 { //第一行
+				dp[row][col] = dp[row][col-1] + grid[row][col]
+			} else if col == 0 { //第一列
+				dp[row][col] = dp[row-1][col] + grid[row][col]
+			} else {
+				dp[row][col] = max(dp[row][col-1], dp[row-1][col]) + grid[row][col]
+			}
+		}
+	}
+	return dp[len(grid)-1][len(grid[0])-1]
 }
-
-// https://leetcode-cn.com/problems/gu-piao-de-zui-da-li-run-lcof/submissions/
-// 股票的最大利润
-func maxProfit(prices []int) int {
-	if len(prices) <= 1 {
-		return 0
+func max(a, b int) int {
+	if a > b {
+		return a
 	}
-	min := math.MaxInt32 //维护一个最小值
-	ret := 0             //最大利润
-	for i := 0; i < len(prices); i++ {
-		if prices[i] < min { //当但当前值比最小值大，最小值为当前值
-			min = prices[i]
-		}
-		if prices[i]-min > ret { //如果当前值-最小值>最大利润，则最大利润=当前值-最小值
-			ret = prices[i] - min
-		}
-	}
-	return ret
+	return b
 }
