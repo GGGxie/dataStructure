@@ -17,8 +17,8 @@ func (h MaxHeap) Less(i, j int) bool {
 	return h[i] > h[j]
 }
 
-func (h *MaxHeap) Swap(i, j int) {
-	(*h)[i], (*h)[j] = (*h)[j], (*h)[i]
+func (h MaxHeap) Swap(i, j int) {
+	h[i], h[j] = h[j], h[i]
 }
 
 func (h *MaxHeap) Push(x interface{}) {
@@ -31,9 +31,17 @@ func (h *MaxHeap) Pop() interface{} {
 	*h = (*h)[:len(*h)-1]
 	return res
 }
+
+func (h *MaxHeap) Top() interface{} {
+	if h.Len() > 0 {
+		return (*h)[0]
+	}
+	return nil
+}
+
 func Test() {
 	h := make(MaxHeap, 0)
-	heap.Init(&h)
+	// heap.Init(&h)
 
 	heap.Push(&h, 8)
 	heap.Push(&h, 1)

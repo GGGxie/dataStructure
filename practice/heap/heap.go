@@ -48,7 +48,9 @@ func (this *MedianFinder) FindMedian() float64 {
 	}
 }
 
-type minHp struct{ sort.IntSlice } //最小堆
+type minHp struct { //最小堆
+	sort.IntSlice
+}
 
 func (h *minHp) Push(v interface{}) { h.IntSlice = append(h.IntSlice, v.(int)) }
 func (h *minHp) Pop() interface{} {
