@@ -2,65 +2,113 @@ package main
 
 import (
 	"fmt"
+	"math"
 )
 
 func main() {
-	fmt.Println(lengthOfLongestSubstring("abc"))
+	h := MaxHeap{
+		Element: []int{62, 41, 30, 28, 16, 22, 13, 19, 17, 15},
+	}
+	// heap.Init(&h)
+	h.Push(52)
+	fmt.Println(h)
+	h.Pop()
+	fmt.Println(h)
+	h.Sort()
+	fmt.Println(h)
+	// heap.Push(&h, 4)
+	// heap.Push(&h, 5)
+	// heap.Push(&h, 2)
+
+	// fmt.Println(heap.Pop(&h))
+	// fmt.Println(heap.Pop(&h))
+	// fmt.Println(heap.Pop(&h))
+	// fmt.Println(heap.Pop(&h))
+
 }
 
-// https://leetcode-cn.com/problems/zui-chang-bu-han-zhong-fu-zi-fu-de-zi-zi-fu-chuan-lcof/
-// 最长不含重复字符的子字符串
-// 滑动窗口
-func lengthOfLongestSubstring(s string) int {
-	//滑动窗口+hash
-	if len(s) == 0 {
-		return 0
-	}
-	ret := 0
-	mapp := make(map[byte]struct{}) //标记数组中的重复元素，空结构体做占位符节省空间
-	for left, right := 0, 0; right < len(s); {
-		if _, ok := mapp[s[right]]; !ok { //窗口右边界往右扩展一个元素
-			mapp[s[right]] = struct{}{}
-			right++
-		} else { //窗口左边界往右收缩一个元素,一直滑动到set中没有重复的元素
-			delete(mapp, s[left])
-			left++
-		}
-		if ret < right-left {
-			ret = right - left
-// https://leetcode-cn.com/problems/lian-xu-zi-shu-zu-de-zui-da-he-lcof/submissions/
-// 连续子数组的最大和
-// maxSubArray(n)=max(maxSubArray(n-1)+nums[n],nums[n])
-// func maxSubArray(nums []int) int {
-// 	dp := make([]int, len(nums))
-// 	dp[0] = nums[0]
-// 	ret := dp[0]
-// 	for i := 1; i < len(nums); i++ {
-// 		dp[i] = max(nums[i], dp[i-1]+nums[i])
-// 		if dp[i] > ret {
-// 			ret = dp[i]
-// 		}
-// 	}
-// 	return ret
-// }
-// https://leetcode-cn.com/problems/lian-xu-zi-shu-zu-de-zui-da-he-lcof
-// 连续子数组的最大和
-// 动态规划: maxSubArray(n)=max(maxSubArray(n-1)+nums[n],nums[n])
-// 用滚动数组优化空间
-func maxSubArray(nums []int) int {
-	temp, ret := 0, nums[0]
-	for i := 0; i < len(nums); i++ {
-		temp2 := max(nums[i], temp+nums[i]) //temp:记录maxSubArray(i-1)的最大值,temp2:记录maxSubArray(i)的最大值
-		if temp2 > ret {
-			ret = temp2
-		}
-		temp = temp2 //滚动,temp记录maxSubArray(i)的最大值,继续遍历i+1
-	}
-	return ret
+//大堆
+type MaxHeap struct {
+	Element []int
 }
-func max(a, b int) int {
-	if a > b {
-		return a
+
+// MaxHeap构造方法
+func NewMaxHeap() *MaxHeap {
+	// 第一个元素仅用于结束insert中的 for 循环
+	h := &MaxHeap{Element: []int{math.MinInt64}}
+	return h
+}
+
+// 插入元素,插入元素需要保证堆的性质
+// 时间复杂度O(logn)
+func (H *MaxHeap) Push(v int) {
+	H.Element = append(H.Element, v)
+	j := len(H.Element) - 1
+	for { //上浮插入的元素
+		i := (j - 1) / 2 // parent
+		if i == j || H.Element[i] > H.Element[j] {
+			break
+		}
+		H.Swap(i, j)
+		j = i
 	}
-	return b
+}
+
+// 删除并返回最大值
+// 时间复杂度O(logn)
+func (H *MaxHeap) Pop() (int, error) {
+	if len(H.Element) <= 1 {
+		return 0, fmt.Errorf("MaxHeap is empty")
+	}
+	//取出切片首位元素
+	maxElement := H.Element[0]
+	//把最后一个元素挪到切片首位
+	H.Swap(0, len(H.Element)-1)
+	i, n := 0, len(H.Element)-1
+	for { //下沉首位元素
+		j1 := 2*i + 1
+		if j1 >= n || j1 < 0 { // j1 < 0 after int overflow
+			break
+		}
+		//从两个子节点中选出一个大的
+		j := j1 // left child
+		if j2 := j1 + 1; j2 < n && H.Element[j2] > H.Element[j1] {
+			j = j2 // = 2*i + 2  // right child
+		}
+		if H.Element[j] < H.Element[i] {
+			break
+		}
+		H.Swap(i, j)
+		i = j
+	}
+	H.Element = H.Element[:n]
+	return maxElement, nil
+}
+
+// 堆排序，对H内的切片进行排序
+// 时间复杂度O(nlogn)
+func (H *MaxHeap) Sort() {
+	n := len(H.Element) - 1
+	for i := n/2 - 1; i >= 0; i-- {
+		for { //下沉
+			j1 := 2*i + 1
+			if j1 >= n || j1 < 0 { // j1 < 0 after int overflow
+				break
+			}
+			//从两个子节点中选出一个大的
+			j := j1 // left child
+			if j2 := j1 + 1; j2 < n && H.Element[j2] > H.Element[j1] {
+				j = j2 // = 2*i + 2  // right child
+			}
+			if H.Element[j] < H.Element[i] {
+				break
+			}
+			H.Swap(i, j)
+			i = j
+		}
+	}
+}
+
+func (H *MaxHeap) Swap(i, j int) {
+	H.Element[i], H.Element[j] = H.Element[j], H.Element[i]
 }

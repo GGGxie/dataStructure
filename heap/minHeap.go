@@ -18,19 +18,22 @@ func NewMinHeap() *MinHeap {
 }
 
 // 插入元素,插入元素需要保证堆的性质
-func (H *MinHeap) Insert(v int) {
+func (H *MinHeap) Push(v int) {
 	H.Element = append(H.Element, v)
-	i := len(H.Element) - 1
-	// 上浮
-	for ; H.Element[i/2] > v; i /= 2 {
-		H.Element[i] = H.Element[i/2]
+	j := len(H.Element) - 1
+	for {
+		i := (j - 1) / 2 // parent
+		if i == j || H.Element[i] < H.Element[j] {
+			break
+		}
+		H.Element[i], H.Element[j] = H.Element[j], H.Element[i]
+		j = i
 	}
-
-	H.Element[i] = v
 }
 
 // 删除并返回最小值
-func (H *MinHeap) DeleteMin() (int, error) {
+// TODO还没验证
+func (H *MinHeap) Pop() (int, error) {
 	if len(H.Element) <= 1 {
 		return 0, fmt.Errorf("MinHeap is empty")
 	}
