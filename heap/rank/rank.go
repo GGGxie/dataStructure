@@ -1,8 +1,6 @@
 package main
 
-import (
-	"fmt"
-)
+import "fmt"
 
 func main() {
 	r := Constructor()
@@ -32,7 +30,7 @@ func main() {
 	}
 }
 
-//利用大堆实现排行榜
+//利用大堆实现动态实时更新的排行榜
 func Constructor() *Rank {
 	return &Rank{
 		mh: &MaxHeap{
