@@ -116,3 +116,32 @@ func minArray(numbers []int) int {
 	}
 	return numbers[0] //数组顺序没有改变，那么第一个元素为最小值
 }
+
+//计算"123456789"的组合个数，组合中每个元素都>=5,<=130
+
+func Count(str string, ret *int) {
+	length := len(str)
+	var tempNum int
+	for i := 0; i < length; i++ {
+		tempNum = tempNum*10 + int(str[i]-48)
+	}
+	if tempNum < 5 {
+		return
+	}
+	//最后的数据满足条件则数量+1
+	//执行完成后不能return，有可能遇到55这种数，还得往下走
+	if 5 <= tempNum && tempNum <= 130 {
+		(*ret)++
+	}
+	var num int
+	for i := 0; i < length; i++ {
+		num = num*10 + int(str[i]-48)
+		if num < 5 {
+			continue
+		}
+		if num > 130 { //超出限制，结束
+			return
+		}
+		Count(str[i+1:], ret)
+	}
+}
