@@ -1,96 +1,31 @@
 package main
 
-import "sync"
-
-const (
-	copyThreshold = 1000
-	maxDeletion   = 10000
-)
-
-// SafeMap provides a map alternative to avoid memory leak.
-// This implementation is not needed until issue below fixed.
-// https://github.com/golang/go/issues/20135
-type SafeMap struct {
-	lock        sync.RWMutex
-	deletionOld int
-	deletionNew int
-	dirtyOld    map[interface{}]interface{}
-	dirtyNew    map[interface{}]interface{}
+type ListNode struct {
+	Val  int
+	Next *ListNode
 }
 
-// NewSafeMap returns a SafeMap.
-func NewSafeMap() *SafeMap {
-	return &SafeMap{
-		dirtyOld: make(map[interface{}]interface{}),
-		dirtyNew: make(map[interface{}]interface{}),
-	}
-}
-
-// Del deletes the value with the given key from m.
-func (m *SafeMap) Del(key interface{}) {
-	m.lock.Lock()
-	if _, ok := m.dirtyOld[key]; ok {
-		delete(m.dirtyOld, key)
-		m.deletionOld++
-	} else if _, ok := m.dirtyNew[key]; ok {
-		delete(m.dirtyNew, key)
-		m.deletionNew++
-	}
-	if m.deletionOld >= maxDeletion && len(m.dirtyOld) < copyThreshold {
-		for k, v := range m.dirtyOld {
-			m.dirtyNew[k] = v
+// 合并两个排序的链表
+// https://leetcode-cn.com/problems/he-bing-liang-ge-pai-xu-de-lian-biao-lcof/
+func mergeTwoLists(l1 *ListNode, l2 *ListNode) *ListNode {
+	idx1, idx2 := l1, l2
+	ret := &ListNode{} //ret指向新的链表的头结点，头结点不存数据，只为优化代码
+	idx3 := ret
+	for idx1 != nil && idx2 != nil {
+		if idx1.Val < idx2.Val {
+			idx3.Next = idx1
+			idx1 = idx1.Next
+		} else {
+			idx3.Next = idx2
+			idx2 = idx2.Next
 		}
-		m.dirtyOld = m.dirtyNew
-		m.deletionOld = m.deletionNew
-		m.dirtyNew = make(map[interface{}]interface{})
-		m.deletionNew = 0
+		idx3 = idx3.Next
 	}
-	if m.deletionNew >= maxDeletion && len(m.dirtyNew) < copyThreshold {
-		for k, v := range m.dirtyNew {
-			m.dirtyOld[k] = v
-		}
-		m.dirtyNew = make(map[interface{}]interface{})
-		m.deletionNew = 0
+	if idx1 != nil {
+		idx3.Next = idx1
 	}
-	m.lock.Unlock()
-}
-
-// Get gets the value with the given key from m.
-func (m *SafeMap) Get(key interface{}) (interface{}, bool) {
-	m.lock.RLock()
-	defer m.lock.RUnlock()
-
-	if val, ok := m.dirtyOld[key]; ok {
-		return val, true
+	if idx2 != nil {
+		idx3.Next = idx2
 	}
-
-	val, ok := m.dirtyNew[key]
-	return val, ok
-}
-
-// Set sets the value into m with the given key.
-func (m *SafeMap) Set(key, value interface{}) {
-	m.lock.Lock()
-	if m.deletionOld <= maxDeletion {
-		if _, ok := m.dirtyNew[key]; ok {
-			delete(m.dirtyNew, key)
-			m.deletionNew++
-		}
-		m.dirtyOld[key] = value
-	} else {
-		if _, ok := m.dirtyOld[key]; ok {
-			delete(m.dirtyOld, key)
-			m.deletionOld++
-		}
-		m.dirtyNew[key] = value
-	}
-	m.lock.Unlock()
-}
-
-// Size returns the size of m.
-func (m *SafeMap) Size() int {
-	m.lock.RLock()
-	size := len(m.dirtyOld) + len(m.dirtyNew)
-	m.lock.RUnlock()
-	return size
+	return ret.Next //返回头结点.Next
 }

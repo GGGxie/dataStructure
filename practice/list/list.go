@@ -216,3 +216,64 @@ func (this *LRUCache) Put(key int, value int) {
 		this.cache[key] = this.list.Front()
 	}
 }
+
+// https://leetcode-cn.com/problems/shan-chu-lian-biao-de-jie-dian-lcof/
+// 删除链表的节点
+func deleteNode2(head *ListNode, val int) *ListNode {
+	var pre, cur *ListNode
+	cur = head
+	for cur != nil {
+		if cur.Val == val {
+			if pre == nil { //删除头结点
+				head = head.Next
+			} else { //删除中间节点
+				pre.Next = cur.Next
+			}
+			break
+		}
+		pre = cur
+		cur = cur.Next
+	}
+	return head
+}
+
+// https://leetcode-cn.com/problems/lian-biao-zhong-dao-shu-di-kge-jie-dian-lcof/submissions/
+// 链表中倒数第k个节点
+//快慢指针，快指针-慢指针=k
+func getKthFromEnd(head *ListNode, k int) *ListNode {
+	var idx1, idx2 *ListNode //idx1：慢指针，idx2：快指针
+	idx1, idx2 = head, head
+	for i := 0; i < k; i++ { //让idx2先走k步
+		idx2 = idx2.Next
+	}
+	for idx2 != nil {
+		idx1 = idx1.Next
+		idx2 = idx2.Next
+	}
+	return idx1
+}
+
+// 合并两个排序的链表
+// https://leetcode-cn.com/problems/he-bing-liang-ge-pai-xu-de-lian-biao-lcof/
+func mergeTwoLists(l1 *ListNode, l2 *ListNode) *ListNode {
+	idx1, idx2 := l1, l2
+	ret := &ListNode{} //ret指向新的链表的头结点，头结点不存数据，只为优化代码
+	idx3 := ret
+	for idx1 != nil && idx2 != nil {
+		if idx1.Val < idx2.Val {
+			idx3.Next = idx1
+			idx1 = idx1.Next
+		} else {
+			idx3.Next = idx2
+			idx2 = idx2.Next
+		}
+		idx3 = idx3.Next
+	}
+	if idx1 != nil {
+		idx3.Next = idx1
+	}
+	if idx2 != nil {
+		idx3.Next = idx2
+	}
+	return ret.Next //返回头结点.Next
+}
