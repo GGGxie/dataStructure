@@ -1,24 +1,40 @@
 package main
 
+import "fmt"
+
 type ListNode struct {
 	Val  int
 	Next *ListNode
 }
 
-// https://leetcode-cn.com/problems/liang-ge-lian-biao-de-di-yi-ge-gong-gong-jie-dian-lcof/
-// 两个链表的第一个公共节点
-func getIntersectionNode(headA, headB *ListNode) *ListNode {
-	mapp := make(map[*ListNode]struct{})
-	idx1, idx2 := headA, headB
-	for idx1 != nil { //把headA指向的链表存入map中
-		mapp[idx1] = struct{}{}
-		idx1 = idx1.Next
-	}
-	for idx2 != nil { //找出headB指向的链表中第一个存在于map中的节点，这就是第一个公共节点
-		if _, ok := mapp[idx2]; ok {
-			return idx2
+func main() {
+	a := []int{1, 6, 3, 5}
+	fmt.Println(exchange(a))
+}
+
+// https://leetcode-cn.com/problems/diao-zheng-shu-zu-shun-xu-shi-qi-shu-wei-yu-ou-shu-qian-mian-lcof/
+// 调整数组顺序使奇数位于偶数前面
+// 双指针法
+func exchange(nums []int) []int {
+	length := len(nums)
+	idx1, idx2 := 0, length-1 //idx1指向奇数，idx2指向偶数
+	for {
+		for { //for循环找到奇数
+			if idx1 >= length || nums[idx1]&1 == 0 {
+				break
+			}
+			idx1++
 		}
-		idx2 = idx2.Next
+		for { //for循环找到偶数
+			if idx2 < 0 || nums[idx2]&1 == 1 {
+				break
+			}
+			idx2--
+		}
+		if idx1 >= length || idx2 < 0 || idx1 >= idx2 { //下标判断
+			break
+		}
+		nums[idx1], nums[idx2] = nums[idx2], nums[idx1] //交换
 	}
-	return nil
+	return nums
 }
