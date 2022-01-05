@@ -8,33 +8,50 @@ type ListNode struct {
 }
 
 func main() {
-	a := []int{1, 6, 3, 5}
-	fmt.Println(exchange(a))
+	m := [][]byte{{'a', 'a'}}
+	b := "aaa"
+	fmt.Println(exist(m, b))
 }
 
-// https://leetcode-cn.com/problems/diao-zheng-shu-zu-shun-xu-shi-qi-shu-wei-yu-ou-shu-qian-mian-lcof/
-// 调整数组顺序使奇数位于偶数前面
-// 双指针法
-func exchange(nums []int) []int {
-	length := len(nums)
-	idx1, idx2 := 0, length-1 //idx1指向奇数，idx2指向偶数
-	for {
-		for { //for循环找到奇数
-			if idx1 >= length || nums[idx1]&1 == 0 {
-				break
+// https://leetcode-cn.com/problems/ju-zhen-zhong-de-lu-jing-lcof/
+// 矩阵中的路径
+// 待优化
+var (
+	dir = [][]int{{0, -1}, {0, 1}, {-1, 0}, {1, 0}}
+)
+
+func exist(board [][]byte, word string) bool {
+	for row := range board {
+		for col := range board[row] { //遍历二维切片
+			if board[row][col] == word[0] { //对与首字母相等的进行深搜
+				var mapp [][]bool //标记
+				mapp = make([][]bool, len(board))
+				for i := range mapp {
+					mapp[i] = make([]bool, len(board[0]))
+				}
+				if ok := dfs(row, col, board, mapp, word, 1); ok {
+					return true
+				}
 			}
-			idx1++
 		}
-		for { //for循环找到偶数
-			if idx2 < 0 || nums[idx2]&1 == 1 {
-				break
-			}
-			idx2--
-		}
-		if idx1 >= length || idx2 < 0 || idx1 >= idx2 { //下标判断
-			break
-		}
-		nums[idx1], nums[idx2] = nums[idx2], nums[idx1] //交换
 	}
-	return nums
+	return false
+}
+func dfs(row, col int, grid [][]byte, mapp [][]bool, target string, count int) bool {
+	mapp[row][col] = true
+	if count == len(target) {
+		return true
+	}
+	for _, d := range dir {
+		newRow := d[0] + row
+		newCol := d[1] + col
+		//判断newRow、newCol是否超出范围，判断grid[newRow][newCol]与下一个字母是否相等，判断grid[newRow][newCol]是否被访问过
+		if (newRow < len(grid) && newRow >= 0) && (newCol < len(grid[0]) && newCol >= 0) && grid[newRow][newCol] == target[count] && !mapp[newRow][newCol] {
+			if ok := dfs(newRow, newCol, grid, mapp, target, count+1); ok {
+				return true
+			}
+			mapp[newRow][newCol] = false
+		}
+	}
+	return false
 }

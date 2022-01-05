@@ -147,3 +147,40 @@ func reverseLeftWords(s string, n int) string {
 	n %= length //防止n>length
 	return s[n:] + s[0:n]
 }
+
+// https://leetcode-cn.com/problems/fan-zhuan-dan-ci-shun-xu-lcof/submissions/
+// 翻转单词顺序
+// 还有更好的方法，参考一下题解
+func reverseWords(s string) string {
+	var ret []byte
+	tempS := split(s) //根据空格分割字符串，忽略空格
+	length := len(tempS)
+	for i := length - 1; i >= 0; i-- { //字符串逆序加入到返回字符串中
+		ret = append(ret, tempS[i]...)
+		if i != 0 {
+			ret = append(ret, byte(' '))
+		}
+	}
+	return string(ret)
+}
+
+func split(s string) []string {
+	var ret []string
+	length := len(s)
+	for i := 0; i < length; i++ {
+		if s[i] != ' ' {
+			var tempS []byte
+			for j := i; j < length; j++ {
+				if s[j] != ' ' {
+					tempS = append(tempS, s[j])
+				} else {
+					i = j
+					break
+				}
+				i = j
+			}
+			ret = append(ret, string(tempS))
+		}
+	}
+	return ret
+}

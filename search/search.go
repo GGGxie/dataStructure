@@ -49,3 +49,19 @@ func firstUniqChar(s string) byte {
 	}
 	return ' '
 }
+
+// https://leetcode-cn.com/problems/he-wei-sde-liang-ge-shu-zi-lcof/
+// 和为s的两个数字
+// 时间复杂度O(nlogn)，空间复杂度O(1)
+func twoSum(nums []int, target int) []int {
+	for i := len(nums) - 1; i >= 0; i-- {
+		dis := target - nums[i]
+		if ok := binarySearch(nums, dis); ok { //二分查找
+			var ret []int
+			ret = append(ret, nums[i])
+			ret = append(ret, dis)
+			return ret
+		}
+	}
+	return nil
+}
