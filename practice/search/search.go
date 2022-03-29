@@ -118,7 +118,6 @@ func minArray(numbers []int) int {
 }
 
 //计算"123456789"的组合个数，组合中每个元素都>=5,<=130
-
 func Count(str string, ret *int) {
 	length := len(str)
 	var tempNum int
