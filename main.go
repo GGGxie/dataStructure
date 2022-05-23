@@ -1,26 +1,42 @@
 package main
 
 import (
-	"log"
+	"net/http"
 
-	"golang.org/x/net/icmp"
+	"github.com/gin-gonic/gin"
 )
 
-func main() {
-	conn, err := icmp.ListenPacket("ip4:icmp", "0.0.0.0")
-	if err != nil {
-		log.Fatal(err)
-	}
+type CommonResp struct {
+	Message string      `json:"message"`
+	Code    int         `json:"code"`
+	Data    interface{} `json:"data"`
+	Result  bool        `json:"result"`
+}
 
-	for {
-		var msg []byte
-		length, sourceIP, err := conn.ReadFrom(msg)
-		if err != nil {
-			log.Println(err)
-			continue
+var db = make(map[string]string)
+
+func setupRouter() *gin.Engine {
+
+	r := gin.Default()
+
+	// Ping test
+	r.POST("/test", func(c *gin.Context) {
+		commonResp := &CommonResp{
+			Result:  true,
+			Message: "",
+			Data: struct {
+				Msg string `json:"msg"`
+			}{"tess"},
+			Code: 200,
 		}
+		c.JSON(http.StatusOK, commonResp)
+		c.String(http.StatusOK, "pong")
+	})
+	return r
+}
 
-		log.Printf("message = '%s', length = %d, source-ip = %s", string(msg), length, sourceIP)
-	}
-	_ = conn.Close()
+func main() {
+	r := setupRouter()
+	// Listen and Server in 0.0.0.0:8080
+	r.Run(":8080")
 }

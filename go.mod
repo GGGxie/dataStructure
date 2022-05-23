@@ -4,13 +4,13 @@ go 1.18
 
 require (
 	github.com/bmizerany/assert v0.0.0-20160611221934-b7ed37b82869
+	github.com/gin-gonic/gin v1.7.7
 	github.com/golang/protobuf v1.5.2
 	github.com/opentracing/opentracing-go v1.2.0
 	github.com/stretchr/testify v1.7.0
 	github.com/tal-tech/go-zero v1.2.2
 	github.com/uber/jaeger-client-go v2.29.1+incompatible
 	go.mongodb.org/mongo-driver v1.7.3
-	golang.org/x/net v0.0.0-20210928044308-7d9f5e0b762b
 	google.golang.org/grpc v1.41.0
 )
 
@@ -22,7 +22,11 @@ require (
 	github.com/coreos/go-semver v0.3.0 // indirect
 	github.com/coreos/go-systemd/v22 v22.3.2 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
+	github.com/gin-contrib/sse v0.1.0 // indirect
 	github.com/go-logr/logr v0.4.0 // indirect
+	github.com/go-playground/locales v0.13.0 // indirect
+	github.com/go-playground/universal-translator v0.17.0 // indirect
+	github.com/go-playground/validator/v10 v10.4.1 // indirect
 	github.com/go-redis/redis v6.15.7+incompatible // indirect
 	github.com/go-sql-driver/mysql v1.5.0 // indirect
 	github.com/go-stack/stack v1.8.0 // indirect
@@ -40,6 +44,8 @@ require (
 	github.com/klauspost/compress v1.14.2 // indirect
 	github.com/kr/pretty v0.2.1 // indirect
 	github.com/kr/text v0.2.0 // indirect
+	github.com/leodido/go-urn v1.2.0 // indirect
+	github.com/mattn/go-isatty v0.0.12 // indirect
 	github.com/matttproud/golang_protobuf_extensions v1.0.2-0.20181231171920-c182affec369 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.1 // indirect
@@ -53,6 +59,7 @@ require (
 	github.com/prometheus/procfs v0.6.0 // indirect
 	github.com/spaolacci/murmur3 v1.1.0 // indirect
 	github.com/uber/jaeger-lib v2.4.1+incompatible // indirect
+	github.com/ugorji/go/codec v1.1.7 // indirect
 	github.com/xdg-go/pbkdf2 v1.0.0 // indirect
 	github.com/xdg-go/scram v1.0.2 // indirect
 	github.com/xdg-go/stringprep v1.0.2 // indirect
@@ -70,6 +77,7 @@ require (
 	go.uber.org/multierr v1.6.0 // indirect
 	go.uber.org/zap v1.17.0 // indirect
 	golang.org/x/crypto v0.0.0-20210513164829-c07d793c2f9a // indirect
+	golang.org/x/net v0.0.0-20210928044308-7d9f5e0b762b // indirect
 	golang.org/x/oauth2 v0.0.0-20210402161424-2e8d93401602 // indirect
 	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c // indirect
 	golang.org/x/sys v0.0.0-20211002104244-808efd93c36d // indirect
