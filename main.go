@@ -8,10 +8,14 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type CommonResp2 struct {
-	Message string      `json:"message"`
-	Code    int         `json:"code"`
-	Result  interface{} `json:"result"`
+type Resp2 struct {
+	Success   bool        `json:"success"`
+	ErrorCode interface{} `json:"errorCode"`
+	ErrorMsg  interface{} `json:"errorMsg"`
+	Data      Data        `json:"data"`
+}
+type Data struct {
+	CorpID string `json:"corpId"`
 }
 type CommonResp struct {
 	Message string      `json:"message"`
@@ -39,15 +43,13 @@ var db = make(map[string]string)
 func setupRouter() *gin.Engine {
 	r := gin.Default()
 	r.GET("/config", func(c *gin.Context) {
-		resp := struct {
-			CorpId string `json:"corpId"`
-		}{
-			"dinge70f54a68fcfc101f2c783f7214b6d69",
-		}
-		commonResp := &CommonResp2{
-			Code:    200,
-			Message: "",
-			Result:  resp,
+		commonResp := &Resp2{
+			Success: true,
+			Data: Data{
+				CorpID: "dinge70f54a68fcfc101f2c783f7214b6d69",
+			},
+			ErrorMsg:  nil,
+			ErrorCode: nil,
 		}
 		c.JSON(http.StatusOK, commonResp)
 	})
