@@ -7,6 +7,7 @@ import * as dd from 'dingtalk-jsapi';
 // 替换成后端服务域名
 const domain = "";
 function App() {
+  alert("11111")
   const [userInfo,setUserInfo] = useState({name:'',avatar:""})
   useEffect(()=>{
     dd.ready(function () {
