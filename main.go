@@ -8,6 +8,11 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+type CommonResp2 struct {
+	Message string      `json:"message"`
+	Code    int         `json:"code"`
+	Result  interface{} `json:"result"`
+}
 type CommonResp struct {
 	Message string      `json:"message"`
 	Code    int         `json:"code"`
@@ -39,11 +44,10 @@ func setupRouter() *gin.Engine {
 		}{
 			"dinge70f54a68fcfc101f2c783f7214b6d69",
 		}
-		commonResp := &CommonResp{
-			Result:  true,
-			Message: "",
-			Data:    resp,
+		commonResp := &CommonResp2{
 			Code:    200,
+			Message: "",
+			Result:  resp,
 		}
 		c.JSON(http.StatusOK, commonResp)
 	})
