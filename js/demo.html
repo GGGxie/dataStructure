@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title></title>
+<meta charset="utf-8">
+<!-- <script src="//g.alicdn.com/dingding/dingtalk-jsapi/2.0.57/dingtalk.open.js"></script> -->
+<script src="https://g.alicdn.com/dingding/dingtalk-jsapi/2.13.42/dingtalk.open.js"></script>
+<!-- <script type="module">
+    import openLink from 'dingtalk-jsapi/api/biz/util/openLink';
+    import close from 'dingtalk-jsapi/api/biz/navigation/close';
+</script> -->
+<script type="text/javascript">
+    dd.ready(function() {
+        dd.runtime.permission.requestAuthCode({
+            corpId: "dinge70f54a68fcfc101f2c783f7214b6d69", //你们企业钉钉的CORPID
+            onSuccess: function(result) {
+                {
+                    var code = result.code;
+                    var url1 = `http://39.108.148.65:8080/getcode?code=${code}`;   //把code传给后端
+                    // var url2 = "https://www.dingtalk.com";
+                    alert(url1)
+                    dd.biz.util.openLink({
+                        url:url1,//要打开链接的地址
+                        onSuccess : function(result) {
+                            alert(JSON.stringify(result))
+                            dd.biz.navigation.close({})
+                        },
+                        onFail : function(err) {
+                            alert(err)
+                        }
+                    })
+                    // openLink({ url: url1 }).then(() => close({}));
+                }
+            },
+            onFail : function(err) {
+                alert('出错了, ' + JSON.stringify(err));
+            }
+        });
+    });
+</script>
+</head>
+<body>
+</body>
+</html>

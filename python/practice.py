@@ -1,20 +1,12 @@
 #!/usr/bin/python
-import json,sys
-jsonStr = sys.argv[2]
-jsonStr=jsonStr.replace("'",'"')
-jsonStr=jsonStr.replace("True","true")
-data = json.loads(jsonStr)
-idx = int(sys.argv[4]) - 1
+import sys
+str = sys.argv[1]
+str = str.encode("utf-8").decode("unicode_escape")
+str = str.strip("/")
+temp = "<SOPS_VAR>text:"+str+"</SOPS_VAR>"
+print(temp.encode("utf-8"))
 
-count = data["data"]["count"]
-if idx+1 <= count:
-    host = data["data"]["pair"][idx]["host"]
-    operator = data["data"]["pair"][idx]["operator"]
-    oTemp="<SOPS_VAR>authman:"+operator+"</SOPS_VAR>"
-    hTemp="<SOPS_VAR>authnode:"+host+"</SOPS_VAR>"
-    print(oTemp.encode('utf-8'))
-    print(hTemp.encode('utf-8'))
-count = str(count)
-c ="<SOPS_VAR>count:"+count+"</SOPS_VAR>"
-print(c.encode('utf-8'))
-
+str = sys.argv[2]
+str = str.strip("/")
+temp = "<SOPS_VAR>person:"+str+"</SOPS_VAR>"
+print(temp.encode("utf-8"))
