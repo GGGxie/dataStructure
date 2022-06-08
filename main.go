@@ -33,8 +33,23 @@ var db = make(map[string]string)
 
 func setupRouter() *gin.Engine {
 	r := gin.Default()
-	r.GET("/getcode", func(c *gin.Context) {
-		code := c.Query("code")
+	r.GET("/config", func(c *gin.Context) {
+		resp := struct {
+			CorpId string `json:"corpId"`
+		}{
+			"dinge70f54a68fcfc101f2c783f7214b6d69",
+		}
+		commonResp := &CommonResp{
+			Result:  true,
+			Message: "",
+			Data:    resp,
+			Code:    200,
+		}
+		c.JSON(http.StatusOK, commonResp)
+	})
+
+	r.GET("/login", func(c *gin.Context) {
+		code := c.Query("authCode")
 		url := "https://oapi.dingtalk.com/topapi/v2/user/getuserinfo" //必须要用https,否则报 missing code错误
 		data := struct {
 			Code string `json:"code"`
