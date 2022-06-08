@@ -2,6 +2,7 @@ import react ,{useEffect,useState} from 'react'
 import './App.css';
 import axios from 'axios';
 import * as dd from 'dingtalk-jsapi';
+alert("111");
 //内网穿透工具介绍:
 // https://developers.dingtalk.com/document/resourcedownload/http-intranet-penetration?pnamespace=app
 // 替换成后端服务域名
