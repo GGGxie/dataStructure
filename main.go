@@ -32,17 +32,7 @@ type Result struct {
 var db = make(map[string]string)
 
 func setupRouter() *gin.Engine {
-
 	r := gin.Default()
-	// r.Static("/code", "js/code.js")
-	r.LoadHTMLGlob("frontend/public/*")
-	r.Static("/js", "frontend/src")
-	r.GET("/code", func(c *gin.Context) {
-		c.HTML(http.StatusOK, "index.html", gin.H{
-			"title": "main site",
-		})
-	})
-	// Ping test
 	r.GET("/getcode", func(c *gin.Context) {
 		code := c.Query("code")
 		url := "https://oapi.dingtalk.com/topapi/v2/user/getuserinfo" //必须要用https,否则报 missing code错误
@@ -52,7 +42,7 @@ func setupRouter() *gin.Engine {
 			Code: code,
 		}
 		query := map[string]string{
-			"access_token": "0e5ff5012b173d31a67cf50e79e7469c",
+			"access_token": "a4dd15620138395e98c2dbb82f3d7118",
 		}
 
 		resp, _ := dhttp.Post(url, data, nil, query)
