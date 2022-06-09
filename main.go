@@ -51,6 +51,8 @@ func setupRouter() *gin.Engine {
 			ErrorMsg:  nil,
 			ErrorCode: nil,
 		}
+		c.Header("Access-Control-Allow-Origin", "*")
+		c.Header("Cache-Control", "no-cache")
 		c.JSON(http.StatusOK, commonResp)
 	})
 
