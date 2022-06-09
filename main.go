@@ -52,6 +52,8 @@ func setupRouter() *gin.Engine {
 			ErrorCode: nil,
 		}
 		c.Header("Access-Control-Allow-Origin", "*")
+		c.Header("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, PATCH, DELETE")
+		c.Header("Access-Control-Allow-Headers", "x-access-token, Origin, X-Requested-With, Content-Type, Accept")
 		c.Header("Cache-Control", "no-cache")
 		c.JSON(http.StatusOK, commonResp)
 	})
