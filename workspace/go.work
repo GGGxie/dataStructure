@@ -1,0 +1,6 @@
+go 1.18
+
+use (
+	./gomodtestc
+	./hello_work
+)

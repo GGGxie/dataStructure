@@ -9,3 +9,7 @@ type Stack interface {
 	Clear()
 	Values() []interface{}
 }
+
+type 手动阀 struct {
+	s string
+}
