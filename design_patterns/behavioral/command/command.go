@@ -7,37 +7,45 @@
 // 然后我们在另外一个 goroutine 中来执行它
 package command
 
+import "fmt"
+
 // import "fmt"
 
-// // ICommand 命令
-// type ICommand interface {
-// 	Execute() error
-// }
+// ICommand 命令
+type ICommand interface {
+	Execute() error
+}
 
-// // StartCommand 游戏开始运行
-// type StartCommand struct{}
+// StartCommand 游戏开始运行
+type StartCommand struct{}
 
-// // NewStartCommand NewStartCommand
-// func NewStartCommand( /*正常情况下这里会有一些参数*/ ) *StartCommand {
-// 	return &StartCommand{}
-// }
+// NewStartCommand NewStartCommand
+func NewStartCommand( /*正常情况下这里会有一些参数*/ ) *StartCommand {
+	return &StartCommand{}
+}
 
-// // Execute Execute
-// func (c *StartCommand) Execute() error {
-// 	fmt.Println("game start")
-// 	return nil
-// }
+// Execute Execute
+func (c *StartCommand) Execute() error {
+	fmt.Println("game start")
+	return nil
+}
 
-// // ArchiveCommand 游戏存档
-// type ArchiveCommand struct{}
+// ArchiveCommand 游戏存档
+type ArchiveCommand struct{}
 
-// // NewArchiveCommand NewArchiveCommand
-// func NewArchiveCommand( /*正常情况下这里会有一些参数*/ ) *ArchiveCommand {
-// 	return &ArchiveCommand{}
-// }
+// NewArchiveCommand NewArchiveCommand
+func NewArchiveCommand( /*正常情况下这里会有一些参数*/ ) *ArchiveCommand {
+	return &ArchiveCommand{}
+}
 
-// // Execute Execute
-// func (c *ArchiveCommand) Execute() error {
-// 	fmt.Println("game archive")
-// 	return nil
-// }
+// Execute Execute
+func (c *ArchiveCommand) Execute() error {
+	fmt.Println("game archive")
+	return nil
+}
+
+// Execute Execute
+func (c *ArchiveCommand) b() error {
+	fmt.Println("game archive")
+	return nil
+}
