@@ -19,7 +19,7 @@ type TreeNode struct {
 	Right *TreeNode
 }
 
-//给一个有序数组，生成一个二分搜索树
+// 给一个有序数组，生成一个二叉搜索树
 func sortedArrayToBST(nums []int) *TreeNode {
 	len := len(nums)
 	if len == 0 {
@@ -34,7 +34,7 @@ func sortedArrayToBST(nums []int) *TreeNode {
 	return tree
 }
 
-//search 查询元素
+// search 查询元素
 func (tn *TreeNode) Search(data int) *TreeNode {
 	if tn == nil {
 		return nil
@@ -49,7 +49,7 @@ func (tn *TreeNode) Search(data int) *TreeNode {
 	return nil
 }
 
-//insert 插入新元素
+// insert 插入新元素
 func (tn *TreeNode) Insert(newNode *TreeNode) {
 	if tn == nil {
 		tn = newNode
@@ -63,7 +63,7 @@ func (tn *TreeNode) Insert(newNode *TreeNode) {
 	}
 }
 
-//二分递归
+// 二分递归
 func dfs(nums []int, start, end int) *TreeNode {
 	if end < start {
 		return nil
@@ -89,7 +89,7 @@ type ListNode struct {
 	Next *ListNode
 }
 
-//bfs 层序遍历，广度搜索
+// bfs 层序遍历，广度搜索
 func listOfDepth(tree *TreeNode) []*ListNode {
 	if tree == nil {
 		return nil
@@ -128,7 +128,7 @@ func listOfDepth(tree *TreeNode) []*ListNode {
 	return retList
 }
 
-//判断是否二叉搜索树
+// 判断是否二叉搜索树
 func isValidBST(root *TreeNode) bool {
 	return helper(root, math.MinInt64, math.MaxInt64)
 }
@@ -143,7 +143,7 @@ func helper(root *TreeNode, lower, upper int) bool {
 	return helper(root.Left, lower, root.Val) && helper(root.Right, root.Val, upper)
 }
 
-//中序找出后继节点,要点:这是有序的,比p大的就是它的后续节点
+// 中序找出后继节点,要点:这是有序的,比p大的就是它的后续节点
 func inorderSuccessor(root *TreeNode, p *TreeNode) *TreeNode {
 	if root == nil {
 		return nil

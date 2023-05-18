@@ -1,8 +1,8 @@
-package lists
+package list
 
 import "fmt"
 
-//链表结构
+// 链表结构
 type LinkList struct {
 	Header *Node
 	End    *Node
@@ -10,7 +10,7 @@ type LinkList struct {
 	Size   int //链表现有数据量
 }
 
-//双向节点结构
+// 双向节点结构
 type Node struct {
 	Data  int
 	Front *Node
@@ -25,7 +25,7 @@ func NewNode(data int, front, next *Node) *Node {
 	}
 }
 
-//init 初始化一个新链表
+// init 初始化一个新链表
 func InitList() *LinkList {
 	return &LinkList{
 		Header: nil,
@@ -35,7 +35,7 @@ func InitList() *LinkList {
 	}
 }
 
-//insert 在链头插入新元素
+// insert 在链头插入新元素
 func (l *LinkList) Add(data int) {
 	if l.Size == 0 { //空链表
 		temp := NewNode(data, nil, nil)
@@ -49,7 +49,7 @@ func (l *LinkList) Add(data int) {
 	l.Size++
 }
 
-//insert 在链尾插入新元素
+// insert 在链尾插入新元素
 func (l *LinkList) Append(data int) {
 	if l.Size == 0 { //空链表
 		temp := NewNode(data, nil, nil)
@@ -63,7 +63,7 @@ func (l *LinkList) Append(data int) {
 	l.Size++
 }
 
-//在链表第i个元素后插入新元素
+// 在链表第i个元素后插入新元素
 func (l *LinkList) Insert(data int, i int) {
 	if i > l.Size { //超过链表长度,就在尾部插入
 		l.Append(data)
