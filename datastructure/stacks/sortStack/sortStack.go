@@ -1,10 +1,10 @@
 package sortStack
 
-import "github.com/GGGxie/dataStructure/stacks/arrayStack"
+import "github.com/GGGxie/dataStructure/datastructure/stacks/arrayStack"
 
-//排序栈
-//辅助数据结构：普通栈
-//最小的元素在栈顶
+// 排序栈
+// 辅助数据结构：普通栈
+// 最小的元素在栈顶
 type SortedStack struct {
 	stack *arrayStack.Stack
 	cache []interface{}
@@ -84,7 +84,7 @@ func (s *SortedStack) Clear() {
 	s.size = 0
 }
 
-//返回栈的值，通过copy的方式，不会对原值造成影响
+// 返回栈的值，通过copy的方式，不会对原值造成影响
 func (s *SortedStack) Values() []interface{} {
 	ret := make([]interface{}, s.size, s.size)
 	copy(ret, s.cache)

@@ -1,7 +1,7 @@
 package minStack
 
 import (
-	"github.com/GGGxie/dataStructure/stacks/arrayStack"
+	"github.com/GGGxie/dataStructure/datastructure/stacks/arrayStack"
 
 	"math"
 )

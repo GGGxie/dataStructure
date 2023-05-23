@@ -1,8 +1,8 @@
 package doubleStack
 
-import "github.com/GGGxie/dataStructure/stacks/arrayStack"
+import "github.com/GGGxie/dataStructure/datastructure/stacks/arrayStack"
 
-//双栈实现队列
+// 双栈实现队列
 type Queue struct {
 	s1 *arrayStack.Stack
 	s2 *arrayStack.Stack

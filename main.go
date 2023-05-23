@@ -3,7 +3,10 @@ package main
 import (
 	"errors"
 	"fmt"
+	"os"
+	"os/signal"
 	"sync"
+	"syscall"
 )
 
 var (
@@ -27,15 +30,47 @@ func (a A) Change2() {
 
 var wg sync.WaitGroup
 
-func main() {
-	wg.Add(100)
-	for i := 0; i < 100; i++ {
-		go func(i int, wg *sync.WaitGroup) {
-			fmt.Println(i)
-			wg.Done()
-		}(i, &wg)
+func close() {
+	sc := make(chan os.Signal, 1)
+	signal.Notify(sc,
+		syscall.SIGHUP,
+		syscall.SIGINT,
+		syscall.SIGTERM,
+		syscall.SIGQUIT,
+	)
+	select {
+	case sig := <-sc:
+		fmt.Println("Program Exit...", sig)
+		// 各种回收
+		os.Exit(1)
 	}
-	wg.Wait()
+	wg.Done()
+}
+func main() {
+	fmt.Println(confusingNumber(11))
+}
+
+func confusingNumber(n int) bool {
+	// 记录翻转后的数字
+	mapp := map[int]int{
+		0: 0,
+		1: 1,
+		6: 9,
+		8: 8,
+		9: 6,
+	}
+	// 位处理
+	var changeNum int
+
+	for tmp := n; tmp != 0; tmp = tmp / 10 {
+		z := tmp % 10
+		if c, ok := mapp[z]; ok {
+			changeNum = changeNum*10 + c
+		} else {
+			return false
+		}
+	}
+	return changeNum != n
 }
 
 type Array struct {
