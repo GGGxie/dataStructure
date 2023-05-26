@@ -47,30 +47,76 @@ func close() {
 	wg.Done()
 }
 func main() {
-	fmt.Println(confusingNumber(11))
+	fmt.Println(-10 % 3)
+}
+func abs(a int) int {
+	if a < 0 {
+		return -a
+	}
+	return a
 }
 
-func confusingNumber(n int) bool {
-	// 记录翻转后的数字
-	mapp := map[int]int{
-		0: 0,
-		1: 1,
-		6: 9,
-		8: 8,
-		9: 6,
-	}
-	// 位处理
-	var changeNum int
-
-	for tmp := n; tmp != 0; tmp = tmp / 10 {
-		z := tmp % 10
-		if c, ok := mapp[z]; ok {
-			changeNum = changeNum*10 + c
+func stringShift2(s string, shift [][]int) string {
+	// 计算移动结果
+	var mov int
+	for i := range shift {
+		if shift[i][0] == 0 {
+			mov += shift[i][1]
 		} else {
-			return false
+			mov -= shift[i][1]
 		}
 	}
-	return changeNum != n
+	length := len(s)
+	var idx int
+	if mov > 0 {
+		idx = mov % length
+	} else {
+		idx = (mov % length) + length
+	}
+	return s[idx:] + s[:idx]
+}
+
+// 相隔为 1 的编辑距离
+// https://leetcode.cn/problems/one-edit-distance/
+func isOneEditDistance(s string, t string) bool {
+	distance := len(s) - len(t)
+	if distance == 1 && (len(s) == 0 || len(t) == 0) {
+		return true
+	}
+	var count int
+	switch distance { //distance有三种情况
+	case 0:
+		{ //长度相等
+			for i := range s {
+				if s[i] != t[i] {
+					count++
+				}
+			}
+			return count == 1
+		}
+	case 1:
+		{ //s 比 t 多一个
+			for i, j := 0, 0; i < len(s) && j < len(t); i, j = i+1, j+1 {
+				if s[i] != t[j] { //遇到不同的直接比较后半段
+					count++
+					return s[i+1:] == t[j:]
+				}
+			}
+			return true //全部遍历完说明前面都相同,就最后一个字符不同,返回 true
+		}
+	case -1:
+		{ //s 比 t 少一个
+			for i, j := 0, 0; i < len(t) && j < len(s); i, j = i+1, j+1 {
+				if s[j] != t[i] { //遇到不同的直接比较后半段
+					count++
+					return t[i+1:] == s[j:]
+				}
+			}
+			return true //全部遍历完说明前面都相同,就最后一个字符不同,返回 true
+		}
+	default: //长度相差>1
+		return false
+	}
 }
 
 type Array struct {
