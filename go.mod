@@ -3,7 +3,6 @@ module github.com/GGGxie/dataStructure
 go 1.20
 
 require (
-	github.com/alecthomas/kingpin/v2 v2.3.2
 	github.com/bmizerany/assert v0.0.0-20160611221934-b7ed37b82869
 	github.com/gin-gonic/gin v1.8.1
 	github.com/golang/protobuf v1.5.2
@@ -13,12 +12,12 @@ require (
 	github.com/uber/jaeger-client-go v2.29.1+incompatible
 	go.mongodb.org/mongo-driver v1.7.3
 	google.golang.org/grpc v1.41.0
+	gopl.io v0.0.0-20211004154805-1ae3ec64947b
 )
 
 require (
 	github.com/DATA-DOG/go-sqlmock v1.5.0 // indirect
 	github.com/HdrHistogram/hdrhistogram-go v1.1.2 // indirect
-	github.com/alecthomas/units v0.0.0-20211218093645-b94a6e3cc137 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/cespare/xxhash/v2 v2.1.1 // indirect
 	github.com/coreos/go-semver v0.3.0 // indirect
@@ -68,7 +67,6 @@ require (
 	github.com/xdg-go/pbkdf2 v1.0.0 // indirect
 	github.com/xdg-go/scram v1.0.2 // indirect
 	github.com/xdg-go/stringprep v1.0.2 // indirect
-	github.com/xhit/go-str2duration/v2 v2.1.0 // indirect
 	github.com/youmark/pkcs8 v0.0.0-20181117223130-1be2e3e5546d // indirect
 	go.etcd.io/etcd/api/v3 v3.5.0 // indirect
 	go.etcd.io/etcd/client/pkg/v3 v3.5.0 // indirect

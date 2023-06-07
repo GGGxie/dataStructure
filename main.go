@@ -1,147 +1,93 @@
 package main
 
 import (
-	"errors"
 	"fmt"
-	"os"
-	"os/signal"
-	"sync"
-	"syscall"
+	_ "image/png"
+	"io"
+	"log"
+	"reflect"
 )
 
-var (
-	intflag    int
-	boolflag   bool
-	stringflag string
-	a          byte
-)
-
-type A struct {
-	Str  string `json:"str,omitempty"`
-	Str2 string `json:"str2,omitempty"`
-}
-
-func (a *A) Change() {
-	a.Str = "3"
-}
-func (a A) Change2() {
-	a.Str = "2"
-}
-
-var wg sync.WaitGroup
-
-func close() {
-	sc := make(chan os.Signal, 1)
-	signal.Notify(sc,
-		syscall.SIGHUP,
-		syscall.SIGINT,
-		syscall.SIGTERM,
-		syscall.SIGQUIT,
-	)
-	select {
-	case sig := <-sc:
-		fmt.Println("Program Exit...", sig)
-		// 各种回收
-		os.Exit(1)
-	}
-	wg.Done()
-}
-func main() {
-	fmt.Println(-10 % 3)
-}
-func abs(a int) int {
-	if a < 0 {
-		return -a
-	}
-	return a
-}
-
-func stringShift2(s string, shift [][]int) string {
-	// 计算移动结果
-	var mov int
-	for i := range shift {
-		if shift[i][0] == 0 {
-			mov += shift[i][1]
+func display(path string, v reflect.Value) {
+	switch v.Kind() {
+	case reflect.Invalid:
+		fmt.Printf("%s = invalid\n", path)
+	case reflect.Slice, reflect.Array:
+		for i := 0; i < v.Len(); i++ {
+			display(fmt.Sprintf("%s[%d]", path, i), v.Index(i))
+		}
+	case reflect.Struct:
+		for i := 0; i < v.NumField(); i++ {
+			fieldPath := fmt.Sprintf("%s.%s", path, v.Type().Field(i).Name)
+			display(fieldPath, v.Field(i))
+		}
+	case reflect.Map:
+		for _, key := range v.MapKeys() {
+			fmt.Println(key)
+			// display(fmt.Sprintf("%s[%s]", path,
+			// 	formatAtom(key)), v.MapIndex(key))
+		}
+	case reflect.Ptr:
+		if v.IsNil() {
+			fmt.Printf("%s = nil\n", path)
 		} else {
-			mov -= shift[i][1]
+			display(fmt.Sprintf("(*%s)", path), v.Elem())
 		}
+	case reflect.Interface:
+		if v.IsNil() {
+			fmt.Printf("%s = nil\n", path)
+		} else {
+			fmt.Printf("%s.type = %s\n", path, v.Elem().Type())
+			display(path+".value", v.Elem())
+		}
+	default: // basic types, channels, funcs
+		fmt.Printf("%s =%T", path, v)
+		// fmt.Printf("%s = %s\n", path, formatAtom(v))
 	}
-	length := len(s)
-	var idx int
-	if mov > 0 {
-		idx = mov % length
-	} else {
-		idx = (mov % length) + length
-	}
-	return s[idx:] + s[:idx]
+}
+func Display(name string, x interface{}) {
+	fmt.Printf("Display %s (%T):\n", name, x)
+	display(name, reflect.ValueOf(x))
 }
 
-// 相隔为 1 的编辑距离
-// https://leetcode.cn/problems/one-edit-distance/
-func isOneEditDistance(s string, t string) bool {
-	distance := len(s) - len(t)
-	if distance == 1 && (len(s) == 0 || len(t) == 0) {
-		return true
-	}
-	var count int
-	switch distance { //distance有三种情况
-	case 0:
-		{ //长度相等
-			for i := range s {
-				if s[i] != t[i] {
-					count++
-				}
+type Movie struct {
+	Title, Subtitle string
+	Year            int
+	Color           bool
+	Actor           map[string]string
+	Oscars          []string
+	Sequel          *string
+}
+
+func main() {
+	fmt.Println(lengthOfLongestSubstringTwoDistinct("abcabcabc"))
+}
+
+// 至多包含两个不同字符的最长子串
+// https://leetcode.cn/problems/longest-substring-with-at-most-two-distinct-characters/
+// 滑动窗口
+func lengthOfLongestSubstringTwoDistinct(s string) int {
+	// 记录窗口内数据
+	mapp := make(map[byte]int)
+	max := 0
+	for i, j := 0, 0; j < len(s); j++ {
+		mapp[s[j]]++
+		for len(mapp) > 2 {
+			// 当字符种类超过 2,从左往右删
+			mapp[s[i]]--
+			if mapp[s[i]] == 0 {
+				delete(mapp, s[i])
 			}
-			return count == 1
+			i++
 		}
-	case 1:
-		{ //s 比 t 多一个
-			for i, j := 0, 0; i < len(s) && j < len(t); i, j = i+1, j+1 {
-				if s[i] != t[j] { //遇到不同的直接比较后半段
-					count++
-					return s[i+1:] == t[j:]
-				}
-			}
-			return true //全部遍历完说明前面都相同,就最后一个字符不同,返回 true
+		if max < j-i+1 {
+			max = j - i + 1
 		}
-	case -1:
-		{ //s 比 t 少一个
-			for i, j := 0, 0; i < len(t) && j < len(s); i, j = i+1, j+1 {
-				if s[j] != t[i] { //遇到不同的直接比较后半段
-					count++
-					return t[i+1:] == s[j:]
-				}
-			}
-			return true //全部遍历完说明前面都相同,就最后一个字符不同,返回 true
-		}
-	default: //长度相差>1
-		return false
 	}
+	return max
 }
-
-type Array struct {
-	data   []interface{}
-	length int
-}
-
-func NewArray(size int) Array {
-	return Array{
-		data:   make([]interface{}, size),
-		length: size,
+func mustCopy(dst io.Writer, src io.Reader) {
+	if _, err := io.Copy(dst, src); err != nil {
+		log.Fatal(err)
 	}
-}
-
-func (a Array) Get(idx int) (interface{}, error) {
-	if idx > a.length-1 {
-		return nil, errors.New("访问越界")
-	}
-	return a.data[idx], nil
-}
-
-func (a Array) Set(idx int, value interface{}) error {
-	if idx > a.length-1 {
-		return errors.New("访问越界")
-	}
-	a.data[idx] = value
-	return nil
 }

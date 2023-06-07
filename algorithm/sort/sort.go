@@ -1,6 +1,8 @@
 package sort
 
-import "testing"
+import (
+	"testing"
+)
 
 func F2(t *testing.T) {
 
@@ -31,8 +33,8 @@ func F2(t *testing.T) {
 // 	}
 // }
 
-//快速排序
-//时间复杂度O(nlogn), 空间复杂度O(logn)，不稳定排序
+// 快速排序
+// 时间复杂度O(nlogn), 空间复杂度O(logn)，不稳定排序
 func QuickSort(slice []int) {
 	var (
 		_quickSort func(left, right int, slice []int)     //利用递归不断对分区进行排序
@@ -100,7 +102,7 @@ func merge(left []int, right []int) []int {
 	return result
 }
 
-//计数排序,max要比数组里面所有的元素大
+// 计数排序,max要比数组里面所有的元素大
 // 时间复杂度O(nlogn)，空间复杂度：O(n)，稳定排序
 func countingSort(array []int, max int) {
 	//b中间数据，记录array排序后的顺序

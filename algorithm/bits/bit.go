@@ -8,7 +8,7 @@ import (
 //取出最低位：num & 1
 //取出后n位：num & ((1<<n)-1)
 
-//用M去填充N的第i-j位
+// 用M去填充N的第i-j位
 // 输入：N = 1024(10000000000), M = 19(10011), i = 2, j = 6
 // 输出：N = 1100(10001001100)
 func InsertBits(N int, M int, i int, j int) int {
@@ -22,7 +22,7 @@ func InsertBits(N int, M int, i int, j int) int {
 	return N
 }
 
-//输出十进制>1的小数的二进制表示
+// 输出十进制>1的小数的二进制表示
 func PrintBin(num float64) string {
 	var ret []byte
 	var count int
@@ -48,7 +48,7 @@ func PrintBin(num float64) string {
 	}
 }
 
-//翻转数位,你可以将一个数位从0变为1,找出你能够获得的最长的一串1的长度。TODO:改成动态规划
+// 翻转数位,你可以将一个数位从0变为1,找出你能够获得的最长的一串1的长度。TODO:改成动态规划
 func reverseBits(num int) int {
 	//pre记录从上一个0开始，1的总数
 	//max记录最大的1的总数
@@ -110,9 +110,9 @@ func findClosedNumbers(num int) []int {
 	return []int{larger, smaller}
 }
 
-//整数转换。编写一个函数，确定需要改变几个位才能将整数A转成整数B。
-//todo:为什么获取数字的二进制表示中1的个数要这样写
-//todo:为什么要int32?
+// 整数转换。编写一个函数，确定需要改变几个位才能将整数A转成整数B。
+// todo:为什么获取数字的二进制表示中1的个数要这样写
+// todo:为什么要int32?
 func convertInteger(A int, B int) int {
 	count := func(num int32) (sum int) { //获取数字的二进制表示中1的个数
 		for num != 0 {
@@ -179,4 +179,49 @@ func multiply(A int, B int) int {
 		}
 
 	}
+}
+
+// 反转字符串中的单词 II
+// https://leetcode.cn/problems/reverse-words-in-a-string-ii/
+// 先翻转所有字符,再逐个单词翻转
+func reverseWords(s []byte) {
+	reverse := func(i, j int) {
+		for ; i < j; i, j = i+1, j-1 {
+			s[i], s[j] = s[j], s[i]
+		}
+	}
+	reverse(0, len(s)-1)
+	for start, idx := 0, 0; idx < len(s); idx++ {
+		if s[idx] == ' ' {
+			reverse(start, idx-1)
+			start = idx + 1
+		}
+		if idx == len(s)-1 {
+			reverse(start, idx)
+		}
+	}
+}
+
+// 至多包含两个不同字符的最长子串
+// https://leetcode.cn/problems/longest-substring-with-at-most-two-distinct-characters/
+// 滑动窗口
+func lengthOfLongestSubstringTwoDistinct(s string) int {
+	// 记录窗口内数据
+	mapp := make(map[byte]int)
+	max := 0
+	for i, j := 0, 0; j < len(s); j++ {
+		mapp[s[j]]++
+		for len(mapp) > 2 {
+			// 当字符种类超过 2,从左往右删
+			mapp[s[i]]--
+			if mapp[s[i]] == 0 {
+				delete(mapp, s[i])
+			}
+			i++
+		}
+		if max < j-i+1 {
+			max = j - i + 1
+		}
+	}
+	return max
 }

@@ -1,7 +1,12 @@
 package main
 
 import (
+	"fmt"
+	"io"
+	"io/ioutil"
+	"net/http"
 	"testing"
+	"time"
 	"unicode"
 )
 
@@ -174,6 +179,55 @@ func BenchmarkA(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		F("A man, a plan, a canal: Panama")
 	}
+}
+
+func BenchmarkP(b *testing.B) {
+	slice := []string{"http://www.baidu.com", "http://www.baidu.com"}
+	for i := range slice {
+		fetch2(slice[i])
+	}
+}
+func BenchmarkP2(b *testing.B) {
+	ch := make(chan string)
+	slice := []string{"http://www.baidu.com", "http://www.baidu.com"}
+	length := len(slice)
+	for i := range slice {
+		go fetch(slice[i], ch)
+	}
+	for i := 0; i < length; i++ {
+		<-ch
+	}
+}
+func fetch(url string, ch chan<- string) {
+	start := time.Now()
+	resp, err := http.Get(url)
+	if err != nil {
+		ch <- fmt.Sprint(err) // send to channel ch
+		return
+	}
+	nbytes, err := io.Copy(ioutil.Discard, resp.Body)
+	resp.Body.Close() // don't leak resources
+	if err != nil {
+		ch <- fmt.Sprintf("while reading %s: %v", url, err)
+		return
+	}
+	secs := time.Since(start).Seconds()
+	ch <- fmt.Sprintf("%.2fs  %7d  %s", secs, nbytes, url)
+}
+
+func fetch2(url string) {
+	start := time.Now()
+	resp, err := http.Get(url)
+	if err != nil {
+		return
+	}
+	nbytes, err := io.Copy(ioutil.Discard, resp.Body)
+	resp.Body.Close() // don't leak resources
+	if err != nil {
+		return
+	}
+	secs := time.Since(start).Seconds()
+	fmt.Sprintf("%.2fs  %7d  %s", secs, nbytes, url)
 }
 
 // // 实例函数,作为文档使用
