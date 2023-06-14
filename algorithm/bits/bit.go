@@ -2,6 +2,7 @@ package bits
 
 import (
 	"fmt"
+	"math"
 )
 
 //常用操作
@@ -208,20 +209,84 @@ func reverseWords(s []byte) {
 func lengthOfLongestSubstringTwoDistinct(s string) int {
 	// 记录窗口内数据
 	mapp := make(map[byte]int)
-	max := 0
+	max := math.MinInt
 	for i, j := 0, 0; j < len(s); j++ {
 		mapp[s[j]]++
-		for len(mapp) > 2 {
+		for ; len(mapp) > 2; i++ {
 			// 当字符种类超过 2,从左往右删
 			mapp[s[i]]--
 			if mapp[s[i]] == 0 {
 				delete(mapp, s[i])
 			}
-			i++
 		}
 		if max < j-i+1 {
 			max = j - i + 1
 		}
 	}
 	return max
+}
+
+// 至多包含 K 个不同字符的最长子串
+// https://leetcode.cn/problems/longest-substring-with-at-most-k-distinct-characters/
+// 滑动窗口
+func lengthOfLongestSubstringKDistinct(s string, k int) int {
+	mapp := map[byte]int{}
+	max := math.MinInt
+	for i, j := 0, 0; j < len(s); j++ {
+		mapp[s[j]]++
+		for ; len(mapp) > k; i++ {
+			mapp[s[i]]--
+			if mapp[s[i]] == 0 {
+				delete(mapp, s[i])
+			}
+		}
+		if max < j-i+1 {
+			max = j - i + 1
+		}
+	}
+	return max
+}
+
+// 长度为 K 的无重复字符子串
+// https://leetcode.cn/problems/find-k-length-substrings-with-no-repeated-characters/
+// 滑动窗口
+func numKLenSubstrNoRepeats(s string, k int) int {
+	count := 0
+	mapp := map[byte]int{}
+	for i, j := 0, 0; j < len(s); j++ {
+		mapp[s[j]]++
+		for ; mapp[s[j]] > 1; i++ {
+			mapp[s[i]]--
+		}
+		if j-i+1 == k {
+			count++
+			mapp[s[i]]--
+			i++
+		}
+	}
+	return count
+}
+
+// 找出所有行中最小公共元素
+// https://leetcode.cn/problems/find-smallest-common-element-in-all-rows/
+// 不能用 map,因为 map 是无序的,不能保证先遍历到最小公共元素,例如:
+// mat = [[1,2,3],[2,3,4],[2,3,5]]
+// 如果先遍历到 3 就错了
+func smallestCommonElement(mat [][]int) int {
+	slice := [10001]int{}
+	count, length := math.MaxInt, len(mat)
+	for _, s := range mat {
+		for j := range s {
+			slice[s[j]]++
+		}
+	}
+	for i := range slice {
+		if slice[i] >= length && count > slice[i] {
+			count = i
+		}
+	}
+	if count == math.MaxInt {
+		count = -1
+	}
+	return count
 }

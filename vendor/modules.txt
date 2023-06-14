@@ -168,6 +168,9 @@ github.com/pelletier/go-toml/v2/internal/tracker
 # github.com/pkg/errors v0.9.1
 ## explicit
 github.com/pkg/errors
+# github.com/pkg/profile v1.2.1
+## explicit
+github.com/pkg/profile
 # github.com/pmezard/go-difflib v1.0.0
 ## explicit
 github.com/pmezard/go-difflib/difflib
@@ -549,8 +552,6 @@ gopkg.in/yaml.v2
 # gopkg.in/yaml.v3 v3.0.1
 ## explicit
 gopkg.in/yaml.v3
-# gopl.io v0.0.0-20211004154805-1ae3ec64947b
-## explicit; go 1.16
 # k8s.io/api v0.22.1
 ## explicit; go 1.16
 k8s.io/api/admissionregistration/v1

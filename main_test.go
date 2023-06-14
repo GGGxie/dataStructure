@@ -5,6 +5,7 @@ import (
 	"io"
 	"io/ioutil"
 	"net/http"
+	"strings"
 	"testing"
 	"time"
 	"unicode"
@@ -233,3 +234,59 @@ func fetch2(url string) {
 // // 实例函数,作为文档使用
 // func ExampleA() {
 // }
+
+func BenchmarkString1(b *testing.B) {
+	var builder strings.Builder
+
+	builder.WriteString("Hello")
+	builder.WriteString(", ")
+	builder.WriteString("World")
+
+	result := builder.String()
+
+	fmt.Println(result)
+}
+
+func BenchmarkString2(b *testing.B) {
+	str1, str2 := "Hello", "World"
+	str3 := str1 + "," + str2
+	fmt.Println(str3)
+}
+
+func BenchmarkString3(b *testing.B) {
+	strs := []string{"Hello", "World"}
+
+	result := strings.Join(strs, ", ")
+
+	fmt.Println(result)
+}
+
+type Cat struct {
+	Name string
+}
+type Duck interface {
+	Quack()
+}
+
+func (c *Cat) Quack() {}
+func BenchmarkDirectCall(b *testing.B) {
+	c := &Cat{Name: "draven"}
+	for n := 0; n < b.N; n++ {
+		// MOVQ	AX, "".c+24(SP)
+		// MOVQ	AX, (SP)
+		// CALL	"".(*Cat).Quack(SB)
+		c.Quack()
+	}
+}
+
+func BenchmarkDynamicDispatch(b *testing.B) {
+	c := Duck(&Cat{Name: "draven"})
+	for n := 0; n < b.N; n++ {
+		// MOVQ	"".d+56(SP), AX
+		// MOVQ	24(AX), AX
+		// MOVQ	"".d+64(SP), CX
+		// MOVQ	CX, (SP)
+		// CALL	AX
+		c.Quack()
+	}
+}

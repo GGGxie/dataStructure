@@ -7,12 +7,12 @@ require (
 	github.com/gin-gonic/gin v1.8.1
 	github.com/golang/protobuf v1.5.2
 	github.com/opentracing/opentracing-go v1.2.0
+	github.com/pkg/profile v1.2.1
 	github.com/stretchr/testify v1.8.2
 	github.com/tal-tech/go-zero v1.2.2
 	github.com/uber/jaeger-client-go v2.29.1+incompatible
 	go.mongodb.org/mongo-driver v1.7.3
 	google.golang.org/grpc v1.41.0
-	gopl.io v0.0.0-20211004154805-1ae3ec64947b
 )
 
 require (
