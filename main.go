@@ -1,40 +1,69 @@
-// main.go
 package main
 
 import (
 	"fmt"
-	"math"
-	_ "net/http/pprof"
+	"sync"
+	"time"
 )
 
-var datas []string
-
 func main() {
-	mat := [][]int{{4, 5, 6}, {2, 3, 4}, {2, 3, 4}}
-	fmt.Println(smallestCommonElement(mat))
+	t := New(2)
+	t.Go(
+		func() {
+			fmt.Println("1")
+		},
+	)
+	t.Go(
+		func() {
+			time.Sleep(5 * time.Second)
+			fmt.Println("1")
+		},
+	)
+	t.Go(
+		func() {
+			fmt.Println("1")
+		},
+	)
+	t.WaitGroup()
+	time.Sleep(5 * time.Second)
 }
 
-// 找出所有行中最小公共元素
-// https://leetcode.cn/problems/find-smallest-common-element-in-all-rows/
-// 不能用 map,因为 map 是无序的,不能保证先遍历到最小公共元素,例如:
-// mat = [[1,2,3],[2,3,4],[2,3,5]]
-// 如果先遍历到 3 就错了
-func smallestCommonElement(mat [][]int) int {
-	mapp := map[int]int{}
-	count, length := math.MaxInt, len(mat)
-	for _, s := range mat {
-		for j := range s {
-			mapp[s[j]]++
+type Task struct {
+	Num    int
+	sc     *sync.WaitGroup
+	ch     chan func()
+	cancel chan struct{}
+}
+
+func New(num int) *Task {
+	ret := &Task{
+		Num:    num,
+		sc:     &sync.WaitGroup{},
+		ch:     make(chan func()),
+		cancel: make(chan struct{}),
+	}
+	for i := 0; i < num; i++ {
+		go ret.Handle()
+	}
+	return ret
+}
+func (t *Task) Handle() {
+	for {
+		select {
+		case f := <-t.ch:
+			f()
+			t.sc.Done()
+		case <-t.cancel:
+			fmt.Println("return ")
+			return
 		}
 	}
-	for i := range mapp {
-		fmt.Println(i)
-		if mapp[i] >= length && count > mapp[i] {
-			count = i
-		}
-	}
-	if count == math.MaxInt {
-		count = -1
-	}
-	return count
+}
+func (t *Task) Go(f func()) {
+	t.sc.Add(1)
+	t.ch <- f
+}
+func (t *Task) WaitGroup() {
+	t.sc.Wait()
+	close(t.cancel)
 }

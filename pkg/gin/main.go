@@ -12,7 +12,16 @@ func main() {
 	router.Use(FirstMiddleware())
 	router.Use(SecondMiddleware(), ThirdMiddleware()) // (1)
 	router.GET("test", H)
+	router.GET("auth", Auth)
 	router.Run()
+}
+
+func Auth(c *gin.Context) {
+	forwardURL := c.Request.FormValue("forward_url")
+	code := c.Request.FormValue("authCode")
+	state := c.Request.FormValue("state")
+	redirectURL := fmt.Sprintf("%s?code=%s&state=%s", forwardURL, code, state)
+	fmt.Println(redirectURL)
 }
 
 func H(c *gin.Context) {

@@ -165,6 +165,7 @@ import (
 func TestA(t *testing.T) {
 
 }
+
 func F(s string) bool {
 	letters := make([]rune, 0, len(s))
 	for _, r := range s {
@@ -231,7 +232,7 @@ func fetch2(url string) {
 	fmt.Sprintf("%.2fs  %7d  %s", secs, nbytes, url)
 }
 
-// // 实例函数,作为文档使用
+// 示例函数,作为文档使用
 // func ExampleA() {
 // }
 
@@ -289,4 +290,30 @@ func BenchmarkDynamicDispatch(b *testing.B) {
 		// CALL	AX
 		c.Quack()
 	}
+}
+
+func TestSplit(t *testing.T) {
+	testP1 := [][]int{
+		[]int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10},
+		[]int{1, 2, 3, 4, 6, 7, 8, 9, 10},
+	}
+	testP2 := []int{2, 3}
+	for i := range testP1 {
+		t.Log(SplitArray(testP1[i], testP2[i]))
+	}
+}
+func SplitArray(array []int, part int) [][]int {
+	var ret [][]int
+	length := len(array)
+	bas := (len(array) / part)
+	for i := 0; i < len(array); {
+		if (length-i)%bas == 0 {
+			ret = append(ret, array[i:i+bas])
+			i += bas
+		} else {
+			ret = append(ret, array[i:i+bas+1])
+			i += bas + 1
+		}
+	}
+	return ret
 }
