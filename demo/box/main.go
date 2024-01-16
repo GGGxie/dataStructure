@@ -29,7 +29,7 @@ func main() {
 	router.GET("health", Health)
 	router.GET("message/:n", H)
 	router.GET("cancel")
-	router.Run(":8080")
+	router.Run("0.0.0.0:8080")
 }
 
 func Health(c *gin.Context) {

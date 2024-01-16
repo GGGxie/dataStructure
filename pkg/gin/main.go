@@ -8,14 +8,20 @@ import (
 )
 
 func main() {
+	// gin.SetMode(gin.ReleaseMode)
 	router := gin.Default()
 	router.Use(FirstMiddleware())
 	router.Use(SecondMiddleware(), ThirdMiddleware()) // (1)
 	router.GET("test", H)
 	router.GET("auth", Auth)
-	router.Run()
+	router.Any("api/v1/pay/*any", Pay)
+	router.Run(":8030")
 }
-
+func Pay(c *gin.Context) {
+	fmt.Println(c.Request.URL.String())
+	fmt.Println(c.GetHeader("user_id"))
+	c.JSON(http.StatusForbidden, "3")
+}
 func Auth(c *gin.Context) {
 	forwardURL := c.Request.FormValue("forward_url")
 	code := c.Request.FormValue("authCode")

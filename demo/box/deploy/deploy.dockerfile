@@ -16,10 +16,16 @@ RUN go mod download
 RUN CGO_ENABLED=0 GOOS=linux go build -o myapp
 
 # 第二阶段：构建最终镜像
-FROM scratch
+FROM alpine:latest AS prod
 
 # 设置工作目录
 WORKDIR /app
 
 # 从第一阶段复制构建好的 Go 二进制文件
 COPY --from=build /app/myapp .
+
+# 执行程序
+CMD ["./myapp"]
+
+# 运行容器测试
+# docker run -p 127.0.0.1:8999:8080 -d 15992686641/box:v1.0 
