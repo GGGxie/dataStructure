@@ -1,8 +1,9 @@
-FROM golang:1.21 AS build
+FROM golang:1.21
 
-ENV GOPROXY="https://goproxy.cn,direct"
-ENV GO111MODULE="on"
+
 WORKDIR /app/dataStructure
 COPY . /app/dataStructure/
 
+RUN echo "export PATH=/usr/local/go/bin:$PATH" && echo "export GO111MODULE=on" && echo "export GOPROXY=https://goproxy.cn,direct"
 RUN go mod download
+
