@@ -28,6 +28,7 @@ func main() {
 		"http://www.example.net/baz",
 	}
 	s := semaphore.NewWeighted(Limit)
+	// w 防止最后一个在完成之前退出
 	var w sync.WaitGroup
 	for _, u := range urls {
 		w.Add(1)
