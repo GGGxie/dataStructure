@@ -1,9 +1,19 @@
 # Streamlit 应用程序界面
 import streamlit as st
-from langchain_openai import ChatOpenAI
-def generate_response(input_text):
-    llm = ChatOpenAI(temperature=0.7, openai_api_key=openai_api_key)
-    st.info(llm(input_text))
+from langchain_community.chat_models import ChatZhipuAI
+from langchain_core.messages import AIMessage, HumanMessage, SystemMessage
+
+
+# api_key: 609356d25d7f1939ab974b04b4e803a1.EjZO8ylvTqlLxWve
+def generate_response(input_text,openai_api_key):
+    chat = ChatZhipuAI(model="glm-3-turbo",temperature=0.5, zhipuai_api_key=openai_api_key)
+    messages = [
+        # AIMessage(content="Hi."),
+        # SystemMessage(content="Your role is a poet."),
+        HumanMessage(content=input_text),
+    ]   
+    resp = chat.invoke(messages)
+    st.info(resp.content)
 def main():
     st.title('🦜🔗 动手学大模型应用开发')
     openai_api_key = st.sidebar.text_input('OpenAI API Key', type='password')
@@ -30,3 +40,4 @@ def main():
                 messages.chat_message("user").write(message["text"])
             elif message["role"] == "assistant":
                 messages.chat_message("assistant").write(message["text"])   
+main()

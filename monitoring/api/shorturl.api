@@ -1,0 +1,45 @@
+syntax = "v1"
+
+info (
+	title:  "monitoring" // TODO: add title
+	desc:   "micro service demo based on go-zero" // TODO: add description
+	author: "GGGxie"
+	email:  ""
+)
+
+type request {}
+
+type response {}
+
+type (
+	expandReq {
+		shorten string `form:"shorten"`
+	}
+	expandResp {
+		url string `json:"url"`
+	}
+)
+
+type (
+	shortenReq {
+		url string `form:"url"`
+	}
+	shortenResp {
+		shorten string `json:"shorten"`
+	}
+)
+
+service shorturl-api {
+	@handler GetUser // TODO: set handler name and delete this comment
+	get /users/id/:userId (request) returns (response)
+
+	@handler CreateUser // TODO: set handler name and delete this comment
+	post /users/create (request)
+
+	@handler ShortenHandler
+	get /shorten (shortenReq) returns (shortenResp)
+
+	@handler ExpandHandler
+	get /expand (expandReq) returns (expandResp)
+}
+

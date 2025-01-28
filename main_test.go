@@ -6,10 +6,43 @@ import (
 	"io/ioutil"
 	"net/http"
 	"strings"
+	"sync"
 	"testing"
 	"time"
 	"unicode"
 )
+
+var cnt = 10000
+
+func BenchmarkProducerConsumerModelNRoutine(b *testing.B) {
+	var wg sync.WaitGroup
+	begin := make(chan string)
+	c := make(chan string, 100000000)
+
+	sender := func() {
+		defer wg.Done()
+		<-begin
+		for i := 0; i < b.N; i++ {
+			c <- "hello"
+		}
+	}
+
+	receive := func() {
+		defer wg.Done()
+		<-begin
+		for i := 0; i < b.N; i++ {
+			<-c
+		}
+	}
+	wg.Add(2 * cnt)
+	for i := 0; i < cnt; i++ {
+		go sender()
+		go receive()
+	}
+	b.StartTimer()
+	close(begin)
+	wg.Wait()
+}
 
 // func generateWithCap(n int) []int {
 // 	rand.Seed(time.Now().UnixNano())

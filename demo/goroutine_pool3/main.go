@@ -16,13 +16,13 @@ func New(num int) *Pool {
 		MaxNum:   num,
 		TaskList: make(chan int),
 	}
-	go pool.Start()
+	pool.Start()
 	return pool
 }
 
 func (p *Pool) Start() {
 	for i := 0; i < p.MaxNum; i++ {
-		p.Work()
+		go p.Work()
 	}
 }
 

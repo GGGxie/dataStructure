@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+package transform;
+option go_package="./transform";
+
+message Request {
+  string ping = 1;
+}
+
+message Response {
+  string pong = 1;
+}
+
+message expandReq {
+  string shorten = 1;
+}
+
+message expandResp {
+  string url = 1;
+}
+
+message shortenReq {
+  string url = 1;
+}
+
+message shortenResp {
+  string shorten = 1;
+}
+
+service Transform {
+  rpc Ping(Request) returns(Response);
+  rpc expand(expandReq) returns(expandResp);
+  rpc shorten(shortenReq) returns(shortenResp);
+}
+

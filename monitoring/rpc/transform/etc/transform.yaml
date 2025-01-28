@@ -1,0 +1,10 @@
+Name: transform.rpc
+ListenOn: 0.0.0.0:8080
+Etcd:
+  Hosts:
+  - mycs:2379
+  Key: transform.rpc
+DataSource: root:@tcp(mycs:3306)/gozero
+Table: shorturl
+Cache:
+  - Host: mycs:6379
